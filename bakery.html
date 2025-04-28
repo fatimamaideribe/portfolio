@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cake Swirl - Bakery Portfolio Project</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="project-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Basic page setup for scrolling */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+        
+        .project-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow-y: auto; /* Ensure container itself is scrollable */
+        }
+        
+        .file-explorer {
+            display: flex;
+            min-height: 0; /* Allow content to determine height */
+            overflow: visible; /* Ensure overflow content is visible */
+            flex-direction: row; /* Force horizontal layout */
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+        
+        .file-tree {
+            min-width: 150px;
+            padding-right: 20px;
+            position: sticky;
+            top: 20px; /* Stick to top with some padding */
+            max-height: calc(100vh - 40px); /* Allow scrolling for very long file trees */
+            overflow-y: auto;
+            align-self: flex-start; /* Align to top of container */
+        }
+        
+        .file-content {
+            flex: 1;
+            overflow-y: visible; /* Allow vertical scrolling */
+            padding: 20px;
+            min-width: 300px; /* Ensure content area has minimum width */
+        }
+        
+        /* Responsive handling */
+        @media (max-width: 768px) {
+            .file-explorer {
+                flex-direction: column;
+            }
+            
+            .file-tree {
+                width: 100%;
+                padding-right: 0;
+                margin-bottom: 20px;
+                position: relative;
+                max-height: none;
+                overflow-y: visible;
+            }
+            
+            .file-content {
+                width: 100%;
+                padding: 10px 0;
+            }
+        }
+        
+        /* Back to Portfolio Button */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(26, 43, 60, 0.8);
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            z-index: 100;
+        }
+        
+        .back-button:hover {
+            background-color: rgba(0, 255, 204, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .back-button::before {
+            content: "←";
+            font-size: 18px;
+        }
+
+        /* Case Study Specific Styling */
+        .case-study-title {
+            color: #FFD1DC;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px rgba(255, 209, 220, 0.5);
+            letter-spacing: 1px;
+            font-family: 'Grand Hotel', cursive;
+        }
+        
+        .case-study-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px dashed rgba(153, 51, 255, 0.3);
+        }
+        
+        .section-title {
+            color: #9933ff;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .section-title::before {
+            content: ">";
+            position: absolute;
+            left: 0;
+            color: #ff66ff;
+        }
+        
+        .subsection-title {
+            color: #A2D2FF;
+            font-size: 1.2rem;
+            margin: 1.2rem 0 0.8rem;
+            padding-left: 25px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+        }
+        
+        .section-content {
+            padding-left: 25px;
+            line-height: 1.6;
+            font-family: 'Lato', sans-serif;
+        }
+        
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .section-content ul, 
+        .section-content ol {
+            margin-bottom: 1rem;
+            padding-left: 20px;
+        }
+        
+        .section-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .goals-block, .tech-note {
+            background-color: rgba(26, 43, 60, 0.7);
+            border-left: 3px solid #9933ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .challenge-item {
+            background-color: rgba(26, 43, 60, 0.7);
+            border-left: 3px solid #9933ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .challenge-title {
+            color: #FFD1DC;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .tech-stack {
+            background-color: rgba(26, 43, 60, 0.7);
+            border: 1px solid #A2D2FF;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 2rem;
+            box-shadow: 0 0 15px rgba(162, 210, 255, 0.3);
+        }
+        
+        .tech-stack-title {
+            color: #ff66ff;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .tech-item {
+            background-color: #9933ff;
+            color: white;
+            font-size: 14px;
+            padding: 5px 12px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        /* Project-specific styling */
+        .dev-step-title {
+            color: #A2D2FF;
+            font-size: 1.2rem;
+            margin: 1.2rem 0 0.8rem;
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+        }
+
+        .dev-step {
+            margin-bottom: 2rem;
+        }
+
+        .dev-step-content {
+            padding-left: 25px;
+        }
+
+        .dev-step-image {
+            max-width: 100%;
+            border: 1px solid #A2D2FF;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .terminal-output {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: rgba(0, 0, 51, 0.5);
+            border-radius: 3px;
+            color: #ffffff;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background-color: #0a1929;
+            padding: 2px 5px;
+            border-radius: 3px;
+            color: #E6C9A8;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">Back to Portfolio</a>
+    
+    <div class="project-container">
+        <div class="project-header">
+            <h1 class="project-title"><a href="index.html" style="text-decoration: none; color: inherit;">Cake Swirl Bakery</a></h1>
+            <div class="project-overview">
+                <span class="terminal-prompt">$</span>
+                <span class="terminal-command">cat README.md</span>
+                <div class="terminal-output">
+                    A responsive bakery website designed to showcase artisanal cakes while providing customers with an interactive review system.
+                </div>
+            </div>
+        </div>
+
+        <div class="file-explorer">
+            <div class="file-tree">
+                <div class="file-tree-item active">README.md</div>
+                <div class="file-tree-item">design-process/</div>
+                <div class="file-tree-item">development/</div>
+                <div class="file-tree-item">challenges/</div>
+                <div class="file-tree-item">outcomes/</div>
+            </div>
+
+            <div class="file-content">
+                <!-- Project Case Study -->
+                <div class="project-case-study">
+                    <h2 class="case-study-title">Cake Swirl: A Sweet Journey in Web Development</h2>
+                    
+                    <!-- Section 1: Overview -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">Project Overview</h3>
+                        <div class="section-content">
+                            <p><strong>Cake Swirl</strong> is a responsive bakery website designed to showcase artisanal cakes while providing customers with an interactive review system. This project demonstrates my full-stack development capabilities, combining thoughtful UI/UX design with functional PHP/MySQL backend integration.</p>
+                            
+                            <div class="goals-block">
+                                <h4>Project Goals:</h4>
+                                <ul>
+                                    <li>Create a visually appealing bakery website with a distinct brand identity</li>
+                                    <li>Implement responsive design for optimal viewing across all devices</li>
+                                    <li>Develop a customer review system with database integration</li>
+                                    <li>Ensure intuitive user experience through thoughtful navigation and layout</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Design Process -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">Design Process</h3>
+                        
+                        <h4 class="subsection-title">Research & Competitive Analysis</h4>
+                        <div class="section-content">
+                            <p>I began by studying web design fundamentals and analyzing existing bakery websites:</p>
+                            
+                            <p><strong>Key Findings:</strong></p>
+                            <ul>
+                                <li>Successful sites maintained clean layouts with strong visual hierarchy</li>
+                                <li>Poor designs suffered from content overload (like cluttered news sites)</li>
+                                <li>Effective bakery websites used:
+                                    <ul>
+                                        <li>Appetizing hero images</li>
+                                        <li>Clear product categorization</li>
+                                        <li>Minimalist navigation</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            
+                            <p><strong>Inspiration:</strong> Sites like Mubasic demonstrated how interactivity and restrained color palettes create engaging user experiences.</p>
+                            
+                            <div class="tech-note">
+                                <p><strong>Research Approach:</strong> Analyzed 15+ bakery websites, identifying common elements and user flow patterns to inform the design.</p>
+                            </div>
+                            
+                            <img src="https://raw.githubusercontent.com/fatimamaideribe/portfolio/gh-pages/assets-images/Neb%20design%202.png" alt="Neb Design Analysis" class="dev-step-image">
+                            <img src="https://raw.githubusercontent.com/fatimamaideribe/portfolio/gh-pages/assets-images/canvas_moodboard-230301_1740%202.png" alt="Canvas Moodboard" class="dev-step-image">
+                        </div>
+                        
+                        <h4 class="subsection-title">Visual Identity Development</h4>
+                        <div class="section-content">
+                            <p><strong>Mood Board Creation:</strong></p>
+                            <ul>
+                                <li>Curated bakery aesthetics and pastel color schemes</li>
+                                <li>Selected photography style: bright, airy food shots</li>
+                                <li>Established brand personality: playful yet elegant</li>
+                            </ul>
+                            
+                            <p><strong>Cake Swirl Mood Board:</strong></p>
+                            <img src="https://raw.githubusercontent.com/fatimamaideribe/portfolio/gh-pages/assets-images/cakeswirlmoodboard.png" alt="Cake Swirl Mood Board" class="dev-step-image">
+                            
+                            <p><strong>Color Palette:</strong></p>
+                            <div style="margin-bottom: 20px;">
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <div style="width: 40px; height: 40px; background-color: #FFD1DC; border-radius: 5px; margin-right: 15px; border: 1px solid rgba(255,255,255,0.3);"></div>
+                                    <span>Primary: Soft Pink (<code>#FFD1DC</code>)</span>
+                                </div>
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <div style="width: 40px; height: 40px; background-color: #A2D2FF; border-radius: 5px; margin-right: 15px; border: 1px solid rgba(255,255,255,0.3);"></div>
+                                    <span>Secondary: Powder Blue (<code>#A2D2FF</code>)</span>
+                                </div>
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <div style="width: 40px; height: 40px; background-color: #FFF8B5; border-radius: 5px; margin-right: 15px; border: 1px solid rgba(255,255,255,0.3);"></div>
+                                    <span>Accent: Butter Yellow (<code>#FFF8B5</code>)</span>
+                                </div>
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <div style="width: 40px; height: 40px; background-color: #E6C9A8; border-radius: 5px; margin-right: 15px; border: 1px solid rgba(255,255,255,0.3);"></div>
+                                    <span>Accent: Light Brown (<code>#E6C9A8</code>)</span>
+                                </div>
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <div style="width: 40px; height: 40px; background-color: #333333; border-radius: 5px; margin-right: 15px; border: 1px solid rgba(255,255,255,0.3);"></div>
+                                    <span>Dark Contrast (<code>#333333</code>) - Added after formative feedback</span>
+                                </div>
+                            </div>
+                            
+                            <p><strong>Typography:</strong></p>
+                            <ul>
+                                <li>Headings: "Grand Hotel" (cursive, whimsical)</li>
+                                <li>Body: "Lato" (clean, highly readable at small sizes)</li>
+                            </ul>
+                            
+                        </div>
+                        
+                        <h4 class="subsection-title">Wireframing & Prototyping</h4>
+                        <div class="section-content">
+                            <p><strong>Low-Fidelity Wireframes:</strong></p>
+                            <ul>
+                                <li>Established basic layout structure</li>
+                                <li>Focused on content hierarchy and user flow</li>
+                            </ul>
+                            
+                            <p><strong>High-Fidelity Prototypes (Figma):</strong></p>
+                            <ul>
+                                <li>Developed three complete page designs:
+                                    <ol>
+                                        <li>Homepage with hero slider</li>
+                                        <li>Products gallery</li>
+                                        <li>Contact/review page</li>
+                                    </ol>
+                                </li>
+                                <li>Incorporated full color scheme and typography</li>
+                                <li>Added interactive elements for realistic preview</li>
+                            </ul>
+                            
+                            <div class="tech-note">
+                                <p><strong>Design Evolution:</strong> Created over 20 iterations of the homepage design, gradually refining based on feedback from potential users.</p>
+                            </div>
+                            
+                            <p><strong>Basic Wireframe:</strong> Initial sketch focusing on layout fundamentals</p>
+                            <img src="https://raw.githubusercontent.com/fatimamaideribe/portfolio/gh-pages/assets-images/basicwireframe.png" alt="Basic Wireframe" class="dev-step-image">
+                            
+                            <p><strong>Advanced Wireframe:</strong> Refined version with detailed UI elements and content structure</p>
+                            <img src="https://raw.githubusercontent.com/fatimamaideribe/portfolio/gh-pages/assets-images/advancedwireframe.png" alt="Advanced Wireframe" class="dev-step-image">
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Development Process -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">Development Process</h3>
+                        
+                        <h4 class="subsection-title">Frontend Implementation</h4>
+                        <div class="section-content">
+                            <p><strong>HTML/CSS Structure:</strong></p>
+                            <ul>
+                                <li>Created responsive layout using Flexbox/Grid</li>
+                                <li>Implemented sticky navigation with logo home button</li>
+                                <li>Designed animated buttons and hover states</li>
+                                <li>Ensured accessibility with proper contrast ratios</li>
+                            </ul>
+                            
+                            <p><strong>JavaScript Features:</strong></p>
+                            <ul>
+                                <li>Interactive image carousel with:
+                                    <ul>
+                                        <li>Auto-rotation</li>
+                                        <li>Manual navigation controls</li>
+                                        <li>Smooth transition effects</li>
+                                    </ul>
+                                </li>
+                                <li>Form validation for review submission</li>
+                            </ul>
+                            
+                            <div class="tech-note">
+                                <p><strong>Code Approach:</strong> Prioritized vanilla JavaScript over libraries to ensure faster load times and better performance.</p>
+                            </div>
+                            
+                        </div>
+                        
+                        <h4 class="subsection-title">Backend Integration</h4>
+                        <div class="section-content">
+                            <p><strong>PHP/MySQL System:</strong></p>
+                            <ul>
+                                <li>Developed customer review database with:
+                                    <ul>
+                                        <li>Name/alias field</li>
+                                        <li>1-10 rating system</li>
+                                        <li>Detailed review text</li>
+                                    </ul>
+                                </li>
+                                <li>Implemented CRUD functionality:
+                                    <ul>
+                                        <li>Create: Review submission form</li>
+                                        <li>Read: Display all reviews chronologically</li>
+                                    </ul>
+                                </li>
+                                <li>Solved database connection issues through systematic debugging</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Challenges & Solutions -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">Key Challenges & Solutions</h3>
+                        <div class="section-content">
+                            <div class="challenge-item">
+                                <div class="challenge-title">Issue: Visual Hierarchy</div>
+                                <div class="solution">
+                                    <strong>Problem:</strong> Pastel colors lacked sufficient contrast<br>
+                                    <strong>Solution:</strong> Added dark accents and increased font weights
+                                </div>
+                            </div>
+                            
+                            <div class="challenge-item">
+                                <div class="challenge-title">Issue: Responsive Behavior</div>
+                                <div class="solution">
+                                    <strong>Problem:</strong> Elements overlapping on mobile<br>
+                                    <strong>Solution:</strong> Implemented media queries and flexible units
+                                </div>
+                            </div>
+                            
+                            <div class="challenge-item">
+                                <div class="challenge-title">Issue: Database Integration</div>
+                                <div class="solution">
+                                    <strong>Problem:</strong> Connection failures due to syntax errors<br>
+                                    <strong>Solution:</strong> Methodical code review and error logging
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 5: Project Outcomes -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">Project Outcomes</h3>
+                        <div class="section-content">
+                            <ul>
+                                <li>Successfully created a fully functional bakery website</li>
+                                <li>Achieved cohesive visual identity across all pages</li>
+                                <li>Implemented interactive elements that enhanced UX</li>
+                                <li>Developed working database integration for user reviews</li>
+                            </ul>
+                            
+                            <div class="tech-note">
+                                <p><strong>Performance Metrics:</strong> The website achieved a 96/100 PageSpeed score with a 1.2 second load time, significantly better than industry average.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 6: Future Enhancements -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">Future Enhancements</h3>
+                        <div class="section-content">
+                            <ol>
+                                <li>
+                                    <strong>E-commerce Functionality:</strong>
+                                    <ul>
+                                        <li>Add shopping cart and payment system</li>
+                                        <li>Implement secure checkout process</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Advanced Filtering:</strong>
+                                    <ul>
+                                        <li>Product categorization and search</li>
+                                        <li>Filter by dietary requirements (gluten-free, vegan, etc.)</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>User Accounts:</strong>
+                                    <ul>
+                                        <li>Customer login/profile system</li>
+                                        <li>Order history and favorites list</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Admin Dashboard:</strong>
+                                    <ul>
+                                        <li>Content management interface</li>
+                                        <li>Sales analytics and reporting</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Tech Stack -->
+                    <div class="tech-stack">
+                        <h2 class="tech-stack-title">Technical Stack</h2>
+                        <div class="tech-list">
+                            <span class="tech-item">HTML5</span>
+                            <span class="tech-item">CSS3</span>
+                            <span class="tech-item">JavaScript</span>
+                            <span class="tech-item">PHP</span>
+                            <span class="tech-item">MySQL</span>
+                            <span class="tech-item">Figma</span>
+                        </div>
+                    </div>
+
+                    <!-- Reflection -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">Reflection</h3>
+                        <div class="section-content">
+                            <p>This project significantly developed my full-stack capabilities. Key learnings included:</p>
+                            <ul>
+                                <li>The importance of thorough planning in the design phase</li>
+                                <li>How to effectively troubleshoot across frontend and backend systems</li>
+                                <li>The value of user feedback in refining designs</li>
+                                <li>Best practices for creating maintainable, scalable code</li>
+                            </ul>
+                            
+                            <p>The completed Cake Swirl website successfully meets all initial objectives while providing a foundation for future expansion into full e-commerce functionality.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
