@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arduino Fan Controller - Project Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="project-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Basic page setup for scrolling */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+        
+        .project-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow-y: auto; /* Ensure container itself is scrollable */
+        }
+        
+        .file-explorer {
+            display: flex;
+            min-height: 0; /* Allow content to determine height */
+            overflow: visible; /* Ensure overflow content is visible */
+            flex-direction: row; /* Force horizontal layout */
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+        
+        .file-tree {
+            min-width: 150px;
+            padding-right: 20px;
+            position: sticky;
+            top: 20px; /* Stick to top with some padding */
+            max-height: calc(100vh - 40px); /* Allow scrolling for very long file trees */
+            overflow-y: auto;
+            align-self: flex-start; /* Align to top of container */
+        }
+        
+        .file-content {
+            flex: 1;
+            overflow-y: visible; /* Allow vertical scrolling */
+            padding: 20px;
+            min-width: 300px; /* Ensure content area has minimum width */
+        }
+        
+        /* Responsive handling */
+        @media (max-width: 768px) {
+            .file-explorer {
+                flex-direction: column;
+            }
+            
+            .file-tree {
+                width: 100%;
+                padding-right: 0;
+                margin-bottom: 20px;
+                position: relative;
+                max-height: none;
+                overflow-y: visible;
+            }
+            
+            .file-content {
+                width: 100%;
+                padding: 10px 0;
+            }
+        }
+        
+        /* Back to Portfolio Button */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(26, 43, 60, 0.8);
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            z-index: 100;
+        }
+        
+        .back-button:hover {
+            background-color: rgba(0, 255, 204, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .back-button::before {
+            content: "←";
+            font-size: 18px;
+        }
+        
+        /* Case Study Specific Styling */
+        .case-study-title {
+            color: #FFD1DC;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px rgba(255, 209, 220, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        .case-study-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px dashed rgba(153, 51, 255, 0.3);
+        }
+        
+        .section-title {
+            color: #9933ff;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .section-title::before {
+            content: ">";
+            position: absolute;
+            left: 0;
+            color: #ff66ff;
+        }
+        
+        .subsection-title {
+            color: #A2D2FF;
+            font-size: 1.2rem;
+            margin: 1.2rem 0 0.8rem;
+            padding-left: 25px;
+        }
+        
+        .section-content {
+            padding-left: 25px;
+            line-height: 1.6;
+        }
+        
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .section-content ul, 
+        .section-content ol {
+            margin-bottom: 1rem;
+            padding-left: 20px;
+        }
+        
+        .section-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .goals-block, .tech-note {
+            background-color: rgba(26, 43, 60, 0.7);
+            border-left: 3px solid #9933ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .challenge-item {
+            background-color: rgba(26, 43, 60, 0.7);
+            border-left: 3px solid #9933ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .challenge-title {
+            color: #FFD1DC;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .tech-stack {
+            background-color: rgba(26, 43, 60, 0.7);
+            border: 1px solid #A2D2FF;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 2rem;
+            box-shadow: 0 0 15px rgba(162, 210, 255, 0.3);
+        }
+        
+        .tech-stack-title {
+            color: #ff66ff;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .tech-item {
+            background-color: #9933ff;
+            color: white;
+            font-size: 14px;
+            padding: 5px 12px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        .feature-list {
+            list-style-type: none;
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .feature-list li {
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .feature-list li::before {
+            content: "✔";
+            position: absolute;
+            left: -25px;
+            color: #00ffcc;
+        }
+
+        .code-block {
+            background-color: rgba(26, 43, 60, 0.7);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            color: #E6C9A8;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            color: #9933ff;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">Back to Portfolio</a>
+    
+    <div class="project-container">
+        <div class="project-header">
+            <h1 class="project-title"><a href="index.html" style="text-decoration: none; color: inherit;">Automated Exhaust Fan with Environmental Alerts</a></h1>
+            <div class="project-overview">
+                <span class="terminal-prompt">$</span>
+                <span class="terminal-command">cat README.md</span>
+                <div class="terminal-output">
+                    An Arduino-based system designed to monitor bathroom humidity and temperature, activating a fan and buzzer when levels exceed thresholds to prevent mold growth. Features real-time data display and multi-tier alerts.
+                </div>
+            </div>
+        </div>
+
+        <div class="file-explorer">
+            <div class="file-tree">
+                <div class="file-tree-item active">README.md</div>
+                <div class="file-tree-item">schematic.pdf</div>
+                <div class="file-tree-item">code/</div>
+                <div class="file-tree-item">testing_logs/</div>
+                <div class="file-tree-item">demo_video.mp4</div>
+            </div>
+
+            <div class="file-content">
+                <!-- Project Case Study -->
+                <div class="project-case-study">
+                    <!-- Overview Section -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">Project Overview</h3>
+                        <div class="section-content">
+                            <p><strong>Automated Exhaust Fan</strong> is an Arduino-based system designed to monitor bathroom humidity and temperature, activating a fan and buzzer when levels exceed thresholds to prevent mold growth. The project integrates:</p>
+                            
+                            <ul>
+                                <li><strong>DHT11 sensor</strong> (environmental monitoring)</li>
+                                <li><strong>MOSFET transistor</strong> (fan control)</li>
+                                <li><strong>I2C LCD</strong> (real-time data display)</li>
+                                <li><strong>Piezo buzzer</strong> (audible alerts)</li>
+                            </ul>
+                            
+                            <p><strong>Key Features:</strong></p>
+                            <ul class="feature-list">
+                                <li>Fan triggers at high humidity/temperature</li>
+                                <li>Multi-tier buzzer alerts (low/high severity)</li>
+                                <li>Compact housing with concealed wiring</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="divider">---</div>
+                    
+                    <!-- Project Journey -->
+                    <h2 class="case-study-title">Project Journey</h2>
+                    
+                    <!-- Inspiration Section -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">1. Inspiration & Problem Identification</h3>
+                        <div class="section-content">
+                            <h4 class="subsection-title">Motivation:</h4>
+                            <p>My bathroom lacked ventilation, leading to moisture buildup and mold risk. Existing exhaust fans were either manual or expensive.</p>
+                            
+                            <h4 class="subsection-title">Initial Goal:</h4>
+                            <p>Create a low-cost, automated system to:</p>
+                            <ul>
+                                <li>Detect humidity/temperature spikes.</li>
+                                <li>Activate exhaust fan + alerts.</li>
+                                <li>Display real-time data.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="divider">---</div>
+                    
+                    <!-- Research Section -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">2. Research & Prototyping</h3>
+                        
+                        <h4 class="subsection-title">Phase 1: Learning from Existing Work</h4>
+                        <div class="section-content">
+                            <p>Adapted LIMPINGLIM's <em>Humidity-Controlled Fan</em> (Arduino Project Hub) but expanded it with:</p>
+                            <ul>
+                                <li><strong>LCD display</strong> (SunFounder tutorials).</li>
+                                <li><strong>Buzzer</strong> (classroom experience).</li>
+                            </ul>
+                            
+                            <div class="tech-note">
+                                <p>The research phase involved exploring both hardware and software aspects, leveraging online resources while adding unique elements based on personal experience.</p>
+                            </div>
+                        </div>
+                        
+                        <h4 class="subsection-title">Phase 2: Hardware Hurdles</h4>
+                        <div class="section-content">
+                            <p><strong>Problem:</strong> Original schematic used Arduino Nano; I had an Uno.</p>
+                            <p><strong>Solution:</strong> Redesigned circuit:</p>
+                            <ul>
+                                <li>Moved DHT11 to Pin 2.</li>
+                                <li>Used breadboard for 5V distribution.</li>
+                                <li>Added 12V MOSFET for fan control.</li>
+                            </ul>
+                            
+                            <div style="margin: 30px 0;">
+                                <h4 class="subsection-title">Prototyping & Testing</h4>
+                                <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px;">
+                                    <div style="flex: 1; min-width: 240px; max-width: 320px;">
+                                        <object data="https://imgur.com/ovU0jf3.png" type="image/png" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
+                                            <img src="https://imgur.com/ovU0jf3.png" alt="Initial breadboard circuit setup" style="width: 100%; border-radius: 8px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
+                                            Initial breadboard circuit setup
+                                        </object>
+                                        <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Test 1: Initial breadboard circuit setup</em></p>
+                                    </div>
+                                    <div style="flex: 1; min-width: 240px; max-width: 320px;">
+                                        <object data="https://imgur.com/MGdpxo4.png" type="image/png" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
+                                            <img src="https://imgur.com/MGdpxo4.png" alt="DHT11 sensor calibration test" style="width: 100%; border-radius: 8px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
+                                            DHT11 sensor calibration test
+                                        </object>
+                                        <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Test 2: DHT11 sensor calibration</em></p>
+                                    </div>
+                                    <div style="flex: 1; min-width: 240px; max-width: 320px;">
+                                        <video controls width="100%" style="border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                                            <source src="./Assests/fan/test3.mp4" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                        <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Test 3: Fan activation with temperature control</em></p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <p><strong>Final Schematic:</strong> <em>Revised schematic (see PDF, Fig. 3)</em></p>
+                            <img src="https://imgur.com/8NkWH42.png" alt="Revised Schematic" class="dev-step-image" style="max-width: 100%; width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
+                            
+                            <div style="margin-top: 30px;">
+                                <h4 class="subsection-title">Final Schematic</h4>
+                                <div style="width: 100%; max-width: 800px; margin: 0 auto;">
+                                    <embed src="./Assests/fan/finalscematic.pdf" type="application/pdf" width="100%" height="500px" style="border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);"/>
+                                    <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Final schematic diagram with component details and wiring connections</em></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="divider">---</div>
+                    
+                    <!-- Development Section -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">3. Iterative Development</h3>
+                        
+                        <h4 class="subsection-title">Software Challenges:</h4>
+                        <div class="section-content">
+                            <div class="challenge-item">
+                                <div class="challenge-title">LCD Integration:</div>
+                                <div class="solution">
+                                    <ul>
+                                        <li>Struggled with I2C address conflicts.</li>
+                                        <li>Fixed by testing <code>0x27</code> vs. <code>0x3F</code> and using <code>LiquidCrystal_I2C</code> library.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="challenge-item">
+                                <div class="challenge-title">Sensor Calibration:</div>
+                                <div class="solution">
+                                    <ul>
+                                        <li>Initially unreliable readings; added <code>SimpleDHT</code> library for stability.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <h4 class="subsection-title">Final Logic:</h4>
+                            <div class="code-block">
+                                <code>
+void loop() {<br>
+  byte temp, humidity;<br>
+  dht11.read(pinDHT11, &temp, &humidity, NULL);<br>
+<br>
+  lcd.print("Temp:"); lcd.print((int)temp);<br>
+  lcd.print("Hum:"); lcd.print((int)humidity);<br>
+<br>
+  if (temp > 40) {<br>
+    digitalWrite(Fan, HIGH);<br>
+    tone(buzzer, 2000); // High-pitched alert<br>
+  }<br>
+}
+                                </code>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="divider">---</div>
+                    
+                    <!-- Assembly Section -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">4. Physical Assembly</h3>
+                        
+                        <h4 class="subsection-title">Design Goals:</h4>
+                        <div class="section-content">
+                            <ul>
+                                <li>Minimalist housing with hidden wires.</li>
+                                <li>Sensor placement near shower for accuracy.</li>
+                            </ul>
+                            
+                            <h4 class="subsection-title">Process:</h4>
+                            <ol>
+                                <li><strong>Mockup:</strong> Cardboard prototype (Fig. 6).</li>
+                                <li><strong>Final Build:</strong>
+                                    <ul>
+                                        <li>Air-dry clay "bathroom" facade.</li>
+                                        <li>Components mounted on foam board.</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                            
+                            <div style="margin: 30px 0;">
+                                <h4 class="subsection-title">Final Assembly</h4>
+                                <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px;">
+                                    <div style="flex: 1; min-width: 240px; max-width: 320px;">
+                                        <object data="https://imgur.com/l9I1RHo.png" type="image/png" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
+                                            <img src="https://imgur.com/l9I1RHo.png" alt="Front view of completed assembly" style="width: 100%; border-radius: 8px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
+                                            Front view of completed assembly
+                                        </object>
+                                        <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Front view of completed assembly</em></p>
+                                    </div>
+                                    <div style="flex: 1; min-width: 240px; max-width: 320px;">
+                                        <object data="https://imgur.com/odt8OuG.png" type="image/png" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
+                                            <img src="https://imgur.com/odt8OuG.png" alt="Side view showing component arrangement" style="width: 100%; border-radius: 8px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
+                                            Side view showing component arrangement
+                                        </object>
+                                        <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Side view showing component arrangement</em></p>
+                                    </div>
+                                    <div style="flex: 1; min-width: 240px; max-width: 320px;">
+                                        <object data="https://imgur.com/V5YNr4nW.png" type="image/png" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
+                                            <img src="https://imgur.com/V5YNr4nW.png" alt="Internal wiring and component placement" style="width: 100%; border-radius: 8px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
+                                            Internal wiring and component placement
+                                        </object>
+                                        <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Internal wiring and component placement</em></p>
+                                    </div>
+                                </div>
+                                
+                                <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+                                    <div style="flex: 1; min-width: 240px; max-width: 320px;">
+                                        <object data="https://imgur.com/V5YNr4nW.png" type="image/png" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                                            <img src="https://imgur.com/V5YNr4nW.png" alt="LCD display showing temperature and humidity readings" style="width: 100%; border-radius: 8px;">
+                                            LCD display showing temperature and humidity readings
+                                        </object>
+                                        <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Close-up of LCD display showing temperature and humidity readings</em></p>
+                                    </div>
+                                    <div style="flex: 1; min-width: 240px; max-width: 320px;">
+                                        <video controls width="100%" style="border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                                            <source src="./Assests/fan/final5.mp4" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                        <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Demonstration video of the working system</em></p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <p><strong>Figure:</strong> <em>Final assembly (see PDF, Fig. 9)</em></p>
+                            <img src="final-assembly.png" alt="Final Assembly" class="dev-step-image">
+                        </div>
+                    </div>
+                    
+                    <div class="divider">---</div>
+                    
+                    <!-- Testing Section -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">5. Testing & Validation</h3>
+                        <div class="section-content">
+                            <ul>
+                                <li><strong>Fan Activation:</strong> Used a hairdryer to simulate temperature spikes (Fig. 4).</li>
+                                <li><strong>Buzzer Tones:</strong> Tested frequencies (100Hz for low, 2000Hz for high alerts).</li>
+                                <li><strong>LCD Readability:</strong> Verified under varying light conditions.</li>
+                            </ul>
+                            
+                            <div class="challenge-item">
+                                <div class="challenge-title">Unexpected Issue:</div>
+                                <div class="solution">
+                                    <ul>
+                                        <li>Food debris (from clay) interfered with sensor.</li>
+                                        <li><strong>Fix:</strong> Added a mesh cover.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="divider">---</div>
+                    
+                    <!-- Learnings Section -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">Key Learnings</h3>
+                        <div class="section-content">
+                            <ol>
+                                <li>
+                                    <strong>Adaptability:</strong>
+                                    <ul>
+                                        <li>Pivoting from Nano to Uno required creative rewiring.</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Debugging:</strong>
+                                    <ul>
+                                        <li>Serial Monitor was invaluable for tracking sensor errors.</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>User Feedback:</strong>
+                                    <ul>
+                                        <li>Class critiques led to adding the LCD (originally not planned).</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    
+                    <div class="divider">---</div>
+                    
+                    <!-- Future Improvements -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">Future Improvements</h3>
+                        <div class="section-content">
+                            <ol>
+                                <li>
+                                    <strong>Enhanced Alerts:</strong>
+                                    <ul>
+                                        <li>RGB LED to visually indicate humidity levels.</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Energy Efficiency:</strong>
+                                    <ul>
+                                        <li>Replace 12V fan with a 5V USB model.</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Cloud Integration:</strong>
+                                    <ul>
+                                        <li>Log data via IoT (e.g., Blynk) for long-term trends.</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    
+                    <!-- Tech Stack -->
+                    <div class="tech-stack">
+                        <h2 class="tech-stack-title">Technical Stack</h2>
+                        <div class="tech-list">
+                            <span class="tech-item">Arduino Uno</span>
+                            <span class="tech-item">DHT11 Sensor</span>
+                            <span class="tech-item">I2C LCD Display</span>
+                            <span class="tech-item">MOSFET Transistor</span>
+                            <span class="tech-item">C++</span>
+                            <span class="tech-item">PWM Control</span>
+                            <span class="tech-item">Piezo Buzzer</span>
+                        </div>
+                    </div>
+
+                    <!-- Conclusion -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">Conclusion</h3>
+                        <div class="section-content">
+                            <p>This project transformed a personal annoyance into a functional solution. It honed my skills in:</p>
+                            <ul>
+                                <li><strong>Circuit design</strong> (MOSFETs, I2C).</li>
+                                <li><strong>Sensor integration</strong> (DHT11 calibration).</li>
+                                <li><strong>Rapid prototyping</strong> (clay + cardboard).</li>
+                            </ul>
+                            
+                            <p><strong>Impact:</strong> The system now runs in my bathroom, proving its practicality.</p>
+                            
+                            <p><strong>Skills Demonstrated:</strong></p>
+                            <p>⌙ Arduino Programming | Circuit Design | Problem-Solving | User-Centered Design</p>
+                            
+                            <p><strong>Project Artifacts:</strong></p>
+                            <p>GitHub Repo | Demo Video | Full Schematic</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

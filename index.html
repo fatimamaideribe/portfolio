@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <style>
+        :root {
+            /* Y2K Cyber Color Scheme */
+            --deep-blue: #000033;
+            --mid-blue: #0033cc;
+            --light-blue: #66ffff;
+            --purple: #9933ff;
+            --pink: #ff66ff;
+            --teal: #00ffcc;
+            --text: #ffffff;
+            --glow: 0 0 10px;
+            --gradient: linear-gradient(45deg, var(--purple), var(--pink), var(--teal));
+            --projects-gradient: linear-gradient(45deg, #ff3366, #ff9933);
+            --about-gradient: linear-gradient(45deg, #ff66ff, #ff99cc);
+            --skills-gradient: linear-gradient(45deg, #33ccff, #3366ff);
+            --contact-gradient: linear-gradient(45deg, #33ff99, #66ffcc);
+            --game-gradient: linear-gradient(45deg, #ff6633, #ffcc33);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Fira Code', monospace;
+            background-color: var(--deep-blue);
+            background-image: url('background1.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: var(--text);
+            height: 100vh;
+            overflow: hidden;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ffffff" d="M11 2h2v8h-2V2zm3 9v2h8v-2h-8zm-10 0h8v2H4v-2zm7 3h2v8h-2v-8z"/></svg>'), auto;
+        }
+
+        /* Desktop */
+        .desktop {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            padding: 20px;
+            display: grid;
+            grid-template-rows: 1fr auto;
+            gap: 20px;
+        }
+
+        .folder-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-content: flex-start;
+            padding: 20px;
+        }
+
+        .folder {
+            width: 80px;
+            height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .folder:hover {
+            transform: scale(1.05);
+        }
+
+        /* Reset all folder icons to base style */
+        .folder-icon {
+            width: 60px;
+            height: 50px;
+            border-radius: 8px;
+            position: relative;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: transparent;
+        }
+
+        .folder-icon:before {
+            display: none;
+        }
+
+        .folder:hover .folder-icon {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        /* Projects Folder */
+        .folder[data-folder="projects"] .folder-icon {
+            background: transparent;
+        }
+        .folder[data-folder="projects"] .folder-icon:after {
+            content: "🗂️";
+            font-size: 36px;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+        }
+
+        /* About Folder */
+        .folder[data-folder="about"] .folder-icon {
+            background: transparent;
+        }
+        .folder[data-folder="about"] .folder-icon:after {
+            content: "🌺";
+            font-size: 36px;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+        }
+
+        /* Skills Folder */
+        .folder[data-folder="skills"] .folder-icon {
+            background: transparent;
+        }
+        .folder[data-folder="skills"] .folder-icon:after {
+            content: "✨";
+            font-size: 36px;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+        }
+
+        /* Contact Folder */
+        .folder[data-folder="contact"] .folder-icon {
+            background: transparent;
+        }
+        .folder[data-folder="contact"] .folder-icon:after {
+            content: "✉️";
+            font-size: 36px;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+        }
+
+        /* Game Folder */
+        .folder[data-folder="game"] .folder-icon {
+            background: transparent;
+        }
+        .folder[data-folder="game"] .folder-icon:after {
+            content: "🐍";
+            font-size: 36px;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+        }
+
+        /* Restore original folder name styling */
+        .folder-name {
+            font-size: 12px;
+            color: var(--text);
+            text-align: center;
+            margin-top: 5px;
+            text-shadow: none;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            border: none;
+        }
+
+        /* Sticky Notes */
+        .sticky-note {
+            position: absolute;
+            width: 220px;  /* Increased from 150px */
+            height: 220px; /* Increased from 150px */
+            background-color: rgba(255, 255, 100, 0.8);
+            padding: 15px; /* Increased from 10px */
+            border-radius: 3px; /* Slightly larger radius */
+            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
+            color: #333;
+            font-family: 'VT323', monospace;
+            cursor: move;
+            z-index: 10;
+            transform: rotate(var(--rotation, -2deg));
+        }
+
+        .sticky-note:nth-child(even) {
+            --rotation: 2deg;
+            background-color: rgba(255, 160, 200, 0.8);
+        }
+
+        .sticky-note:nth-child(3n) {
+            --rotation: -1deg;
+            background-color: rgba(160, 255, 200, 0.8);
+        }
+
+        .sticky-note-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+            padding-bottom: 8px; /* Increased from 5px */
+            margin-bottom: 8px; /* Increased from 5px */
+            font-size: 18px; /* Added font size */
+        }
+
+        .sticky-note-content {
+            font-size: 18px; /* Increased from 14px */
+            line-height: 1.4; /* Added line height for better readability */
+            overflow-wrap: break-word;
+        }
+
+        .delete-note {
+            cursor: pointer;
+            color: #ff4444;
+            font-weight: bold;
+            font-size: 22px; /* Increased size for better clickability */
+        }
+
+        /* Terminal */
+        .terminal-container {
+            grid-row: 2;
+            background-color: rgba(0, 0, 51, 0.9);
+            border-radius: 10px;
+            border: 1px solid #8f8f9d;
+            box-shadow: 0 0 20px rgba(68, 221, 255, 0.3);
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+
+        .terminal-info {
+            padding: 10px;
+            color: var(--text);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, #6699cc, #336699);
+            padding: 8px 15px;
+            border-bottom: 1px solid #8f8f9d;
+        }
+
+        .terminal-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+        }
+
+        .terminal-title::before {
+            content: ">";
+            color: #ffcc00;
+        }
+
+        .terminal-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .terminal-control {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .terminal-control.minimize {
+            background-color: #ffbd2e;
+        }
+
+        .terminal-control.maximize {
+            background-color: #28c940;
+        }
+
+        .terminal-control.close {
+            background-color: #ff5f56;
+        }
+
+        .terminal-body {
+            height: 250px;
+            padding: 15px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .terminal-output {
+            color: var(--text);
+            white-space: pre-wrap;
+            margin-bottom: 10px;
+        }
+
+        .command-prompt {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .prompt-symbol {
+            color: var(--pink);
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        #command-input {
+            background: transparent;
+            border: none;
+            color: var(--teal);
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            caret-color: var(--pink);
+            flex-grow: 1;
+            outline: none;
+        }
+
+        /* Modal Windows */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--mid-blue);
+            border: 1px solid var(--teal);
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--deep-blue);
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--teal);
+        }
+
+        .modal-title {
+            color: var(--teal);
+            font-weight: 500;
+        }
+
+        .close-modal {
+            color: var(--pink);
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .modal-content {
+            padding: 20px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 99;
+        }
+
+        /* Animations */
+        @keyframes moveStars {
+            from { background-position: 0 0; }
+            to { background-position: 800px 800px; }
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.7; }
+        }
+
+        .blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* Project-specific styling */
+        .project-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: rgba(26, 43, 60, 0.7);
+            border-left: 3px solid var(--purple);
+            border-radius: 0 5px 5px 0;
+        }
+
+        .project-title {
+            color: var(--teal);
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .project-description {
+            margin-bottom: 10px;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .tech-tag {
+            background-color: var(--purple);
+            color: white;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 12px;
+        }
+
+        /* Skills visualization */
+        .skill-category {
+            margin-bottom: 20px;
+        }
+
+        .skill-category-title {
+            color: var(--pink);
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .skill-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .skill-list li {
+            background-color: rgba(26, 43, 60, 0.7);
+            border: 1px solid var(--purple);
+            color: var(--text);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+        
+        .skill-list li:hover {
+            background-color: var(--purple);
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .skill-bar {
+            height: 10px;
+            background-color: var(--light-blue);
+            border-radius: 5px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .skill-level {
+            height: 100%;
+            border-radius: 5px;
+            background: linear-gradient(90deg, var(--teal), var(--purple));
+        }
+
+        .skill-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .skill-name {
+            color: var(--text);
+        }
+
+        /* Contact form */
+        .contact-form {
+            display: grid;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-label {
+            color: var(--teal);
+            font-size: 14px;
+        }
+
+        .form-input, .form-textarea {
+            background-color: var(--deep-blue);
+            border: 1px solid var(--light-blue);
+            border-radius: 4px;
+            padding: 8px 12px;
+            color: var(--text);
+            font-family: 'Fira Code', monospace;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .submit-btn {
+            background-color: var(--purple);
+            border: none;
+            border-radius: 4px;
+            padding: 10px 15px;
+            color: white;
+            font-family: 'Fira Code', monospace;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--pink);
+        }
+
+        /* Mini-game section */
+        .game-container {
+            width: 100%;
+            aspect-ratio: 1/1;
+            max-width: 400px;
+            margin: 0 auto;
+            border: 2px solid var(--teal);
+            background-color: var(--deep-blue);
+        }
+
+        /* Taskbar */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(to bottom, #1084d0, #0c5a91);
+            border-top: 1px solid #5aabde;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            z-index: 1000;
+        }
+
+        .start-button {
+            background: linear-gradient(to bottom, #5aabde, #3b89b9);
+            border: 1px solid #0c5a91;
+            color: white;
+            padding: 5px 15px;
+            font-family: 'Fira Code', monospace;
+            cursor: pointer;
+            margin-right: 20px;
+            transition: all 0.2s;
+            border-radius: 3px;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+            font-weight: bold;
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .start-button:hover {
+            background: linear-gradient(to bottom, #6cb5e2, #479bd3);
+        }
+
+        .taskbar-icons {
+            display: flex;
+            gap: 15px;
+            margin-left: 20px;
+        }
+
+        .taskbar-icon {
+            color: white;
+            font-size: 18px;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+        }
+
+        .taskbar-icon:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .taskbar-clock {
+            margin-left: auto;
+            color: white;
+            font-size: 14px;
+            padding: 5px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.2);
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+
+    <!-- Tutorial Sticky Note -->
+    <div class="sticky-note" style="top: 60px; right: 60px; background-color: rgba(160, 255, 200, 0.9); z-index: 100; width: 240px; height: 240px;">
+        <div class="sticky-note-header">
+            <span>💡 HOW TO USE</span>
+            <span class="delete-note">×</span>
+        </div>
+        <div class="sticky-note-content">
+            <p>• Drag & drop sticky notes</p>
+            <p>• Click folders to explore</p>
+            <p>• Type commands in terminal</p>
+            <p>• Press 'x' to close popups</p>
+            <p>• Try hidden easter eggs!</p>
+            <br>
+            <p style="font-size: 14px; font-style: italic;">Grab this note's header to move it around!</p>
+        </div>
+    </div>
+
+    <!-- Desktop Interface -->
+    <div class="desktop">
+        <div class="folder-area">
+            <!-- Folders -->
+            <div class="folder" data-folder="projects">
+                <div class="folder-icon"></div>
+                <div class="folder-name">Projects</div>
+            </div>
+            <div class="folder" data-folder="about">
+                <div class="folder-icon"></div>
+                <div class="folder-name">About Me</div>
+            </div>
+            <div class="folder" data-folder="skills">
+                <div class="folder-icon"></div>
+                <div class="folder-name">Skills</div>
+            </div>
+            <div class="folder" data-folder="contact">
+                <div class="folder-icon"></div>
+                <div class="folder-name">Contact</div>
+            </div>
+            <div class="folder" data-folder="game">
+                <div class="folder-icon"></div>
+                <div class="folder-name">Snake Game</div>
+            </div>
+
+            <!-- Image Carousel Widget -->
+            <div class="carousel-widget" style="position: absolute; top: 350px; left: 200px; width: 500px; height: 300px; background-color: rgba(26, 43, 60, 0.9); border: 2px solid var(--teal); border-radius: 8px; overflow: hidden; box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); z-index: 5; display: none;">
+                <div class="widget-header" style="padding: 8px 15px; background-color: var(--deep-blue); border-bottom: 1px solid var(--teal); font-size: 14px; color: var(--teal); font-family: 'VT323', monospace; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center;">
+                    <span>Project Gallery</span>
+                    <div style="display: flex; gap: 10px;">
+                        <button id="prev-slide" style="background: none; border: 1px solid var(--teal); color: var(--teal); cursor: pointer; width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px;">&lt;</button>
+                        <button id="next-slide" style="background: none; border: 1px solid var(--teal); color: var(--teal); cursor: pointer; width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px;">&gt;</button>
+                    </div>
+                </div>
+                <div class="carousel-container" style="position: relative; width: 100%; height: calc(100% - 45px); overflow: hidden;">
+                    <div class="carousel-slides" style="display: flex; transition: transform 0.5s ease; height: 100%; width: 500%;">
+                        <div class="carousel-slide" style="min-width: 100%; height: 100%; position: relative;">
+                            <img src="https://picsum.photos/id/237/800/450" alt="Project 1" style="width: 100%; height: 100%; object-fit: cover;">
+                            <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 10px; background: linear-gradient(transparent, rgba(0,0,51,0.8)); color: white; text-align: center;">
+                                <h3 style="margin: 0; font-size: 18px; color: var(--teal);">A* Pathfinding Snake</h3>
+                                <p style="margin: 5px 0 0; font-size: 12px;">AI-powered snake game with intelligent pathfinding</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide" style="min-width: 100%; height: 100%; position: relative;">
+                            <img src="https://picsum.photos/id/24/800/450" alt="Project 2" style="width: 100%; height: 100%; object-fit: cover;">
+                            <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 10px; background: linear-gradient(transparent, rgba(0,0,51,0.8)); color: white; text-align: center;">
+                                <h3 style="margin: 0; font-size: 18px; color: var(--teal);">Wildwise</h3>
+                                <p style="margin: 5px 0 0; font-size: 12px;">Conservation-focused educational platform</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide" style="min-width: 100%; height: 100%; position: relative;">
+                            <img src="https://picsum.photos/id/42/800/450" alt="Project 3" style="width: 100%; height: 100%; object-fit: cover;">
+                            <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 10px; background: linear-gradient(transparent, rgba(0,0,51,0.8)); color: white; text-align: center;">
+                                <h3 style="margin: 0; font-size: 18px; color: var(--teal);">Automated Exhaust Fan</h3>
+                                <p style="margin: 5px 0 0; font-size: 12px;">Arduino-powered environmental control system</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide" style="min-width: 100%; height: 100%; position: relative;">
+                            <img src="https://picsum.photos/id/96/800/450" alt="Project 4" style="width: 100%; height: 100%; object-fit: cover;">
+                            <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 10px; background: linear-gradient(transparent, rgba(0,0,51,0.8)); color: white; text-align: center;">
+                                <h3 style="margin: 0; font-size: 18px; color: var(--teal);">AI Study Buddy</h3>
+                                <p style="margin: 5px 0 0; font-size: 12px;">ESP32-powered interactive learning assistant</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide" style="min-width: 100%; height: 100%; position: relative;">
+                            <img src="https://picsum.photos/id/119/800/450" alt="Project 5" style="width: 100%; height: 100%; object-fit: cover;">
+                            <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 10px; background: linear-gradient(transparent, rgba(0,0,51,0.8)); color: white; text-align: center;">
+                                <h3 style="margin: 0; font-size: 18px; color: var(--teal);">Bakery Website</h3>
+                                <p style="margin: 5px 0 0; font-size: 12px;">Full-stack web development project for a bakery business</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide indicators -->
+                    <div class="carousel-indicators" style="position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px;">
+                        <span class="indicator active" data-index="0" style="width: 10px; height: 10px; border-radius: 50%; background-color: var(--teal); cursor: pointer;"></span>
+                        <span class="indicator" data-index="1" style="width: 10px; height: 10px; border-radius: 50%; background-color: rgba(255,255,255,0.5); cursor: pointer;"></span>
+                        <span class="indicator" data-index="2" style="width: 10px; height: 10px; border-radius: 50%; background-color: rgba(255,255,255,0.5); cursor: pointer;"></span>
+                        <span class="indicator" data-index="3" style="width: 10px; height: 10px; border-radius: 50%; background-color: rgba(255,255,255,0.5); cursor: pointer;"></span>
+                        <span class="indicator" data-index="4" style="width: 10px; height: 10px; border-radius: 50%; background-color: rgba(255,255,255,0.5); cursor: pointer;"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Default Sticky Notes -->
+            <div class="sticky-note" style="top: 80px; left: 350px;">
+                <div class="sticky-note-header">
+                    <span>Welcome!</span>
+                    <span class="delete-note">×</span>
+                </div>
+                <div class="sticky-note-content">
+                    Type 'help' in the terminal to see available commands. 🚀 Or a little 'hello' wouldn't hurt 😜
+                </div>
+            </div>
+            <div class="sticky-note" style="top: 180px; left: 620px;">
+                <div class="sticky-note-header">
+                    <span>Easter Eggs</span>
+                    <span class="delete-note">×</span>
+                </div>
+                <div class="sticky-note-content">
+                    Try typing 'coffee' in the terminal... 🌟
+                </div>
+            </div>
+
+            <!-- GIF Widget -->
+            <div class="gif-widget" style="position: absolute; top: 150px; left: 800px; width: 220px; height: 220px; background-color: rgba(26, 43, 60, 0.9); border: 1px solid var(--teal); border-radius: 5px; overflow: hidden; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); z-index: 5;">
+                <div class="widget-header" style="padding: 5px 10px; background-color: var(--deep-blue); border-bottom: 1px solid var(--teal); font-size: 12px; color: var(--teal); font-family: 'VT323', monospace; letter-spacing: 1px;">
+                    <span>ME RN LOL</span>
+                </div>
+                <div style="height: calc(100% - 30px); overflow: hidden;">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExb2dhbHZuaGh4d3hjNXY3MGpmejZ0bG5iZ2pkeno1bndnc2RvOWlnciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/YQitE4YNQNahy/giphy.gif" alt="Retro Computer Animation" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            </div>
+
+            <!-- Calendar Widget -->
+            <div class="calendar-widget" style="position: fixed; bottom: 70px; right: 540px; width: 220px; height: 180px; background-color: rgba(26, 43, 60, 0.9); border: 1px solid var(--teal); border-radius: 5px; overflow: hidden; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); z-index: 5; display: none;">
+                <div class="widget-header" style="padding: 5px 10px; background-color: var(--deep-blue); border-bottom: 1px solid var(--teal); font-size: 12px; color: var(--teal); font-family: 'VT323', monospace; letter-spacing: 1px;">
+                    <span>Calendar</span>
+                    <span class="close-widget" style="cursor: pointer; margin-left: auto;">×</span>
+                </div>
+                <div style="padding: 8px; text-align: center;">
+                    <div id="current-date" style="font-size: 12px; margin-bottom: 3px; color: var(--pink); font-family: 'VT323', monospace;"></div>
+                    <div id="current-time" style="font-size: 16px; color: var(--teal); font-family: 'VT323', monospace; letter-spacing: 1px;"></div>
+                    <div style="margin-top: 5px; display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; font-size: 9px;">
+                        <div style="color: var(--pink);">Su</div>
+                        <div style="color: var(--text);">Mo</div>
+                        <div style="color: var(--text);">Tu</div>
+                        <div style="color: var(--text);">We</div>
+                        <div style="color: var(--text);">Th</div>
+                        <div style="color: var(--text);">Fr</div>
+                        <div style="color: var(--pink);">Sa</div>
+                    </div>
+                    <div style="margin-top: 5px; text-align: left; border-top: 1px solid var(--light-blue); padding-top: 3px;">
+                        <div style="font-size: 10px; margin-bottom: 3px; color: var(--teal);">Today's Events:</div>
+                        <div style="display: flex; justify-content: space-between; font-size: 9px; margin-bottom: 2px;">
+                            <span style="color: var(--pink);">09:00</span>
+                            <span style="color: var(--text); flex-grow: 1; margin-left: 5px;">Portfolio Review</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 9px;">
+                            <span style="color: var(--pink);">14:30</span>
+                            <span style="color: var(--text); flex-grow: 1; margin-left: 5px;">Project Meeting</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notepad Widget -->
+            <div class="notepad-widget" style="position: fixed; bottom: 70px; right: 300px; width: 220px; height: 120px; background-color: rgba(26, 43, 60, 0.9); border: 1px solid var(--teal); border-radius: 5px; overflow: hidden; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); z-index: 5; display: none;">
+                <div class="widget-header" style="padding: 5px 10px; background-color: var(--deep-blue); border-bottom: 1px solid var(--teal); font-size: 12px; color: var(--teal); font-family: 'VT323', monospace; letter-spacing: 1px;">
+                    <span>Notepad</span>
+                    <span class="close-widget" style="cursor: pointer; margin-left: auto;">×</span>
+                </div>
+                <div style="padding: 8px; height: calc(100% - 30px);">
+                    <div contenteditable="true" style="width: 100%; height: 100%; background-color: #f5f5dc; padding: 5px; color: #333; font-family: 'Courier New', monospace; font-size: 11px; line-height: 1.2; overflow-y: auto;">Type your quick notes here...
+
+- Finish portfolio updates
+- Update resume
+- Research new tech trends</div>
+                </div>
+            </div>
+            
+            <!-- Weather Widget -->
+            <div class="weather-widget" style="position: fixed; bottom: 70px; right: 60px; width: 220px; height: 120px; background-color: rgba(26, 43, 60, 0.9); border: 1px solid var(--teal); border-radius: 5px; overflow: hidden; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); z-index: 5; display: none;">
+                <div class="widget-header" style="padding: 5px 10px; background-color: var(--deep-blue); border-bottom: 1px solid var(--teal); font-size: 12px; color: var(--teal); font-family: 'VT323', monospace; letter-spacing: 1px; display: flex; justify-content: space-between;">
+                    <span>Weather</span>
+                    <span class="refresh-weather" style="cursor: pointer; transition: transform 0.2s;">↻</span>
+                    <span class="close-widget" style="cursor: pointer;">×</span>
+                </div>
+                <div style="padding: 8px; text-align: center;">
+                    <div style="font-size: 32px; margin: 2px 0;">☀️</div>
+                    <div style="font-size: 20px; font-weight: bold; color: var(--teal); font-family: 'VT323', monospace; letter-spacing: 1px;">19°C</div>
+                    <div style="font-size: 12px; margin-bottom: 3px; font-family: 'VT323', monospace;">London, UK</div>
+                    <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text); opacity: 0.8;">
+                        <span>H: 26° L: 18°</span>
+                        <span>Humidity: 65%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- System Monitor Widget -->
+            <div class="system-monitor" style="position: fixed; bottom: 70px; right: 780px; width: 150px; height: 100px; background-color: rgba(26, 43, 60, 0.9); border: 1px solid var(--teal); border-radius: 5px; overflow: hidden; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); z-index: 5; display: none;">
+                <div class="widget-header" style="padding: 5px 10px; background-color: var(--deep-blue); border-bottom: 1px solid var(--teal); font-size: 12px; color: var(--teal); font-family: 'VT323', monospace; letter-spacing: 1px;">
+                    <span>System Monitor</span>
+                    <span class="close-widget" style="cursor: pointer; margin-left: auto;">×</span>
+                </div>
+                <div style="padding: 8px; font-size: 11px; color: var(--text); font-family: 'Fira Code', monospace; line-height: 1.4;">
+                    CPU: ████ 45%<br>
+                    RAM: █████ 65%<br>
+                    Disk: ██ 20%
+                </div>
+            </div>
+        </div>
+
+        <!-- Terminal Interface -->
+        <div class="terminal-container">
+            <div class="terminal-info">A terminal is a text-based interface where you can type commands to interact with a computer. It's like a text conversation with your computer instead of using buttons and menus.</div>
+            <div class="terminal-header">
+                <div class="terminal-title">fatimas@Portfolio ~ Terminal</div>
+                <div class="terminal-controls">
+                    <span class="terminal-control minimize">─</span>
+                    <span class="terminal-control maximize">□</span>
+                    <span class="terminal-control close">×</span>
+                </div>
+            </div>
+            <div class="terminal-body">
+                <div class="terminal-output">
+Welcome to my Creative Computing Portfolio
+
+Type 'help' to see available commands.
+                </div>
+                <div class="command-prompt">
+                    <span class="prompt-symbol">></span>
+                    <input type="text" id="command-input" autofocus placeholder="Type a command...">
+                </div>
+            </div>
+        </div>
+
+        <!-- Taskbar -->
+        <div class="taskbar">
+            <button class="start-button">
+                <span>Start</span>
+            </button>
+            <div class="taskbar-icons">
+                <a href="#" class="taskbar-icon" id="terminal-icon" title="Terminal">
+                    <span>💻</span>
+                </a>
+                <a href="#" class="taskbar-icon" id="calendar-icon" title="Calendar">
+                    <span>📅</span>
+                </a>
+                <a href="#" class="taskbar-icon" id="notepad-icon" title="Notepad">
+                    <span>📝</span>
+                </a>
+                <a href="#" class="taskbar-icon" id="weather-icon" title="Weather">
+                    <span>🌤️</span>
+                </a>
+                <a href="#" class="taskbar-icon" id="system-icon" title="System Monitor">
+                    <span>📊</span>
+                </a>
+            </div>
+            <div class="taskbar-clock" id="clock">00:00:00</div>
+        </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="overlay"></div>
+
+    <!-- Projects Modal -->
+    <div id="projects-modal" class="modal">
+        <div class="modal-header">
+            <div class="modal-title">Projects</div>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-content">
+            <div class="project-item">
+                <h3 class="project-title"><a href="snake-ai.html" style="text-decoration: none; color: inherit;">A* Pathfinding Snake Game</a></h3>
+                <p class="project-description">
+                    A classic arcade snake game with a twist - an intelligent AI using A* pathfinding algorithm to guide the snake towards food while avoiding obstacles and itself.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">A* Algorithm</span>
+                    <span class="tech-tag">Game Development</span>
+                </div>
+            </div>
+            <div class="project-item">
+                <h3 class="project-title"><a href="wildwise.html" style="text-decoration: none; color: inherit;">Wildwise</a></h3>
+                <p class="project-description">
+                    A conservation-focused brand with educational content across multiple platforms, including a Roblox game, social media presence, and campaign materials to raise awareness about wildlife protection.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">Roblox Studio</span>
+                    <span class="tech-tag">Content Strategy</span>
+                    <span class="tech-tag">Graphic Design</span>
+                    <span class="tech-tag">Educational Gaming</span>
+                </div>
+            </div>
+            <div class="project-item">
+                <h3 class="project-title"><a href="arduino-fan.html" style="text-decoration: none; color: inherit;">Automated Exhaust Fan</a></h3>
+                <p class="project-description">
+                    An Arduino-powered environmental control system that automatically manages exhaust fans based on sensor readings. Features LCD feedback display and responsive control mechanisms.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">Arduino</span>
+                    <span class="tech-tag">C++</span>
+                    <span class="tech-tag">Sensors</span>
+                    <span class="tech-tag">Electronics</span>
+                </div>
+            </div>
+            <div class="project-item">
+                <h3 class="project-title"><a href="ai-study-buddy.html" style="text-decoration: none; color: inherit;">AI Study Buddy</a></h3>
+                <p class="project-description">
+                    An ESP32-powered interactive learning assistant that helps students with study sessions, flashcards, and timed work intervals. Provides personalized recommendations and progress tracking.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">ESP32</span>
+                    <span class="tech-tag">AI Integration</span>
+                    <span class="tech-tag">UX Design</span>
+                </div>
+            </div>
+            <div class="project-item">
+                <h3 class="project-title"><a href="bakery.html" style="text-decoration: none; color: inherit;">Bakery Website</a></h3>
+                <p class="project-description">
+                    A full-stack web development project for a bakery business, featuring online ordering, product catalog, and admin dashboard to manage inventory and orders.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">HTML/CSS</span>
+                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">PHP</span>
+                    <span class="tech-tag">MySQL</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div id="about-modal" class="modal">
+        <div class="modal-header">
+            <div class="modal-title">About Me</div>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-content">
+            <h3 style="color: var(--teal); margin-bottom: 15px;">Hello, World!</h3>
+            <p style="margin-bottom: 15px;">
+                I'm a creative technologist passionate about blending art and technology to build engaging and interactive experiences. With a background in both design and programming, I love exploring the intersection of these disciplines.
+            </p>
+            <p style="margin-bottom: 25px;">
+                I blend technical expertise with creative vision to transform concepts into impactful digital experiences. Driven by innovation, I thrive in collaborative environments where technology meets artistic expression. Whether developing interactive installations or designing immersive web experiences, I approach each project with both analytical precision and creative intuition—solving complex problems with elegant, user-centered solutions.
+            </p>
+            <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--light-blue);">
+                <h4 style="color: var(--pink); margin-bottom: 10px;">Education</h4>
+                <p>Bachelor of Science in Creative Computing</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills Modal -->
+    <div id="skills-modal" class="modal">
+        <div class="modal-header">
+            <div class="modal-title">Skills & Expertise</div>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-content">
+            <div class="skill-category">
+                <h3 class="skill-category-title">Programming Languages</h3>
+                <ul class="skill-list">
+                    <li>JavaScript</li>
+                    <li>Python</li>
+                    <li>C++</li>
+                    <li>PHP</li>
+                </ul>
+            </div>
+            
+            <div class="skill-category">
+                <h3 class="skill-category-title">Web Technologies</h3>
+                <ul class="skill-list">
+                    <li>HTML/CSS</li>
+                    <li>JavaScript</li>
+                    <li>Node.js</li>
+                </ul>
+            </div>
+            
+            <div class="skill-category">
+                <h3 class="skill-category-title">Creative & Design</h3>
+                <ul class="skill-list">
+                    <li>UI/UX Design</li>
+                    <li>Adobe Creative Suite</li>
+                    <li>3D Modeling</li>
+                </ul>
+            </div>
+            
+            <div class="skill-category">
+                <h3 class="skill-category-title">Hardware & IoT</h3>
+                <ul class="skill-list">
+                    <li>Arduino</li>
+                    <li>ESP32/ESP8266</li>
+                    <li>Sensors & Actuators</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="modal">
+        <div class="modal-header">
+            <div class="modal-title">Contact Me</div>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-content">
+            <div style="margin-bottom: 20px;">
+                <h3 style="color: var(--teal); margin-bottom: 10px;">Get In Touch</h3>
+                <p>I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.</p>
+            </div>
+            
+            <div style="display: flex; gap: 30px; margin-bottom: 30px;">
+                <div>
+                    <h4 style="color: var(--pink); margin-bottom: 8px;">Email</h4>
+                    <p>fatimamaideribe@gmail.com</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--pink); margin-bottom: 8px;">LinkedIn</h4>
+                    <p><a href="https://www.linkedin.com/in/fatima-ibrahim-maideribe" target="_blank" style="color: inherit; text-decoration: underline;">Fatima Ibrahim Maideribe</a></p>
+                </div>
+            </div>
+            
+            <form class="contact-form">
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-input" placeholder="Your Name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" placeholder="your.email@example.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Subject</label>
+                    <input type="text" class="form-input" placeholder="What's this about?">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Message</label>
+                    <textarea class="form-textarea" placeholder="Your message here..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Game Modal -->
+    <div id="game-modal" class="modal">
+        <div class="modal-header">
+            <div class="modal-title">Snake*Search</div>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-content" style="background-color: #0033cc; padding: 20px; border-radius: 8px; text-align: center;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h3 style="color: var(--teal); margin-bottom: 10px; text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);">A* Pathfinding Snake</h3>
+                <p style="color: white;">Watch the AI navigate the snake to food while avoiding obstacles, or take control yourself!</p>
+                <div style="margin: 15px 0; display: flex; justify-content: center; gap: 10px;">
+                    <button id="ai-mode" class="submit-btn" style="background-color: #9933ff; min-width: 120px; font-weight: bold;">AI Mode</button>
+                    <button id="player-mode" class="submit-btn" style="background-color: #ff66ff; min-width: 120px; font-weight: bold;">Player Mode</button>
+                </div>
+            </div>
+            
+            <div class="game-container" id="snake-game" style="width: 400px; height: 400px; margin: 0 auto; border: 2px solid var(--teal); background-color: #000033; box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);">
+                <!-- Game canvas will be inserted here by JavaScript -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px; color: white;">
+                <p>Score: <span id="game-score" style="font-weight: bold; color: var(--teal);">0</span></p>
+                <p id="game-message" style="color: var(--pink);">Press AI Mode or Player Mode to start</p>
+            </div>
+            
+            <!-- Snake game controls section -->
+            <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--light-blue);">
+                <h3 style="color: var(--teal); margin-bottom: 15px; text-align: center;">Snake Game Controls</h3>
+                <ul style="list-style-type: none; text-align: center; padding: 0; color: white;">
+                    <li>Use arrow keys to control the snake</li>
+                    <li>Eat food to grow longer and score points</li>
+                    <li>Avoid hitting walls and your own tail</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>document.addEventListener('DOMContentLoaded', function() {
+        // Terminal functionality
+        const commandInput = document.getElementById('command-input');
+        const terminalBody = document.querySelector('.terminal-body');
+        const terminalOutput = document.querySelector('.terminal-output');
+        const terminalContainer = document.querySelector('.terminal-container');
+        const clock = document.getElementById('clock');
+        
+        // Widget elements
+        const calendarWidget = document.querySelector('.calendar-widget');
+        const notepadWidget = document.querySelector('.notepad-widget');
+        const weatherWidget = document.querySelector('.weather-widget');
+        const systemMonitor = document.querySelector('.system-monitor');
+        
+        // Taskbar icons
+        const terminalIcon = document.getElementById('terminal-icon');
+        const calendarIcon = document.getElementById('calendar-icon');
+        const notepadIcon = document.getElementById('notepad-icon');
+        const weatherIcon = document.getElementById('weather-icon');
+        const systemIcon = document.getElementById('system-icon');
+        
+        // Terminal window controls
+        const minimizeBtn = document.querySelector('.minimize');
+        const maximizeBtn = document.querySelector('.maximize');
+        const closeBtn = document.querySelector('.close');
+        
+        // Add close functionality to all widgets
+        const closeWidgets = document.querySelectorAll('.close-widget');
+        closeWidgets.forEach(button => {
+            button.addEventListener('click', function() {
+                this.closest('.calendar-widget, .notepad-widget, .weather-widget, .system-monitor').style.display = 'none';
+            });
+        });
+        
+        // Toggle widgets and terminal visibility
+        terminalIcon.addEventListener('click', function(e) {
+            e.preventDefault();
+            terminalContainer.style.display = terminalContainer.style.display === 'none' ? 'block' : 'none';
+            if (terminalContainer.style.display !== 'none') {
+                commandInput.focus();
+            }
+        });
+        
+        calendarIcon.addEventListener('click', function(e) {
+            e.preventDefault();
+            calendarWidget.style.display = calendarWidget.style.display === 'none' ? 'block' : 'none';
+        });
+        
+        notepadIcon.addEventListener('click', function(e) {
+            e.preventDefault();
+            notepadWidget.style.display = notepadWidget.style.display === 'none' ? 'block' : 'none';
+        });
+        
+        weatherIcon.addEventListener('click', function(e) {
+            e.preventDefault();
+            weatherWidget.style.display = weatherWidget.style.display === 'none' ? 'block' : 'none';
+            if (weatherWidget.style.display !== 'none') {
+                updateWeather(); // Refresh weather when opened
+            }
+        });
+        
+        systemIcon.addEventListener('click', function(e) {
+            e.preventDefault();
+            systemMonitor.style.display = systemMonitor.style.display === 'none' ? 'block' : 'none';
+        });
+    
+        minimizeBtn.addEventListener('click', () => {
+            terminalContainer.style.display = 'none';
+        });
+    
+        maximizeBtn.addEventListener('click', () => {
+            if (terminalContainer.style.height === '40px') {
+                terminalContainer.style.height = '300px';
+                terminalBody.style.display = 'block';
+            } else {
+                terminalContainer.style.width = '100%';
+                terminalContainer.style.height = '100%';
+                terminalContainer.style.top = '0';
+                terminalContainer.style.left = '0';
+            }
+        });
+    
+        closeBtn.addEventListener('click', () => {
+            terminalContainer.style.display = 'none';
+        });
+    
+        // Update clock
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            clock.textContent = `${hours}:${minutes}:${seconds}`;
+            
+            // Update calendar widget time and date
+            const currentDate = document.getElementById('current-date');
+            const currentTime = document.getElementById('current-time');
+            
+            if (currentDate && currentTime) {
+                currentDate.textContent = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+                currentTime.textContent = `${hours}:${minutes}`;
+            }
+        }
+    
+        setInterval(updateClock, 1000);
+        updateClock();
+        
+        // Initialize Calendar Grid
+        function initCalendar() {
+            const calendarGrid = document.querySelector('.calendar-widget div:nth-child(2) div:nth-child(3)');
+            if (!calendarGrid) return;
+            
+            const now = new Date();
+            const today = now.getDate();
+            const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
+            const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+            
+            // Add empty cells for days before the first of the month
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.style.color = 'var(--light-blue)';
+                emptyDay.style.fontSize = '10px';
+                emptyDay.style.textAlign = 'center';
+                emptyDay.style.padding = '2px 0';
+                calendarGrid.appendChild(emptyDay);
+            }
+            
+            // Add days of the month
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayCell = document.createElement('div');
+                dayCell.textContent = i;
+                dayCell.style.fontSize = '10px';
+                dayCell.style.textAlign = 'center';
+                dayCell.style.padding = '2px 0';
+                
+                // Highlight today
+                if (i === today) {
+                    dayCell.style.backgroundColor = 'var(--teal)';
+                    dayCell.style.color = 'var(--deep-blue)';
+                    dayCell.style.borderRadius = '50%';
+                    dayCell.style.fontWeight = 'bold';
+                } else {
+                    dayCell.style.color = 'var(--text)';
+                }
+                
+                calendarGrid.appendChild(dayCell);
+            }
+        }
+        
+        // Initialize calendar if it exists
+        initCalendar();
+        
+        // Weather widget functionality
+        const refreshWeatherBtn = document.querySelector('.refresh-weather');
+        if (refreshWeatherBtn) {
+            refreshWeatherBtn.addEventListener('click', updateWeather);
+        }
+        
+        function updateWeather() {
+            // In a real implementation, you would fetch from a weather API
+            const weatherIcons = ['☀️', '⛅', '🌧️', '❄️', '🌩️'];
+            const temps = [18, 22, 24, 19, 21];
+            const icon = weatherIcons[Math.floor(Math.random() * weatherIcons.length)];
+            const temp = temps[Math.floor(Math.random() * temps.length)];
+            const high = Math.floor(Math.random() * 5) + 23;
+            const low = Math.floor(Math.random() * 5) + 15;
+            const humidity = Math.floor(Math.random() * 30) + 50;
+            
+            const weatherWidget = document.querySelector('.weather-widget');
+            if (weatherWidget) {
+                const iconEl = weatherWidget.querySelector('div:nth-child(2) div:nth-child(1)');
+                const tempEl = weatherWidget.querySelector('div:nth-child(2) div:nth-child(2)');
+                const detailsEl = weatherWidget.querySelector('div:nth-child(2) div:nth-child(4)');
+                
+                if (iconEl) iconEl.textContent = icon;
+                if (tempEl) tempEl.textContent = `${temp}°C`;
+                if (detailsEl) {
+                    detailsEl.innerHTML = `
+                        <span>H: ${high}° L: ${low}°</span>
+                        <span>Humidity: ${humidity}%</span>
+                    `;
+                }
+            }
+        }
+        
+        // Initialize weather
+        updateWeather();
+    
+        // Command handling
+        commandInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const command = this.value.trim().toLowerCase();
+                processCommand(command);
+                this.value = '';
+            }
+        });
+    
+        function processCommand(command) {
+            terminalOutput.innerHTML += `\n> ${command}\n`;
+    
+            switch(command) {
+                case 'help':
+                    terminalOutput.innerHTML += `
+    Available commands:
+      help       - Display this help menu
+      about      - Show information about me
+      projects   - View my project portfolio
+      skills     - List my technical skills
+      contact    - Display contact information
+      clear      - Clear the terminal screen
+      folders    - Show available folders
+      create     - Create a new sticky note
+      fix-game   - Fix and initialize snake game
+      ls         - List directory contents
+      cd         - Change directory
+      cat        - Display file contents
+      sudo       - Nice try, you're not root 😏
+      
+    Try to find hidden commands for easter eggs!`;
+                    break;
+                case 'about':
+                    openModal('about-modal');
+                    terminalOutput.innerHTML += 'Opening about information...\n';
+                    break;
+                case 'projects':
+                    openModal('projects-modal');
+                    terminalOutput.innerHTML += 'Loading project portfolio...\n';
+                    break;
+                case 'skills':
+                    openModal('skills-modal');
+                    terminalOutput.innerHTML += 'Displaying skills and expertise...\n';
+                    break;
+                case 'contact':
+                    openModal('contact-modal');
+                    terminalOutput.innerHTML += 'Opening contact information...\n';
+                    break;
+                case 'clear':
+                    terminalOutput.innerHTML = '';
+                    break;
+                case 'folders':
+                    terminalOutput.innerHTML += `
+    Available folders:
+      Projects   - My portfolio of work
+      About Me   - Personal information
+      Skills     - Technical capabilities
+      Contact    - Ways to reach me
+      Snake*Search - Interactive A* pathfinding demo`;
+                    break;
+                case 'create':
+                    createStickyNote();
+                    terminalOutput.innerHTML += 'Created a new sticky note!\n';
+                    break;
+                case 'fix-game':
+                    openModal('game-modal');
+                    terminalOutput.innerHTML += 'Initializing Snake Game...\n';
+                    
+                    // Initialize a basic snake game canvas
+                    setTimeout(() => {
+                        const gameContainer = document.getElementById('snake-game');
+                        if (gameContainer && !gameContainer.querySelector('canvas')) {
+                            // Create canvas if it doesn't exist
+                            const canvas = document.createElement('canvas');
+                            canvas.width = 400;
+                            canvas.height = 400;
+                            canvas.style.border = '1px solid var(--teal)';
+                            canvas.style.backgroundColor = '#000033';
+                            gameContainer.appendChild(canvas);
+                            
+                            // Update message
+                            document.getElementById('game-message').textContent = 'Game initialized! Press AI Mode or Player Mode to start.';
+                            terminalOutput.innerHTML += 'Snake game has been fixed and initialized!\n';
+                        } else {
+                            terminalOutput.innerHTML += 'Snake game was already initialized or container not found.\n';
+                        }
+                    }, 500);
+                    break;
+                case 'cd':
+                    terminalOutput.innerHTML += 'Usage: cd [directory]\n';
+                    break;
+                case 'cat':
+                    terminalOutput.innerHTML += 'Usage: cat [filename]\n';
+                    break;
+                case 'sudo':
+                    terminalOutput.innerHTML += 'Nice try, you\'re not root 😏\n';
+                    break;
+                case 'hello':
+                case 'hi':
+                    terminalOutput.innerHTML += 'Hello there! Nice to meet you. Type "help" to see what I can do.\n';
+                    break;
+                case '42':
+                    terminalOutput.innerHTML += 'Yes, that is indeed the answer to life, the universe, and everything.\n';
+                    break;
+                case 'coffee':
+                    terminalOutput.innerHTML += `
+            ( (
+             ) )
+          .........
+          |       |]
+          \\       /
+           \`-----'
+                            
+    Error: Coffee machine not found. Please insert coin to continue.\n`;
+                    break;
+                default:
+                    terminalOutput.innerHTML += `Command not found: ${command}. Type "help" for available commands.\n`;
+            }
+            
+            // Scroll to the bottom
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+    
+        // Modal functionality
+        const overlay = document.querySelector('.overlay');
+        const modals = document.querySelectorAll('.modal');
+        const closeButtons = document.querySelectorAll('.close-modal');
+        
+        function openModal(modalId) {
+            // Hide all modals first
+            modals.forEach(modal => {
+                modal.style.display = 'none';
+            });
+            
+            // Show the overlay
+            overlay.style.display = 'block';
+            
+            // Show the requested modal
+            document.getElementById(modalId).style.display = 'block';
+        }
+        
+        function closeAllModals() {
+            modals.forEach(modal => {
+                modal.style.display = 'none';
+            });
+            overlay.style.display = 'none';
+        }
+        
+        // Attach close events
+        closeButtons.forEach(button => {
+            button.addEventListener('click', closeAllModals);
+        });
+        
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) {
+                closeAllModals();
+            }
+        });
+    
+        // Folder click handlers
+        const folders = document.querySelectorAll('.folder');
+        folders.forEach(folder => {
+            folder.addEventListener('click', function() {
+                const folderId = this.getAttribute('data-folder');
+                openModal(folderId + '-modal');
+                
+                // Initialize snake game if the game folder is clicked
+                if (folderId === 'game') {
+                    // Clear any existing canvas first to prevent stacking
+                    const gameContainer = document.getElementById('snake-game');
+                    if (gameContainer) {
+                        // Clear any existing canvases
+                        gameContainer.innerHTML = '';
+                        
+                        // Create a fresh canvas
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 400;
+                        canvas.height = 400;
+                        canvas.style.border = '2px solid var(--teal)';
+                        canvas.style.backgroundColor = '#000033';
+                        gameContainer.appendChild(canvas);
+                    }
+                    
+                    // Reset game message
+                    document.getElementById('game-message').textContent = 'Press Player Mode to start playing!';
+                }
+            });
+        });
+    
+        // Sticky note functionality
+        function createStickyNote() {
+            const note = document.createElement('div');
+            note.className = 'sticky-note';
+            note.style.top = Math.random() * 300 + 'px';
+            note.style.left = Math.random() * 500 + 'px';
+            const header = document.createElement('div');
+            header.className = 'sticky-note-header';
+            
+            const title = document.createElement('span');
+            title.textContent = 'New Note';
+            
+            const closeBtn = document.createElement('span');
+            closeBtn.className = 'delete-note';
+            closeBtn.textContent = '×';
+            closeBtn.addEventListener('click', function() {
+                note.remove();
+            });
+            
+            const content = document.createElement('div');
+            content.className = 'sticky-note-content';
+            content.contentEditable = true;
+            content.textContent = 'Click to edit this note...';
+            
+            header.appendChild(title);
+            header.appendChild(closeBtn);
+            note.appendChild(header);
+            note.appendChild(content);
+            
+            document.querySelector('.folder-area').appendChild(note);
+            makeDraggable(note);
+        }
+        
+        // Make existing notes draggable
+        const stickyNotes = document.querySelectorAll('.sticky-note');
+        stickyNotes.forEach(note => {
+            makeDraggable(note);
+            
+            // Add delete functionality
+            note.querySelector('.delete-note').addEventListener('click', function() {
+                note.remove();
+            });
+        });
+        
+        // Make all widgets draggable
+        const widgets = document.querySelectorAll('.calendar-widget, .notepad-widget, .weather-widget, .system-monitor, .gif-widget');
+        widgets.forEach(widget => {
+            makeDraggable(widget);
+        });
+        
+        function makeDraggable(element) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            
+            const header = element.querySelector('.widget-header') || element.querySelector('.sticky-note-header') || element;
+            header.style.cursor = 'move';
+            header.addEventListener('mousedown', dragMouseDown);
+            
+            function dragMouseDown(e) {
+                e.preventDefault();
+                // Get mouse position
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.addEventListener('mouseup', closeDragElement);
+                document.addEventListener('mousemove', elementDrag);
+            }
+    
+            function elementDrag(e) {
+                e.preventDefault();
+                // Calculate new position
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                // Set element's new position
+                element.style.top = (element.offsetTop - pos2) + "px";
+                element.style.left = (element.offsetLeft - pos1) + "px";
+            }
+            
+            function closeDragElement() {
+                // Stop tracking mouse movements
+                document.removeEventListener('mouseup', closeDragElement);
+                document.removeEventListener('mousemove', elementDrag);
+            }
+        }
+    
+        // Initial focus on terminal input
+        commandInput.focus();
+        
+        // Focus terminal input when clicking anywhere in terminal
+        terminalBody.addEventListener('click', function() {
+            commandInput.focus();
+        });
+
+        // Carousel functionality
+        const carousel = document.querySelector('.carousel-slides');
+        const prevButton = document.getElementById('prev-slide');
+        const nextButton = document.getElementById('next-slide');
+        const indicators = document.querySelectorAll('.indicator');
+        let currentSlide = 0;
+        const slideCount = document.querySelectorAll('.carousel-slide').length;
+        
+        function updateCarousel() {
+            if (!carousel) return;
+            carousel.style.transform = `translateX(-${currentSlide * 100 / slideCount}%)`;
+            
+            // Update indicators
+            document.querySelectorAll('.indicator').forEach((indicator, index) => {
+                if (index === currentSlide) {
+                    indicator.style.backgroundColor = 'var(--teal)';
+                } else {
+                    indicator.style.backgroundColor = 'rgba(255,255,255,0.5)';
+                }
+            });
+        }
+        
+        if (nextButton) {
+            nextButton.addEventListener('click', () => {
+                currentSlide = (currentSlide + 1) % slideCount;
+                updateCarousel();
+            });
+        }
+        
+        if (prevButton) {
+            prevButton.addEventListener('click', () => {
+                currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+                updateCarousel();
+            });
+        }
+        
+        // Make indicators clickable
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                currentSlide = index;
+                updateCarousel();
+            });
+        });
+        
+        // Auto-rotate slides
+        setInterval(() => {
+            if (carousel) {
+                currentSlide = (currentSlide + 1) % slideCount;
+                updateCarousel();
+            }
+        }, 5000);
+
+        // Make carousel widget draggable
+        const carouselWidget = document.querySelector('.carousel-widget');
+        if (carouselWidget) {
+            makeDraggable(carouselWidget);
+        }
+
+        // Snake Game functionality
+        const aiModeBtn = document.getElementById('ai-mode');
+        const playerModeBtn = document.getElementById('player-mode');
+        let gameCanvas, gameContext, snake, food, direction, gameInterval;
+
+        function initializeSnakeGame() {
+            // First, clean up any existing game elements
+            const gameContainer = document.getElementById('snake-game');
+            if (gameContainer) {
+                // Clear any existing canvases
+                gameContainer.innerHTML = '';
+                
+                // Create a fresh canvas
+                gameCanvas = document.createElement('canvas');
+                gameCanvas.width = 400;
+                gameCanvas.height = 400;
+                gameCanvas.style.border = '2px solid var(--teal)';
+                gameCanvas.style.backgroundColor = '#000033';
+                gameContainer.appendChild(gameCanvas);
+            } else {
+                // If game container doesn't exist, try to get existing canvas
+                gameCanvas = document.querySelector('#snake-game canvas');
+            }
+            
+            // Make sure we have a canvas before proceeding
+            if (!gameCanvas) {
+                console.error("Could not initialize game canvas");
+                return;
+            }
+            
+            // Always get a new context to avoid potential issues
+            gameContext = gameCanvas.getContext('2d');
+            
+            // Initialize game variables
+            snake = [
+                {x: 200, y: 200},
+                {x: 190, y: 200},
+                {x: 180, y: 200},
+                {x: 170, y: 200},
+                {x: 160, y: 200}
+            ];
+            
+            // Set initial direction
+            direction = 'right';
+            
+            // Generate initial food
+            if (gameCanvas) {
+                generateFood();
+            }
+            
+            // Reset score
+            const scoreElement = document.getElementById('game-score');
+            if (scoreElement) {
+                scoreElement.textContent = '0';
+            }
+            
+            // Clear any existing interval to avoid multiple intervals
+            if (gameInterval) {
+                clearInterval(gameInterval);
+                gameInterval = null;
+            }
+            
+            // Draw the initial snake to show it's initialized
+            if (gameContext && snake) {
+                drawSnake();
+            }
+        }
+        
+        function generateFood() {
+            // Make sure gameCanvas exists before generating food
+            if (!gameCanvas) return;
+            
+            // Generate random coordinates for food
+            food = {
+                x: Math.floor(Math.random() * (gameCanvas.width - 10) / 10) * 10,
+                y: Math.floor(Math.random() * (gameCanvas.height - 10) / 10) * 10
+            };
+            
+            // Check if food is on snake body
+            if (snake) {
+                for (let i = 0; i < snake.length; i++) {
+                    if (food.x === snake[i].x && food.y === snake[i].y) {
+                        // Regenerate food
+                        generateFood();
+                        return;
+                    }
+                }
+            }
+        }
+        
+        function drawSnake() {
+            if (!gameContext || !gameCanvas) return;
+            
+            // Clear canvas
+            gameContext.fillStyle = '#000033';
+            gameContext.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+            
+            // Draw snake with brighter colors
+            for (let i = 0; i < snake.length; i++) {
+                // Head is bright teal, body is bright purple with gradient effect
+                if (i === 0) {
+                    // Head
+                    gameContext.fillStyle = '#00FFCC'; // Bright teal
+                } else {
+                    // Body segments with slight gradient
+                    const gradient = 1 - (i / snake.length * 0.5); // Creates a gradient effect
+                    gameContext.fillStyle = `rgba(153, 51, 255, ${gradient})`; // Bright purple with gradient
+                }
+                
+                // Make segments slightly smaller with spacing to distinguish them better
+                gameContext.fillRect(snake[i].x, snake[i].y, 10, 10);
+                
+                // Add a bright outline to make segments more visible
+                gameContext.strokeStyle = '#FFFFFF'; // White
+                gameContext.lineWidth = 1;
+                gameContext.strokeRect(snake[i].x, snake[i].y, 10, 10);
+            }
+            
+            // Draw food with a bright color and glowing effect
+            if (food) {
+                // Main food circle
+                gameContext.beginPath();
+                gameContext.arc(food.x + 5, food.y + 5, 5, 0, Math.PI * 2);
+                gameContext.fillStyle = '#FF66FF'; // Bright pink
+                gameContext.fill();
+                
+                // Glowing effect
+                gameContext.beginPath();
+                gameContext.arc(food.x + 5, food.y + 5, 7, 0, Math.PI * 2);
+                gameContext.strokeStyle = 'rgba(255, 102, 255, 0.5)'; // Faded pink
+                gameContext.stroke();
+            }
+        }
+        
+        function moveSnake() {
+            // Create new head based on direction
+            const head = {x: snake[0].x, y: snake[0].y};
+            
+            switch(direction) {
+                case 'right':
+                    head.x += 10;
+                    break;
+                case 'left':
+                    head.x -= 10;
+                    break;
+                case 'up':
+                    head.y -= 10;
+                    break;
+                case 'down':
+                    head.y += 10;
+                    break;
+            }
+            
+            // Check for collision with walls
+            if (head.x < 0 || head.x >= gameCanvas.width || 
+                head.y < 0 || head.y >= gameCanvas.height) {
+                gameOver();
+                return;
+            }
+            
+            // Check for collision with self
+            for (let i = 0; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    gameOver();
+                    return;
+                }
+            }
+            
+            // Add new head
+            snake.unshift(head);
+            
+            // Check for food collision
+            if (head.x === food.x && head.y === food.y) {
+                // Increase score
+                const score = parseInt(document.getElementById('game-score').textContent) + 10;
+                document.getElementById('game-score').textContent = score;
+                
+                // Generate new food
+                generateFood();
+            } else {
+                // Remove tail if not eating
+                snake.pop();
+            }
+        }
+        
+        function gameOver() {
+            clearInterval(gameInterval);
+            document.getElementById('game-message').textContent = 'Game Over! Press Player Mode to play again.';
+        }
+        
+        function startPlayerMode() {
+            // Initialize game
+            initializeSnakeGame();
+            
+            // Make sure keyboard events are properly captured
+            document.removeEventListener('keydown', handleKeyPress);
+            document.addEventListener('keydown', handleKeyPress);
+            
+            // Clear any existing game interval
+            if (gameInterval) {
+                clearInterval(gameInterval);
+            }
+            
+            // Update game message
+            document.getElementById('game-message').textContent = 'Use arrow keys to control the snake!';
+            
+            // Start game loop
+            gameInterval = setInterval(() => {
+                moveSnake();
+                drawSnake();
+            }, 100);
+        }
+        
+        function handleKeyPress(e) {
+            // Check if game canvas exists
+            if (!gameCanvas) return;
+            
+            // Handle arrow keys
+            switch(e.key) {
+                case 'ArrowRight':
+                    if (direction !== 'left') direction = 'right';
+                    break;
+                case 'ArrowLeft':
+                    if (direction !== 'right') direction = 'left';
+                    break;
+                case 'ArrowUp':
+                    if (direction !== 'down') direction = 'up';
+                    break;
+                case 'ArrowDown':
+                    if (direction !== 'up') direction = 'down';
+                    break;
+            }
+        }
+        
+        // Add event listeners to game mode buttons
+        if (playerModeBtn) {
+            playerModeBtn.addEventListener('click', startPlayerMode);
+        }
+        
+        if (aiModeBtn) {
+            aiModeBtn.addEventListener('click', function() {
+                // Initialize the game first
+                initializeSnakeGame();
+                
+                // Update game message
+                const messageElement = document.getElementById('game-message');
+                if (messageElement) {
+                    messageElement.textContent = 'AI mode not fully implemented yet. Use Player Mode instead.';
+                }
+                
+                // Draw the initial snake to show it's initialized
+                if (gameContext && snake) {
+                    drawSnake();
+                }
+            });
+        }
+    });
+    </script>
+</body>
+</html>

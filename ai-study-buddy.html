@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Study Buddy - Project Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="project-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Basic page setup for scrolling */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+        
+        /* Blur overlay */
+        .blur-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 51, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            cursor: not-allowed;
+        }
+        
+        .blur-message {
+            background-color: rgba(153, 51, 255, 0.3);
+            border: 2px solid #00ffcc;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
+        }
+        
+        .blur-message h2 {
+            color: #00ffcc;
+            font-family: 'Fira Code', monospace;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        
+        .blur-message p {
+            color: white;
+            font-family: 'Fira Code', monospace;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .blur-message .emoji {
+            font-size: 36px;
+            margin: 20px 0;
+        }
+        
+        .back-btn {
+            background-color: #ff66ff;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-family: 'Fira Code', monospace;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background-color: #9933ff;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(153, 51, 255, 0.4);
+        }
+        
+        .project-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow-y: auto; /* Ensure container itself is scrollable */
+        }
+        
+        .file-explorer {
+            display: flex;
+            min-height: 0; /* Allow content to determine height */
+            overflow: visible; /* Ensure overflow content is visible */
+            flex-direction: row; /* Force horizontal layout */
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+        
+        .file-tree {
+            min-width: 150px;
+            padding-right: 20px;
+            position: sticky;
+            top: 20px; /* Stick to top with some padding */
+            max-height: calc(100vh - 40px); /* Allow scrolling for very long file trees */
+            overflow-y: auto;
+            align-self: flex-start; /* Align to top of container */
+        }
+        
+        .file-content {
+            flex: 1;
+            overflow-y: visible; /* Allow vertical scrolling */
+            padding: 20px;
+            min-width: 300px; /* Ensure content area has minimum width */
+        }
+        
+        /* Responsive handling */
+        @media (max-width: 768px) {
+            .file-explorer {
+                flex-direction: column;
+            }
+            
+            .file-tree {
+                width: 100%;
+                padding-right: 0;
+                margin-bottom: 20px;
+                position: relative;
+                max-height: none;
+                overflow-y: visible;
+            }
+            
+            .file-content {
+                width: 100%;
+                padding: 10px 0;
+            }
+        }
+        
+        /* Back to Portfolio Button */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(26, 43, 60, 0.8);
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            z-index: 100;
+        }
+        
+        .back-button:hover {
+            background-color: rgba(0, 255, 204, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .back-button::before {
+            content: "←";
+            font-size: 18px;
+        }
+        
+        /* Case Study Specific Styling */
+        .case-study-title {
+            color: #FFD1DC;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px rgba(255, 209, 220, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        .case-study-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px dashed rgba(153, 51, 255, 0.3);
+        }
+        
+        .section-title {
+            color: #9933ff;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .section-title::before {
+            content: ">";
+            position: absolute;
+            left: 0;
+            color: #ff66ff;
+        }
+        
+        .subsection-title {
+            color: #A2D2FF;
+            font-size: 1.2rem;
+            margin: 1.2rem 0 0.8rem;
+            padding-left: 25px;
+        }
+        
+        .section-content {
+            padding-left: 25px;
+            line-height: 1.6;
+        }
+        
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .section-content ul, 
+        .section-content ol {
+            margin-bottom: 1rem;
+            padding-left: 20px;
+        }
+        
+        .section-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .goals-block, .tech-note {
+            background-color: rgba(26, 43, 60, 0.7);
+            border-left: 3px solid #9933ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .challenge-item {
+            background-color: rgba(26, 43, 60, 0.7);
+            border-left: 3px solid #9933ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .challenge-title {
+            color: #FFD1DC;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .tech-stack {
+            background-color: rgba(26, 43, 60, 0.7);
+            border: 1px solid #A2D2FF;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 2rem;
+            box-shadow: 0 0 15px rgba(162, 210, 255, 0.3);
+        }
+        
+        .tech-stack-title {
+            color: #ff66ff;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .tech-item {
+            background-color: #9933ff;
+            color: white;
+            font-size: 14px;
+            padding: 5px 12px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            color: #9933ff;
+            font-size: 20px;
+        }
+        
+        .code-block {
+            background-color: rgba(26, 43, 60, 0.7);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            color: #E6C9A8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Blur overlay -->
+    <div class="blur-overlay">
+        <div class="blur-message">
+            <h2>Content Coming Soon</h2>
+            <div class="emoji">🔒</div>
+            <p>This project is currently under development and not ready for public viewing.</p>
+            <p>Check back later for updates on the AI Study Buddy project!</p>
+            <a href="index.html" class="back-btn">Return to Portfolio</a>
+        </div>
+    </div>
+
+    <a href="index.html" class="back-button">Back to Portfolio</a>
+    
+    <div class="project-container">
+        <div class="project-header">
+            <h1 class="project-title"><a href="index.html" style="text-decoration: none; color: inherit;">AI Study Buddy</a></h1>
+            <div class="project-overview">
+                <span class="terminal-prompt">$</span>
+                <span class="terminal-command">cat README.md</span>
+                <div class="terminal-output">
+                    An AI-powered voice-interactive study assistant built on ESP32, featuring real-time speech recognition, natural language processing, and personalized learning assistance.
+                </div>
+            </div>
+        </div>
+
+        <div class="file-explorer">
+            <div class="file-tree">
+                <div class="file-tree-item active">README.md</div>
+                <div class="file-tree-item">abstract.md</div>
+                <div class="file-tree-item">introduction/</div>
+                <div class="file-tree-item">methodology/</div>
+                <div class="file-tree-item">results/</div>
+                <div class="file-tree-item">conclusion/</div>
+            </div>
+
+            <div class="file-content">
+                <!-- Project Case Study -->
+                <div class="project-case-study">
+                    <h2 class="case-study-title">StudyBuddy: An Adaptive Educational Robot</h2>
+                    
+                    <!-- Abstract Section -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">Abstract</h3>
+                        <div class="section-content">
+                            <p>
+                                This project explores how artificial intelligence and hardware (ESP32, OLED displays,
+                                Servos) can be used to create an adaptive educational robot that supports interactive
+                                learning for children. The StudyBuddy prototype uses the Freenode ESP32
+                                microcontroller paired with dual OLED displays, servos, and a speaker to simulate
+                                expressive and physical feedback.
+                            </p>
+                            <p>
+                                On the software side, the system uses Vosk for offline speech recognition and TinyLlama from Hugging Face for lightweight language processing, allowing the generation of AI-powered responses in real-time. The robot was designed to address gaps in current educational AI learning tools, which often lack hands-on experience, physical interaction, and adaptability for younger learners or those with special needs.
+                            </p>
+                            <p>
+                                StudyBuddy was tested in different environments to evaluate its accuracy, performance, and engagement level. Results showed that it could successfully respond to queries and questions, with up to 88% recognition accuracy in quiet conditions. Although limited by hardware constraints (using a laptop with only around 16 GB of memory), the robot provided multimodal feedback through speech, animation, and movement, which are known to improve memory retention and focus.
+                            </p>
+                            <p>
+                                Feedback highlighted the importance of being more descriptive on how the robot works and giving some user guidelines for students to know how to use and interact with the robot quickly. Also, try to make it more realistic, expressive, and mechanical. The findings support that combining physical embodiment with AI can make learning more inclusive, personalised, and enjoyable. Future improvements will focus on adding emotion recognition, more interactive features, and classroom-ready usability.
+                            </p>
+                            
+                            <div class="goals-block">
+                                <h4>Project Goals:</h4>
+                                <ul>
+                                    <li>Design an interactive robot that uses AI to personalize lessons in real-time</li>
+                                    <li>Enhance engagement through speech recognition, motion, and dynamic feedback</li>
+                                    <li>Bridge the gap between digital and hands-on learning experiences</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="divider">---</div>
+                    
+                    <!-- Introduction Section -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">1. Introduction</h3>
+                        
+                        <h4 class="subsection-title">1.1 Background & Context</h4>
+                        <div class="section-content">
+                            <p>
+                                Education has relied on one-size-fits-all teaching methods for decades, failing to cater to many students' educational and social needs; however, artificial Intelligence (AI) is becoming a key aspect of our everyday society. It advances the academic sector and revolutionises children's learning, shifting from passive actions to more dynamic and personalised experiences. Artificial Intelligence is no longer confined to areas like research labs but is now on the brink of transforming classrooms across the globe.
+                            </p>
+                        </div>
+                        
+                        <h4 class="subsection-title">1.2 Driving Forces</h4>
+                        <div class="section-content">
+                            <p>
+                                The rise in AI has been driven by rapid technological advancements, increasing digital accessibility, and a growing demand for personalisation, especially in learning. AI can help in multiple aspects, such as adapting to each student's needs, styles, and pace. Offering them the necessary feedback and help to improve in areas where they are struggling, as well as their educational outcomes.
+                            </p>
+                            <p>
+                                Artificial Intelligence would also benefit children with disabilities, especially with applications and tools like text-to-speech, language translation, and personalised learning plans, enhancing equity and accessibility. However, with all these benefits, many challenges and corners remain, including:
+                            </p>
+                            <ul>
+                                <li>Overreliance on technology: Fear of lacking social interaction may hinder social development.</li>
+                                <li>Ethical Dilemmas: Data privacy and algorithmic bias require careful regulation.</li>
+                                <li>Engagement limitations: Many AI tools are screen-based and lack physical interaction.</li>
+                            </ul>
+                        </div>
+                        
+                        <h4 class="subsection-title">1.3 Current Applications</h4>
+                        <div class="section-content">
+                            <p>AI is already making a significant impact on digital learning:</p>
+                            <ul>
+                                <li>Chatbots and tutors (e.g., Duolingo AI tutor) provide instant practice, feedback, and conversational learning.</li>
+                                <li>Personalised learning plans (e.g., Khan Academy) that adapt to the student's progress.</li>
+                                <li>Adaptive assessments identify students' knowledge gaps, recommending resources and help.</li>
+                            </ul>
+                            <p>
+                                These platforms remain digitally confined despite these innovations, missing tangible, interactive learning opportunities. As childhood development thrives on tactile engagement, there is a massive gap in AI tools that combine physical interaction with digital intelligence.
+                            </p>
+                        </div>
+                        
+                        <h4 class="subsection-title">1.4 Research Problem Gap</h4>
+                        <div class="section-content">
+                            <p>While AI enhances personalised learning and has significant potential in education, many of these tools:</p>
+                            <ol>
+                                <li>Are not always accessible, especially to children with learning disabilities.</li>
+                                <li>Do not continually update in real-time to meet individual learning needs.</li>
+                                <li>Lack physical interactivity, reducing engagement for students.</li>
+                            </ol>
+                            <p>
+                                This project aims to bridge the digital and physical learning gap by developing an educational robot that adapts to the child's projects and enhances engagement through AI-driven interactions.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="divider">---</div>
+                    
+                    <!-- Methodology Preview -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">2. Methodology Overview</h3>
+                        <div class="section-content">
+                            <p>The StudyBuddy system was developed through the following approach:</p>
+                            <ol>
+                                <li><strong>Hardware Selection:</strong> ESP32, servos, OLED displays, and a speaker</li>
+                                <li><strong>AI Integration:</strong> Vosk for speech-to-text, Hugging Face's TinyLlama for adaptive response generation</li>
+                                <li><strong>Prototype testing:</strong> Conducted in various environments to assess accuracy and performance</li>
+                            </ol>
+                            
+                            <div class="tech-note">
+                                <p>While broader user testing was outside the scope of this prototype phase, individual experimentation enabled the system to be evaluated for functionality, adaptability, and potential scalability.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- System Design Section -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">3. System Design & Implementation</h3>
+                        
+                        <h4 class="subsection-title">3.1 Hardware Architecture</h4>
+                        <div class="section-content">
+                            <p>
+                                StudyBuddy combines hardware components with software tools to create an interactive learning companion. The hardware design features a 3D-printed case with dual OLED displays for facial expressions and text, servo-driven arm movements, and audio feedback.
+                            </p>
+                            
+                            <div style="margin: 30px 0;">
+                                <h4 class="subsection-title">StudyBuddy Casing</h4>
+                                <div style="text-align: center; margin: 20px 0;">
+                                    <img src="./Assests/studybuddy-case.png" alt="StudyBuddy 3D-printed casing" style="max-width: 80%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                                    <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>3D-printed casing for the StudyBuddy robot with compartments for displays and components</em></p>
+                                </div>
+                            </div>
+                            
+                            <h4 class="subsection-title">Key Components</h4>
+                            <ul>
+                                <li><strong>ESP32 Microcontroller:</strong> Core processing unit managing all interactions</li>
+                                <li><strong>OLED Displays (2):</strong> One for facial expressions, another for text/content display</li>
+                                <li><strong>Servo Motors:</strong> Enable physical movements and gestures</li>
+                                <li><strong>Speaker:</strong> Provides audio feedback and responses</li>
+                                <li><strong>Microphone (INMP441):</strong> Captures voice input for speech recognition</li>
+                            </ul>
+                            
+                            <div class="tech-note">
+                                <p><strong>Hardware Challenge:</strong> While the initial design included the INMP441 microphone, testing revealed inconsistent performance. The solution involved using the computer's built-in microphone for the prototype, demonstrating the project's adaptability and problem-solving approach.</p>
+                            </div>
+                            
+                            <div style="margin: 30px 0;">
+                                <h4 class="subsection-title">ESP32 Wiring Schematic</h4>
+                                <div style="text-align: center; margin: 20px 0;">
+                                    <img src="./Assests/wiring-schematic.png" alt="ESP32 Wiring Schematic" style="max-width: 90%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                                    <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Schematic showing connections between ESP32 and various components</em></p>
+                                </div>
+                            </div>
+                            
+                            <table style="width: 100%; border-collapse: collapse; margin: 20px 0; background-color: rgba(26, 43, 60, 0.5); border-radius: 8px;">
+                                <thead>
+                                    <tr style="background-color: rgba(153, 51, 255, 0.3);">
+                                        <th style="padding: 12px; border-bottom: 1px solid #444; text-align: left;">Component</th>
+                                        <th style="padding: 12px; border-bottom: 1px solid #444; text-align: left;">ESP32 Pins</th>
+                                        <th style="padding: 12px; border-bottom: 1px solid #444; text-align: left;">Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">OLED Display 1</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">
+                                            SDA: GPIO 21<br>
+                                            SCL: GPIO 22<br>
+                                            GND<br>
+                                            3.3V
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">I2C address: 0x3c</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">OLED Display 2</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">
+                                            SDA: GPIO 4<br>
+                                            SCL: GPIO 5<br>
+                                            GND<br>
+                                            3.3V
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">I2C address: 0x3d</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">Speaker</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">
+                                            GPIO 18<br>
+                                            GND
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">PWM-capable pin for tone generation</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">Servo 1</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">
+                                            GPIO 13<br>
+                                            GND<br>
+                                            3.3V
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">PWM signal for servo control</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px;">Servo 2</td>
+                                        <td style="padding: 12px;">
+                                            GPIO 14<br>
+                                            GND<br>
+                                            3.3V
+                                        </td>
+                                        <td style="padding: 12px;">PWM signal for servo control</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <h4 class="subsection-title">3.2 Software Architecture</h4>
+                        <div class="section-content">
+                            <p>The software pipeline consists of several key components working together:</p>
+                            
+                            <ul>
+                                <li>
+                                    <strong>Speech Recognition:</strong> Vosk for offline speech-to-text processing
+                                    <ul>
+                                        <li>Open-source solution that doesn't require internet connectivity</li>
+                                        <li>Chosen over Google Speech-to-Text to avoid credit-based costs</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Natural Language Processing:</strong> TinyLlama from Hugging Face Transformers
+                                    <ul>
+                                        <li>Lightweight language model for generating responses</li>
+                                        <li>Balance between size and performance to enable real-time interaction</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Knowledge Base:</strong> Wikipedia API integration
+                                    <ul>
+                                        <li>Provides factual information for educational responses</li>
+                                        <li>Open-source solution chosen after testing Khan Academy and OpenStack APIs</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Multimodal Feedback:</strong>
+                                    <ul>
+                                        <li>Python for high-level logic (user input, AI response generation)</li>
+                                        <li>ESP32 for physical outputs (expressions, servo movements, sounds)</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            
+                            <div class="code-block">
+                                <h4>Key System Classes:</h4>
+<pre><code>class ESP32Communicator:
+    # Handles communication with ESP32 hardware
+    # Controls displays, servos, and audio
+
+class StudyBuddyAI:
+    # Main AI companion managing the learning experience
+    # Handles speech recognition, response generation, and activities
+
+class AdaptiveLearningProfile:
+    # Tracks student progress and skill development
+    # Adapts difficulty based on performance</code></pre>
+                            </div>
+                            
+                            <div style="margin: 20px 0;">
+                                <h4 class="subsection-title">System Workflow</h4>
+                                <img src="./Assests/system-workflow.png" alt="StudyBuddy System Workflow" style="max-width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                                <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Diagram showing the flow of data between components in the StudyBuddy system</em></p>
+                            </div>
+                            
+                            <div class="challenge-item">
+                                <div class="challenge-title">Software Challenge: AI Model Selection</div>
+                                <div class="solution">
+                                    <p>Initial tests with larger language models (Llama 2, DeepSeek) showed promising response quality but were too slow for real-time interaction. TinyLlama was selected as the optimal balance between performance and resource requirements, though sacrificing some response coherence.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="subsection-title">3.3 Adaptive Learning System</h4>
+                        <div class="section-content">
+                            <p>
+                                A key innovation in StudyBuddy is its ability to adapt to individual learners. The system tracks student performance and adjusts its approach using a lightweight Bayesian skill estimation method.
+                            </p>
+                            
+                            <div class="code-block">
+<pre><code># Key adaptive learning algorithm
+def update_subject_skill(self, subject, topic, correct):
+    # Current estimates
+    current_skill = self.profile['skills'][subject][topic]
+    
+    # Bayesian update weights
+    surprise_factor = 1.0
+    if (correct and current_skill < 0.5) or (not correct and current_skill > 0.5):
+        surprise_factor = 1.5  # Higher updates for surprising results
+        
+    # Update skill estimate
+    if correct:
+        new_skill = current_skill + (1 - current_skill) * 0.2 * surprise_factor
+    else:
+        new_skill = current_skill * (1 - 0.2 * surprise_factor)
+        
+    # Store updated skill
+    self.profile['skills'][subject][topic] = new_skill</code></pre>
+                            </div>
+                            
+                            <p>This approach enables:</p>
+                            <ul>
+                                <li>Personalized difficulty scaling based on demonstrated skills</li>
+                                <li>Targeted practice recommendations focusing on weak areas</li>
+                                <li>Learning style adaptation (visual, auditory, kinesthetic)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="divider">---</div>
+                    
+                    <!-- User Interaction Section -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">4. User Interaction & Experience</h3>
+                        
+                        <h4 class="subsection-title">4.1 How StudyBuddy Works</h4>
+                        <div class="section-content">
+                            <p>
+                                StudyBuddy offers an intuitive interaction experience that begins as soon as the system powers on. The interaction flow includes:
+                            </p>
+                            
+                            <ol>
+                                <li>
+                                    <strong>Startup Sequence:</strong>
+                                    <ul>
+                                        <li>OLED displays animate a friendly greeting</li>
+                                        <li>Speaker plays a welcoming tone</li>
+                                        <li>System enters listening mode, ready for user commands</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Main Menu Access:</strong>
+                                    <ul>
+                                        <li>User can say "main menu" to see available modes</li>
+                                        <li>Alternatively, direct questions skip the menu for immediate answers</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Learning Modes:</strong>
+                                    <ul>
+                                        <li><strong>Ask Any Question:</strong> General Q&A using TinyLlama for factual or open-ended responses</li>
+                                        <li><strong>Vocabulary:</strong> Word practice with spelling and definition exercises</li>
+                                        <li><strong>Science Facts:</strong> Educational content about scientific topics with quizzes</li>
+                                        <li><strong>Math Mode:</strong> Adaptive math problems based on student skill level</li>
+                                        <li><strong>Show Progress:</strong> Visual display of learning statistics and skill development</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                            
+                            <div style="margin: 30px 0;">
+                                <h4 class="subsection-title">Multimodal Feedback</h4>
+                                <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px;">
+                                    <div style="flex: 1; min-width: 240px; max-width: 320px;">
+                                        <img src="./Assests/facial-expressions.png" alt="StudyBuddy facial expressions" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                                        <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>OLED display showing different facial expressions</em></p>
+                                    </div>
+                                    <div style="flex: 1; min-width: 240px; max-width: 320px;">
+                                        <img src="./Assests/text-display.png" alt="StudyBuddy text display" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                                        <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Second OLED showing text responses and educational content</em></p>
+                                    </div>
+                                    <div style="flex: 1; min-width: 240px; max-width: 320px;">
+                                        <img src="./Assests/servo-movement.png" alt="StudyBuddy servo movement" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                                        <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Servo-driven arm gestures for physical feedback</em></p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <p>
+                                Each response is accompanied by matching expressions on the OLED face, appropriate sound effects, and occasionally small servo gestures like nodding. This combination of visual, auditory, and physical feedback creates a more engaging and personalized learning experience.
+                            </p>
+                        </div>
+                        
+                        <h4 class="subsection-title">4.2 Learning Activity Examples</h4>
+                        <div class="section-content">
+                            <div style="margin-bottom: 30px;">
+                                <strong>Science Quiz Example:</strong>
+                                <div class="code-block">
+<pre>StudyBuddy: "Let's learn about photosynthesis! This is the process plants use 
+to make food using sunlight. Would you like to take a mini-quiz?"
+
+User: "Yes"
+
+StudyBuddy: [Displays a thinking expression]
+"Great! Here's your first question: What do plants need for photosynthesis? 
+Is it: A) Just water, B) Sunlight, water, and carbon dioxide, or C) Soil only?"
+
+User: "B"
+
+StudyBuddy: [Displays happy expression, servo nods] 
+"Correct! Plants need sunlight, water, and carbon dioxide to make their own food 
+through photosynthesis. They release oxygen as a byproduct, which we breathe.
+Ready for the next question?"</pre>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <strong>Adaptive Math Example:</strong>
+                                <div class="code-block">
+<pre>StudyBuddy: "Based on your previous answers, I'll give you a slightly more 
+challenging subtraction problem. What is 43 - 18?"
+
+User: "25"
+
+StudyBuddy: [Displays thinking face]
+"Let's check that... I got a different answer. Let me help you work through this.
+First, we can subtract 3 - 8, but since 8 is larger than 3, we need to borrow.
+40 + 3 becomes 30 + 13. Now 13 - 8 = 5, and 30 - 10 = 20.
+So 43 - 18 = 25. You were right! Great job!"
+
+[System updates user's math subtraction skill from 0.65 to 0.71]
+[Next question difficulty increases slightly based on this performance]</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="divider">---</div>
+                    
+                    <!-- Results & Discussion -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">5. Results & Discussion</h3>
+                        
+                        <h4 class="subsection-title">5.1 System Performance</h4>
+                        <div class="section-content">
+                            <p>Testing of the StudyBuddy prototype revealed the following performance metrics:</p>
+                            
+                            <table style="width: 100%; border-collapse: collapse; margin: 20px 0; background-color: rgba(26, 43, 60, 0.5); border-radius: 8px;">
+                                <thead>
+                                    <tr style="background-color: rgba(153, 51, 255, 0.3);">
+                                        <th style="padding: 12px; border-bottom: 1px solid #444; text-align: left;">Metric</th>
+                                        <th style="padding: 12px; border-bottom: 1px solid #444; text-align: left;">Result</th>
+                                        <th style="padding: 12px; border-bottom: 1px solid #444; text-align: left;">Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">Speech Recognition Accuracy</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">88% (quiet)<br>72% (noisy)</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">Performance degraded significantly with background noise</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">Response Accuracy</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">85%</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">TinyLlama outperformed T5, but occasional hallucinations occurred</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">Response Time</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">1-3 seconds</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #444;">Acceptable for maintaining natural conversation flow</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px;">Hardware Reliability</td>
+                                        <td style="padding: 12px;">90%</td>
+                                        <td style="padding: 12px;">Servo attachment issues required hot glue solution</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="challenge-item">
+                                <div class="challenge-title">Key Finding: Physical Interaction Impact</div>
+                                <div class="solution">
+                                    <p>The combination of visual expressions, sound effects, and physical movements significantly enhanced engagement compared to screen-only or voice-only interfaces. Even with basic servo gestures, users reported a stronger sense of connection with the learning system.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="subsection-title">5.2 Comparison to Existing Solutions</h4>
+                        <div class="section-content">
+                            <p>When compared to commercial educational platforms like Duolingo and Khan Academy:</p>
+                            
+                            <ul>
+                                <li><strong>Advantages:</strong>
+                                    <ul>
+                                        <li>Real-time physical feedback lacking in screen-based tools</li>
+                                        <li>Open-ended conversation rather than structured multiple-choice</li>
+                                        <li>Adaptivity that dynamically responds to learner progress</li>
+                                        <li>Multimodal interaction supporting different learning styles</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Limitations:</strong>
+                                    <ul>
+                                        <li>Less comprehensive content library compared to established platforms</li>
+                                        <li>Variable AI response quality, especially with smaller models</li>
+                                        <li>Hardware dependencies that increase system complexity</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            
+                            <p>StudyBuddy offers a complementary approach to digital learning rather than a replacement for existing tools. Its greatest strength lies in providing tangible, physically engaging interactions for learners who benefit from hands-on experiences.</p>
+                        </div>
+                        
+                        <h4 class="subsection-title">5.3 User Feedback</h4>
+                        <div class="section-content">
+                            <p>After demonstration and presentation, feedback highlighted several areas for improvement:</p>
+                            
+                            <div class="goals-block">
+                                <h4>Key Feedback Points:</h4>
+                                <ul>
+                                    <li><strong>Realism:</strong> More mechanical, humanoid design would better simulate a tutor or companion</li>
+                                    <li><strong>Instructions:</strong> Clearer guidance on how to interact with StudyBuddy is needed</li>
+                                    <li><strong>Hands-on Teaching:</strong> Expand capabilities to guide physical tasks like building circuits</li>
+                                    <li><strong>Interaction Modes:</strong> Add more engaging content like mini-games and storytelling</li>
+                                </ul>
+                            </div>
+                            
+                            <p>This feedback reinforces the value of combining technical performance with child-centered design principles and will inform future iterations of the system.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="divider">---</div>
+                    
+                    <!-- Conclusion -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">6. Conclusion & Future Work</h3>
+                        
+                        <h4 class="subsection-title">6.1 Key Findings</h4>
+                        <div class="section-content">
+                            <p>
+                                This project demonstrated how low-cost hardware and open-source AI tools can be combined to create an interactive, engaging, and educational robot. The StudyBuddy prototype showed that:
+                            </p>
+                            <ul>
+                                <li>AI-driven personalization significantly enhances student engagement by adapting in real-time</li>
+                                <li>Physical interaction through gestures, expressions, and feedback improves focus and memory</li>
+                                <li>Multimodal feedback makes learning more inclusive and accessible</li>
+                            </ul>
+                        </div>
+                        
+                        <h4 class="subsection-title">6.2 Limitations</h4>
+                        <div class="section-content">
+                            <p>Despite promising outcomes, several limitations constrained the final implementation:</p>
+                            <ul>
+                                <li><strong>Hardware Limitations:</strong> ESP32's memory and processing capabilities required laptop support</li>
+                                <li><strong>Speech Recognition Challenges:</strong> Struggled in noisy environments with inconsistent performance</li>
+                                <li><strong>Knowledge Base Quality:</strong> Reliance on Wikipedia introduced potential for outdated or biased information</li>
+                                <li><strong>Human Nuance Detection:</strong> Limited ability to recognize non-verbal cues like confusion</li>
+                            </ul>
+                        </div>
+                        
+                        <h4 class="subsection-title">6.3 Future Improvements</h4>
+                        <div class="section-content">
+                            <p>Future work will focus on enhancing the system in several key areas:</p>
+                            <ol>
+                                <li><strong>Hardware Upgrades:</strong>
+                                    <ul>
+                                        <li>Integration of Raspberry Pi 5 for improved local processing</li>
+                                        <li>More mechanical body design with expanded movement capabilities</li>
+                                        <li>ESP32 camera module for visual recognition and interaction</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Software Enhancements:</strong>
+                                    <ul>
+                                        <li>Emotion recognition through facial and tonal analysis</li>
+                                        <li>More diverse lesson plans and adaptive content delivery</li>
+                                        <li>Cloud-AI hybrid approach for balancing performance and privacy</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Expanded Capabilities:</strong>
+                                    <ul>
+                                        <li>Multi-language support for diverse educational settings</li>
+                                        <li>Interactive games and narrative-based learning activities</li>
+                                        <li>Field testing in classroom environments with diverse learners</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                            
+                            <p>
+                                These improvements would transform StudyBuddy from a promising prototype into a robust educational tool that could effectively support diverse learning styles and needs in both home and classroom settings.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Technology Stack -->
+                    <div class="tech-stack">
+                        <h2 class="tech-stack-title">Technology Stack</h2>
+                        <div class="tech-list">
+                            <span class="tech-item">ESP32</span>
+                            <span class="tech-item">OLED Displays</span>
+                            <span class="tech-item">Servo Motors</span>
+                            <span class="tech-item">Python</span>
+                            <span class="tech-item">Vosk</span>
+                            <span class="tech-item">TinyLlama</span>
+                            <span class="tech-item">Hugging Face</span>
+                            <span class="tech-item">Wikipedia API</span>
+                            <span class="tech-item">Bayesian Learning</span>
+                            <span class="tech-item">3D Printing</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

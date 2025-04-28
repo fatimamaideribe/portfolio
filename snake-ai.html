@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake*Search</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="project-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Basic page setup for scrolling */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+        
+        .project-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow-y: auto; /* Ensure container itself is scrollable */
+        }
+        
+        .file-explorer {
+            display: flex;
+            min-height: 0; /* Allow content to determine height */
+            overflow: visible; /* Ensure overflow content is visible */
+            flex-direction: row; /* Force horizontal layout */
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+        
+        .file-tree {
+            min-width: 150px;
+            padding-right: 20px;
+            position: sticky;
+            top: 20px; /* Stick to top with some padding */
+            max-height: calc(100vh - 40px); /* Allow scrolling for very long file trees */
+            overflow-y: auto;
+            align-self: flex-start; /* Align to top of container */
+        }
+        
+        .file-content {
+            flex: 1;
+            overflow-y: visible; /* Allow vertical scrolling */
+            padding: 20px;
+            min-width: 300px; /* Ensure content area has minimum width */
+        }
+        
+        /* Responsive handling */
+        @media (max-width: 768px) {
+            .file-explorer {
+                flex-direction: column;
+            }
+            
+            .file-tree {
+                width: 100%;
+                padding-right: 0;
+                margin-bottom: 20px;
+                position: relative;
+                max-height: none;
+                overflow-y: visible;
+            }
+            
+            .file-content {
+                width: 100%;
+                padding: 10px 0;
+            }
+        }
+        
+        /* Case Study Specific Styling */
+        .case-study-title {
+            color: #00ffcc;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        .case-study-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px dashed rgba(153, 51, 255, 0.3);
+        }
+        
+        .section-title {
+            color: #9933ff;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .section-title::before {
+            content: ">";
+            position: absolute;
+            left: 0;
+            color: #ff66ff;
+        }
+        
+        .subsection-title {
+            color: #00ffcc;
+            font-size: 1.2rem;
+            margin: 1.2rem 0 0.8rem;
+            padding-left: 25px;
+        }
+        
+        .section-content {
+            padding-left: 25px;
+            line-height: 1.6;
+        }
+        
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .section-content ul, 
+        .section-content ol {
+            margin-bottom: 1rem;
+            padding-left: 20px;
+        }
+        
+        .section-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .goals-block, .tech-note, .skills-demonstrated, .project-artifacts {
+            background-color: rgba(26, 43, 60, 0.7);
+            border-left: 3px solid #9933ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .code-block {
+            background-color: #0a1929;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        
+        .code-block pre {
+            margin: 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .code-block code {
+            color: #ffffff;
+        }
+        
+        .skills-demonstrated p, .project-artifacts p {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        /* Demo container styling */
+        .demo-container {
+            background-color: rgba(26, 43, 60, 0.7);
+            border: 1px solid #00ffcc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 2rem;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+        }
+        
+        .demo-title {
+            color: #ff66ff;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.8rem;
+            text-shadow: 0 0 10px rgba(255, 102, 255, 0.5);
+        }
+        
+        .game-container {
+            background-color: #000033;
+            border: 2px solid #00ffcc;
+            width: 100%;
+            aspect-ratio: 1/1;
+            max-width: 500px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+            overflow: hidden;
+        }
+        
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 1rem;
+        }
+        
+        .control-btn {
+            background-color: #9933ff;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            font-family: 'Fira Code', monospace;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .control-btn:hover {
+            background-color: #b366ff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        .control-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        }
+        
+        #game-score, #game-message {
+            text-align: center;
+            margin: 10px 0;
+            font-family: 'Fira Code', monospace;
+            color: #00ffcc;
+        }
+        
+        #game-score {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        #game-message {
+            color: #ff66ff;
+            height: 1.5em;
+            margin-top: 15px;
+        }
+        
+        .game-instructions {
+            background-color: rgba(10, 25, 41, 0.6);
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            border-left: 3px solid #00ffcc;
+        }
+        
+        .game-instructions h4 {
+            color: #00ffcc;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        
+        .game-instructions ul {
+            color: #ffffff;
+            margin-bottom: 0;
+        }
+        
+        .game-instructions li {
+            margin-bottom: 5px;
+        }
+        
+        @media (max-width: 600px) {
+            .game-container {
+                max-width: 100%;
+                aspect-ratio: 1/1;
+            }
+        }
+        
+        /* Add background with transparency and styling to improve appearance */
+        body {
+            background: linear-gradient(45deg, #000033, #003366);
+            color: #ffffff;
+            font-family: 'Fira Code', monospace;
+            line-height: 1.6;
+        }
+        
+        /* Improve file tree items styling */
+        .file-tree-item {
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: rgba(26, 43, 60, 0.7);
+            border-left: 3px solid transparent;
+        }
+        
+        .file-tree-item:hover {
+            background-color: rgba(26, 43, 60, 0.9);
+            transform: translateX(5px);
+        }
+        
+        .file-tree-item.active {
+            border-left-color: #00ffcc;
+            background-color: rgba(51, 51, 102, 0.8);
+            color: #00ffcc;
+        }
+        
+        /* Style the project header for better appearance */
+        .project-header {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: rgba(26, 43, 60, 0.7);
+            border-radius: 8px;
+            border: 1px solid #00ffcc;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+        }
+        
+        .project-title {
+            color: #ff66ff;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(255, 102, 255, 0.5);
+        }
+        
+        .project-overview {
+            background-color: #0a1929;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 3px solid #9933ff;
+        }
+        
+        .terminal-prompt {
+            color: #ff66ff;
+            margin-right: 8px;
+        }
+        
+        .terminal-command {
+            color: #00ffcc;
+        }
+        
+        .terminal-output {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: rgba(0, 0, 51, 0.5);
+            border-radius: 3px;
+            color: #ffffff;
+        }
+        
+        /* Back to Portfolio Button */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(26, 43, 60, 0.8);
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            z-index: 100;
+        }
+        
+        .back-button:hover {
+            background-color: rgba(0, 255, 204, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .back-button::before {
+            content: "←";
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">Back to Portfolio</a>
+    
+    <div class="project-container">
+        <div class="project-header">
+            <h1 class="project-title"><a href="index.html" style="text-decoration: none; color: inherit;">snake*search.exe</a></h1>
+            <div class="project-overview">
+                <span class="terminal-prompt">$</span>
+                <span class="terminal-command">cat README.md</span>
+                <div class="terminal-output">
+                    A classic snake game implementation with intelligent pathfinding using the A* algorithm. The snake automatically finds the shortest path to food while avoiding obstacles and its own body.
+                </div>
+            </div>
+        </div>
+
+        <div class="file-explorer">
+            <div class="file-tree">
+                <div class="file-tree-item active">README.md</div>
+                <div class="file-tree-item">development_log.txt</div>
+                <div class="file-tree-item">challenges.log</div>
+                <div class="file-tree-item">tech_stack.info</div>
+                <div class="file-tree-item">demo.exe</div>
+            </div>
+
+            <div class="file-content">
+                <!-- Project Case Study -->
+                <div class="project-case-study">
+                    <h2 class="case-study-title">Snake*Search: A Journey Through Algorithmic Game Design</h2>
+                    
+                    <!-- Section 1 -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">1. Conception: From Curiosity to Code</h3>
+                        <div class="section-content">
+                            <p>
+                                The project began with a simple question: <em>How do game characters navigate complex environments so efficiently?</em> During my studies in <strong>distributed systems and graph algorithms</strong>, I became fascinated by pathfinding methods like <strong>DFS, BFS, and Dijkstra's Algorithm</strong>. But it was <em>A*</em><strong>search</strong>—a hybrid of heuristic-driven and cost-based navigation—that stood out for its balance of speed and accuracy.
+                            </p>
+                            
+                            <div class="goals-block">
+                                <h4>Initial Goals:</h4>
+                                <ul>
+                                    <li>Implement a self-playing Snake game using A*.</li>
+                                    <li>Compare its efficiency against other algorithms (time constraints later narrowed this focus).</li>
+                                    <li>Learn Pygame to bridge theory with tangible results.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Section 2 -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">2. Building the Foundation</h3>
+                        
+                        <h4 class="subsection-title">Phase 1: The Basic Snake</h4>
+                        <div class="section-content">
+                            <p>
+                                I started with a <strong>Pygame tutorial</strong> (Coder Space, 2022) to create the core mechanics:
+                            </p>
+                            <ul>
+                                <li><strong>Snake movement</strong> (grid-based, WASD controls).</li>
+                                <li><strong>Food spawning</strong> (random coordinates).</li>
+                                <li><strong>Collision detection</strong> (walls, self).</li>
+                            </ul>
+                            
+                            <div class="tech-note">
+                                <p><strong>Early Struggle:</strong> The snake's movement felt rigid. To make it autonomous, I needed to replace player input with <strong>algorithmic decision-making</strong>.</p>
+                            </div>
+                            
+                            <div class="basic-game-video">
+                                <!-- Video is now embedded from YouTube -->
+                                <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);">
+                                    <iframe src="https://www.youtube.com/embed/a1P7fAVwTGs" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+                                </div>
+                                <p style="text-align: center; font-size: 0.9rem; color: #A2D2FF;"><em>The original snake game with manual controls</em></p>
+                            </div>
+                        </div>
+                        
+                        <h4 class="subsection-title">Phase 2: A* Integration</h4>
+                        <div class="section-content">
+                            <p><strong>Key Steps:</strong></p>
+                            <ol>
+                                <li>
+                                    <strong>Grid Representation:</strong>
+                                    <ul>
+                                        <li>Treated the game window as a graph where each pixel was a node.</li>
+                                        <li>Defined neighbors (up/down/left/right) with a <strong>Manhattan distance heuristic</strong>.</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Path Calculation:</strong>
+                                    <ul>
+                                        <li>Used A* to find the shortest path from the snake's head to the food, avoiding:
+                                            <ul>
+                                                <li>Its own body (<code>snake_body</code> list).</li>
+                                                <li>Randomly placed obstacles (<code>obstacle_positions</code>).</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Dynamic Adaptation:</strong>
+                                    <ul>
+                                        <li>Recalculated the path after every move to account for the growing body.</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                            
+                            <div class="code-block">
+                                <h4>Code Breakthrough:</h4>
+                                <pre><code>def A_Star(start, goal, grid_size, snake_body, obstacle_positions):
+    open_set = {start}
+    came_from = {}  # Tracks the optimal path
+    g_score = {start: 0}  # Cost from start
+    f_score = {start: m_distance(start, goal)}  # Estimated total cost
+    ...</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Section 3 -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">3. Challenges & Iterations</h3>
+                        
+                        <h4 class="subsection-title">Problem 1: Food Spawning in Obstacles</h4>
+                        <div class="section-content">
+                            <ul>
+                                <li>Initially, food appeared inside obstacles, causing instant collisions.</li>
+                                <li><strong>Solution:</strong> Added validation to regenerate food until it spawned in a valid location.</li>
+                            </ul>
+                        </div>
+                        
+                        <h4 class="subsection-title">Problem 2: Algorithmic Bottlenecks</h4>
+                        <div class="section-content">
+                            <ul>
+                                <li>A* slowed when the snake grew long (many body segments to avoid).</li>
+                                <li><strong>Optimization:</strong> Limited path recalculation to every <em>N</em> frames and prioritized recent moves.</li>
+                            </ul>
+                        </div>
+                        
+                        <h4 class="subsection-title">Problem 3: Visual Clarity</h4>
+                        <div class="section-content">
+                            <ul>
+                                <li>Debugging paths was hard without visual aids.</li>
+                                <li><strong>Fix:</strong> Added temporary debug lines to display A*'s chosen path (removed in the final version).</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Section 4 -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">4. Polishing the Experience</h3>
+                        <div class="section-content">
+                            <p>To make the game engaging, I:</p>
+                            <ul>
+                                <li><strong>Added Assets:</strong> Replaced rectangles with pixel-art sprites (snake, food, obstacles).</li>
+                                <li><strong>Fine-Tuned Gameplay:</strong> Adjusted snake speed (<code>time_step</code>) and obstacle density.</li>
+                                <li><strong>Scoring System:</strong> +10 points per food, with a reset on collision.</li>
+                            </ul>
+                            
+                            <div class="tech-note">
+                                <h4>Final Mechanics:</h4>
+                                <ul>
+                                    <li>The snake autonomously navigates to food while dodging obstacles and its tail.</li>
+                                    <li>Obstacles reset on each game over, ensuring variability.</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="ai-game-video">
+                                <!-- Video is now embedded from YouTube -->
+                                <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);">
+                                    <iframe src="https://www.youtube.com/embed/WFWpAtqTk5E" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+                                </div>
+                                <p style="text-align: center; font-size: 0.9rem; color: #A2D2FF;"><em>The A* pathfinding algorithm in action, automatically navigating the snake</em></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Section 5 -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">5. Lessons Learned</h3>
+                        <div class="section-content">
+                            <ol>
+                                <li>
+                                    <strong>Theory vs. Practice:</strong>
+                                    <ul>
+                                        <li>A*'s elegance in textbooks didn't account for real-world edge cases (e.g., dead ends).</li>
+                                        <li>Debugging forced me to deeply understand heuristic trade-offs.</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Adaptability Matters:</strong>
+                                    <ul>
+                                        <li>My initial plan to compare multiple algorithms was scrapped due to time, but A* alone taught me more about optimization.</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>User Experience:</strong>
+                                    <ul>
+                                        <li>Even a technical demo benefits from polish (e.g., sprites, score displays).</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    
+                    <!-- Section 6 -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">6. Future Directions</h3>
+                        <div class="section-content">
+                            <ol>
+                                <li>
+                                    <strong>Advanced AI:</strong>
+                                    <ul>
+                                        <li>Replace A* with <strong>Q-learning</strong> to let the snake learn from mistakes.</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Multi-Algorithm Mode:</strong>
+                                    <ul>
+                                        <li>Let users toggle between A*, Dijkstra, and BFS to see differences in real time.</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Hardware Integration:</strong>
+                                    <ul>
+                                        <li>Port the game to a <strong>Raspberry Pi</strong> and connect it to a physical robotic snake.</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    
+                    <!-- Conclusion -->
+                    <div class="case-study-section">
+                        <h3 class="section-title">Conclusion</h3>
+                        <div class="section-content">
+                            <p>
+                                <em>Snake*Search</em> evolved from a simple coding exercise into a deep dive into <strong>algorithmic decision-making</strong>. The project honed my skills in <strong>Python, Pygame, and heuristic design</strong>, while teaching me to embrace iterative problem-solving. Most importantly, it proved that even classic games can become gateways to advanced computational thinking.
+                            </p>
+                            
+                            <div class="skills-demonstrated">
+                                <h4>Skills Demonstrated:</h4>
+                                <p>⌙ Pathfinding Algorithms (A*) | Pygame Development | Debugging & Optimization | AI Fundamentals</p>
+                            </div>
+                            
+                            <div class="project-artifacts">
+                                <h4>Project Artifacts:</h4>
+                                <p>Code | Demo Video | Technical Write-Up</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Interactive Demo -->
+                    <div class="demo-container">
+                        <h3 class="demo-title">DEMO.exe</h3>
+                        <div id="snake-game" class="game-container">
+                            <!-- Game will be initialized here -->
+                        </div>
+                        <div class="game-controls">
+                            <button id="ai-mode" class="control-btn">AI Mode</button>
+                            <button id="player-mode" class="control-btn">Player Mode</button>
+                        </div>
+                        <div id="game-score">Score: 0</div>
+                        <div id="game-message"></div>
+                        
+                        <div class="game-instructions">
+                            <h4>How to Play:</h4>
+                            <ul>
+                                <li><strong>AI Mode:</strong> Watch as the A* algorithm navigates the snake through obstacles to find food</li>
+                                <li><strong>Player Mode:</strong> Control the snake using WASD or arrow keys</li>
+                                <li><strong>Objective:</strong> Collect food (pink circles) and avoid obstacles (red X's) and walls</li>
+                                <li><strong>A* Algorithm:</strong> In AI mode, the pathfinding algorithm calculates the optimal route to food</li>
+                                <li><strong>Restart:</strong> Click AI Mode or Player Mode to restart after game over</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the canvas element
+            const gameContainer = document.getElementById('snake-game');
+            const canvas = document.createElement('canvas');
+            canvas.width = gameContainer.clientWidth;
+            canvas.height = gameContainer.clientHeight;
+            gameContainer.appendChild(canvas);
+            const ctx = canvas.getContext('2d');
+            
+            // Game variables
+            const TILE_SIZE = Math.floor(canvas.width / 20);
+            let snake = [];
+            let food = {};
+            let obstacles = [];
+            let score = 0;
+            let direction = { x: 0, y: 0 };
+            let speed = 130;
+            let lastRenderTime = 0;
+            let gameOver = false;
+            let aiMode = true;
+            let path = [];
+            
+            // UI Elements
+            const scoreDisplay = document.getElementById('game-score');
+            const messageDisplay = document.getElementById('game-message');
+            const aiModeBtn = document.getElementById('ai-mode');
+            const playerModeBtn = document.getElementById('player-mode');
+            
+            // Initialize game
+            function initGame() {
+                // Reset variables
+                snake = [{ x: 10 * TILE_SIZE, y: 10 * TILE_SIZE }];
+                placeFood();
+                generateObstacles(5);
+                score = 0;
+                direction = { x: 0, y: 0 };
+                gameOver = false;
+                path = [];
+                
+                // Update UI
+                scoreDisplay.textContent = `Score: ${score}`;
+                messageDisplay.textContent = aiMode ? "AI is controlling the snake" : "Use WASD or arrow keys to move";
+            }
+            
+            // Generate random obstacles
+            function generateObstacles(num) {
+                obstacles = [];
+                for (let i = 0; i < num; i++) {
+                    let obstacle;
+                    do {
+                        obstacle = {
+                            x: Math.floor(Math.random() * (canvas.width / TILE_SIZE)) * TILE_SIZE,
+                            y: Math.floor(Math.random() * (canvas.height / TILE_SIZE)) * TILE_SIZE
+                        };
+                    } while (
+                        // Don't place obstacles on snake or food
+                        snake.some(segment => segment.x === obstacle.x && segment.y === obstacle.y) ||
+                        (food.x === obstacle.x && food.y === obstacle.y) ||
+                        obstacles.some(obs => obs.x === obstacle.x && obs.y === obstacle.y)
+                    );
+                    obstacles.push(obstacle);
+                }
+            }
+            
+            // Place food randomly
+            function placeFood() {
+                let newFood;
+                do {
+                    newFood = {
+                        x: Math.floor(Math.random() * (canvas.width / TILE_SIZE)) * TILE_SIZE,
+                        y: Math.floor(Math.random() * (canvas.height / TILE_SIZE)) * TILE_SIZE
+                    };
+                } while (
+                    snake.some(segment => segment.x === newFood.x && segment.y === newFood.y) ||
+                    obstacles.some(obstacle => obstacle.x === newFood.x && obstacle.y === newFood.y)
+                );
+                food = newFood;
+            }
+            
+            // A* pathfinding algorithm
+            function manhattanDistance(a, b) {
+                return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+            }
+            
+            function getNeighbors(node) {
+                const neighbors = [
+                    { x: node.x + TILE_SIZE, y: node.y },
+                    { x: node.x - TILE_SIZE, y: node.y },
+                    { x: node.x, y: node.y + TILE_SIZE },
+                    { x: node.x, y: node.y - TILE_SIZE }
+                ];
+                
+                // Filter neighbors to valid positions (within bounds, not on snake or obstacles)
+                return neighbors.filter(n => 
+                    n.x >= 0 && n.x < canvas.width && 
+                    n.y >= 0 && n.y < canvas.height &&
+                    !snake.some(s => s.x === n.x && s.y === n.y) &&
+                    !obstacles.some(o => o.x === n.x && o.y === n.y)
+                );
+            }
+            
+            function reconstructPath(cameFrom, current) {
+                const totalPath = [current];
+                while (cameFrom.has(`${current.x},${current.y}`)) {
+                    current = cameFrom.get(`${current.x},${current.y}`);
+                    totalPath.unshift(current);
+                }
+                return totalPath.slice(1); // exclude the starting point
+            }
+            
+            function findPath(start, goal) {
+                // Initialize data structures
+                const openSet = new Set([`${start.x},${start.y}`]);
+                const cameFrom = new Map();
+                
+                const gScore = new Map();
+                gScore.set(`${start.x},${start.y}`, 0);
+                
+                const fScore = new Map();
+                fScore.set(`${start.x},${start.y}`, manhattanDistance(start, goal));
+                
+                // Main A* algorithm loop
+                while (openSet.size > 0) {
+                    // Find node with lowest fScore
+                    let currentKey = null;
+                    let lowestFScore = Infinity;
+                    
+                    for (const pos of openSet) {
+                        const fScoreValue = fScore.get(pos) || Infinity;
+                        if (fScoreValue < lowestFScore) {
+                            currentKey = pos;
+                            lowestFScore = fScoreValue;
+                        }
+                    }
+                    
+                    // Get x,y coordinates from the key
+                    const [currentX, currentY] = currentKey.split(',').map(Number);
+                    const current = { x: currentX, y: currentY };
+                    
+                    // If we reached the goal, reconstruct and return the path
+                    if (current.x === goal.x && current.y === goal.y) {
+                        return reconstructPath(cameFrom, current);
+                    }
+                    
+                    // Remove current from open set
+                    openSet.delete(currentKey);
+                    
+                    // Check all neighbors
+                    for (const neighbor of getNeighbors(current)) {
+                        const neighborKey = `${neighbor.x},${neighbor.y}`;
+                        
+                        // Calculate tentative gScore
+                        const tentativeGScore = (gScore.get(currentKey) || Infinity) + 1;
+                        
+                        // If this path is better than any previous path to this neighbor
+                        if (tentativeGScore < (gScore.get(neighborKey) || Infinity)) {
+                            // Update this path as the best path to the neighbor
+                            cameFrom.set(neighborKey, current);
+                            gScore.set(neighborKey, tentativeGScore);
+                            fScore.set(neighborKey, tentativeGScore + manhattanDistance(neighbor, goal));
+                            
+                            // Add to open set if not already there
+                            if (!openSet.has(neighborKey)) {
+                                openSet.add(neighborKey);
+                            }
+                        }
+                    }
+                }
+                
+                // No path found
+                return [];
+            }
+            
+            // Handle keyboard input
+            function handleKeyInput(e) {
+                if (aiMode) return;
+                
+                switch (e.key) {
+                    case 'ArrowUp':
+                    case 'w':
+                    case 'W':
+                        if (direction.y === 0) direction = { x: 0, y: -TILE_SIZE };
+                        break;
+                    case 'ArrowDown':
+                    case 's':
+                    case 'S':
+                        if (direction.y === 0) direction = { x: 0, y: TILE_SIZE };
+                        break;
+                    case 'ArrowLeft':
+                    case 'a':
+                    case 'A':
+                        if (direction.x === 0) direction = { x: -TILE_SIZE, y: 0 };
+                        break;
+                    case 'ArrowRight':
+                    case 'd':
+                    case 'D':
+                        if (direction.x === 0) direction = { x: TILE_SIZE, y: 0 };
+                        break;
+                }
+            }
+            
+            // AI movement
+            function updateAI() {
+                if (!aiMode || gameOver) return;
+                
+                // Recalculate path if needed
+                if (path.length === 0) {
+                    path = findPath(snake[0], food);
+                    
+                    // If no path found, try to survive
+                    if (path.length === 0) {
+                        const possibleMoves = getNeighbors(snake[0]);
+                        if (possibleMoves.length > 0) {
+                            // Just move to first available safe spot
+                            path = [possibleMoves[0]];
+                        }
+                    }
+                }
+                
+                // Move based on path
+                if (path.length > 0) {
+                    const nextMove = path[0];
+                    path = path.slice(1);
+                    
+                    direction = {
+                        x: nextMove.x - snake[0].x,
+                        y: nextMove.y - snake[0].y
+                    };
+                }
+            }
+            
+            // Move the snake
+            function moveSnake() {
+                if (gameOver) return;
+                
+                // If no direction, don't move
+                if (direction.x === 0 && direction.y === 0) return;
+                
+                // Create new head based on direction
+                const newHead = {
+                    x: snake[0].x + direction.x,
+                    y: snake[0].y + direction.y
+                };
+                
+                // Check for collision with walls
+                if (
+                    newHead.x < 0 || 
+                    newHead.x >= canvas.width || 
+                    newHead.y < 0 || 
+                    newHead.y >= canvas.height
+                ) {
+                    gameOver = true;
+                    messageDisplay.textContent = "Game Over! Hit a wall. Click AI/Player to restart.";
+                    return;
+                }
+                
+                // Check for collision with self
+                if (snake.some(segment => segment.x === newHead.x && segment.y === newHead.y)) {
+                    gameOver = true;
+                    messageDisplay.textContent = "Game Over! Snake hit itself. Click AI/Player to restart.";
+                    return;
+                }
+                
+                // Check for collision with obstacles
+                if (obstacles.some(obstacle => obstacle.x === newHead.x && obstacle.y === newHead.y)) {
+                    gameOver = true;
+                    messageDisplay.textContent = "Game Over! Hit an obstacle. Click AI/Player to restart.";
+                    return;
+                }
+                
+                // Add new head
+                snake.unshift(newHead);
+                
+                // Check if food eaten
+                if (snake[0].x === food.x && snake[0].y === food.y) {
+                    // Increase score
+                    score += 10;
+                    scoreDisplay.textContent = `Score: ${score}`;
+                    
+                    // Place new food
+                    placeFood();
+                    
+                    // Reset path for AI
+                    path = [];
+                } else {
+                    // Remove tail if no food eaten
+                    snake.pop();
+                }
+            }
+            
+            // Draw the game
+            function draw() {
+                // Clear canvas with a grid pattern background
+                ctx.fillStyle = '#000033';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw grid pattern for retro effect
+                ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+                ctx.lineWidth = 1;
+                
+                // Draw vertical grid lines
+                for (let x = 0; x <= canvas.width; x += TILE_SIZE) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, canvas.height);
+                    ctx.stroke();
+                }
+                
+                // Draw horizontal grid lines
+                for (let y = 0; y <= canvas.height; y += TILE_SIZE) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(canvas.width, y);
+                    ctx.stroke();
+                }
+                
+                // Draw snake with gradient colors and Y2K style
+                snake.forEach((segment, index) => {
+                    // Create gradient for snake segments
+                    let segmentGradient;
+                    if (index === 0) {
+                        // Head has special cyan gradient
+                        segmentGradient = ctx.createLinearGradient(
+                            segment.x, segment.y, 
+                            segment.x + TILE_SIZE, segment.y + TILE_SIZE
+                        );
+                        segmentGradient.addColorStop(0, '#00ffcc');
+                        segmentGradient.addColorStop(1, '#00ccff');
+                    } else {
+                        // Body has purple gradient
+                        segmentGradient = ctx.createLinearGradient(
+                            segment.x, segment.y, 
+                            segment.x + TILE_SIZE, segment.y + TILE_SIZE
+                        );
+                        segmentGradient.addColorStop(0, '#9933ff');
+                        segmentGradient.addColorStop(1, '#ff66ff');
+                    }
+                    
+                    // Fill segment with gradient
+                    ctx.fillStyle = segmentGradient;
+                    ctx.fillRect(segment.x, segment.y, TILE_SIZE, TILE_SIZE);
+                    
+                    // Add Y2K-style inner border
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(segment.x + 2, segment.y + 2, TILE_SIZE - 4, TILE_SIZE - 4);
+                    
+                    // Draw eyes on head
+                    if (index === 0) {
+                        ctx.fillStyle = '#ffffff';
+                        const eyeSize = TILE_SIZE / 4;
+                        const eyeOffset = TILE_SIZE / 3;
+                        
+                        // Left eye
+                        ctx.beginPath();
+                        ctx.arc(
+                            segment.x + eyeOffset, 
+                            segment.y + eyeOffset, 
+                            eyeSize / 2, 
+                            0, 
+                            Math.PI * 2
+                        );
+                        ctx.fill();
+                        
+                        // Right eye
+                        ctx.beginPath();
+                        ctx.arc(
+                            segment.x + TILE_SIZE - eyeOffset, 
+                            segment.y + eyeOffset, 
+                            eyeSize / 2, 
+                            0, 
+                            Math.PI * 2
+                        );
+                        ctx.fill();
+                        
+                        // Black pupils
+                        ctx.fillStyle = '#000000';
+                        
+                        // Left pupil
+                        ctx.beginPath();
+                        ctx.arc(
+                            segment.x + eyeOffset, 
+                            segment.y + eyeOffset, 
+                            eyeSize / 4, 
+                            0, 
+                            Math.PI * 2
+                        );
+                        ctx.fill();
+                        
+                        // Right pupil
+                        ctx.beginPath();
+                        ctx.arc(
+                            segment.x + TILE_SIZE - eyeOffset, 
+                            segment.y + eyeOffset, 
+                            eyeSize / 4, 
+                            0, 
+                            Math.PI * 2
+                        );
+                        ctx.fill();
+                    }
+                });
+                
+                // Draw food with neon glow
+                ctx.fillStyle = '#ff66ff';
+                ctx.beginPath();
+                ctx.arc(
+                    food.x + TILE_SIZE / 2, 
+                    food.y + TILE_SIZE / 2, 
+                    TILE_SIZE / 2 - 2, 
+                    0, 
+                    Math.PI * 2
+                );
+                ctx.fill();
+                
+                // Add glow effect
+                ctx.shadowColor = '#ff66ff';
+                ctx.shadowBlur = 10;
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+                
+                // Draw inner pattern on food
+                ctx.beginPath();
+                ctx.arc(
+                    food.x + TILE_SIZE / 2, 
+                    food.y + TILE_SIZE / 2, 
+                    TILE_SIZE / 4, 
+                    0, 
+                    Math.PI * 2
+                );
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                
+                // Draw obstacles with Y2K styling
+                obstacles.forEach(obstacle => {
+                    // Create gradient background
+                    const obstacleGradient = ctx.createLinearGradient(
+                        obstacle.x, obstacle.y, 
+                        obstacle.x + TILE_SIZE, obstacle.y + TILE_SIZE
+                    );
+                    obstacleGradient.addColorStop(0, '#ff3333');
+                    obstacleGradient.addColorStop(1, '#cc0000');
+                    
+                    ctx.fillStyle = obstacleGradient;
+                    ctx.fillRect(obstacle.x, obstacle.y, TILE_SIZE, TILE_SIZE);
+                    
+                    // Add Y2K-style inner border
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(obstacle.x + 2, obstacle.y + 2, TILE_SIZE - 4, TILE_SIZE - 4);
+                    
+                    // Draw X pattern
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(obstacle.x + 4, obstacle.y + 4);
+                    ctx.lineTo(obstacle.x + TILE_SIZE - 4, obstacle.y + TILE_SIZE - 4);
+                    ctx.moveTo(obstacle.x + TILE_SIZE - 4, obstacle.y + 4);
+                    ctx.lineTo(obstacle.x + 4, obstacle.y + TILE_SIZE - 4);
+                    ctx.stroke();
+                });
+                
+                // Draw path (only faintly visible when AI is active)
+                if (aiMode && path.length > 0) {
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+                    path.forEach(point => {
+                        ctx.beginPath();
+                        ctx.arc(
+                            point.x + TILE_SIZE / 2,
+                            point.y + TILE_SIZE / 2,
+                            TILE_SIZE / 6,
+                            0,
+                            Math.PI * 2
+                        );
+                        ctx.fill();
+                    });
+                }
+                
+                // Add Y2K-style screen effect overlay
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+                for (let y = 0; y < canvas.height; y += 2) {
+                    ctx.fillRect(0, y, canvas.width, 1);
+                }
+            }
+            
+            // Game loop
+            function gameLoop(currentTime) {
+                window.requestAnimationFrame(gameLoop);
+                
+                const secondsSinceLastRender = (currentTime - lastRenderTime) / 1000;
+                if (secondsSinceLastRender < 1 / (speed / 60)) return;
+                
+                lastRenderTime = currentTime;
+                
+                // Update AI if in AI mode
+                if (aiMode) {
+                    updateAI();
+                }
+                
+                // Move snake
+                moveSnake();
+                
+                // Draw everything
+                draw();
+            }
+            
+            // Set up event listeners
+            aiModeBtn.addEventListener('click', function() {
+                aiMode = true;
+                initGame();
+            });
+            
+            playerModeBtn.addEventListener('click', function() {
+                aiMode = false;
+                initGame();
+            });
+            
+            window.addEventListener('keydown', handleKeyInput);
+            
+            // Start the game
+            initGame();
+            window.requestAnimationFrame(gameLoop);
+        });
+    </script>
+</body>
+</html> 
