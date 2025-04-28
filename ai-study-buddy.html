@@ -458,11 +458,11 @@
                                 StudyBuddy combines hardware components with software tools to create an interactive learning companion. The hardware design features a 3D-printed case with dual OLED displays for facial expressions and text, servo-driven arm movements, and audio feedback.
                             </p>
                             
-                            <div style="margin: 30px 0;">
-                                <h4 class="subsection-title">StudyBuddy Casing</h4>
-                                <div style="text-align: center; margin: 20px 0;">
-                                    <img src="./Assests/studybuddy-case.png" alt="StudyBuddy 3D-printed casing" style="max-width: 80%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-                                    <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>3D-printed casing for the StudyBuddy robot with compartments for displays and components</em></p>
+                            <div class="dev-step">
+                                <h3 class="dev-step-title">Physical Design & 3D Printing</h3>
+                                <div class="dev-step-content">
+                                    <p>Designed a compact spherical casing with Blender, sized to house all components while maintaining a friendly appearance:</p>
+                                    <img src="https://imgur.com/JdVMp86.png" alt="StudyBuddy 3D-printed casing" style="max-width: 80%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
                                 </div>
                             </div>
                             
@@ -475,8 +475,12 @@
                                 <li><strong>Microphone (INMP441):</strong> Captures voice input for speech recognition</li>
                             </ul>
                             
-                            <div class="tech-note">
-                                <p><strong>Hardware Challenge:</strong> While the initial design included the INMP441 microphone, testing revealed inconsistent performance. The solution involved using the computer's built-in microphone for the prototype, demonstrating the project's adaptability and problem-solving approach.</p>
+                            <div class="dev-step">
+                                <h3 class="dev-step-title">Component Wiring</h3>
+                                <div class="dev-step-content">
+                                    <p>Created a careful wiring layout to connect all components to the ESP32:</p>
+                                    <img src="https://imgur.com/QbCy3HZ.png" alt="ESP32 Wiring Schematic" style="max-width: 90%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                                </div>
                             </div>
                             
                             <div style="margin: 30px 0;">
@@ -598,7 +602,7 @@ class AdaptiveLearningProfile:
                             
                             <div style="margin: 20px 0;">
                                 <h4 class="subsection-title">System Workflow</h4>
-                                <img src="./Assests/system-workflow.png" alt="StudyBuddy System Workflow" style="max-width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                                <img src="https://imgur.com/5NsWqCu.png" alt="StudyBuddy System Workflow" style="max-width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
                                 <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Diagram showing the flow of data between components in the StudyBuddy system</em></p>
                             </div>
                             
@@ -690,16 +694,13 @@ def update_subject_skill(self, subject, topic, correct):
                                 <h4 class="subsection-title">Multimodal Feedback</h4>
                                 <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px;">
                                     <div style="flex: 1; min-width: 240px; max-width: 320px;">
-                                        <img src="./Assests/facial-expressions.png" alt="StudyBuddy facial expressions" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-                                        <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>OLED display showing different facial expressions</em></p>
+                                        <img src="https://imgur.com/Z8kWrHN.png" alt="StudyBuddy facial expressions" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
                                     </div>
                                     <div style="flex: 1; min-width: 240px; max-width: 320px;">
-                                        <img src="./Assests/text-display.png" alt="StudyBuddy text display" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-                                        <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Second OLED showing text responses and educational content</em></p>
+                                        <img src="https://imgur.com/yL62f7C.png" alt="StudyBuddy text display" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
                                     </div>
                                     <div style="flex: 1; min-width: 240px; max-width: 320px;">
-                                        <img src="./Assests/servo-movement.png" alt="StudyBuddy servo movement" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-                                        <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Servo-driven arm gestures for physical feedback</em></p>
+                                        <img src="https://imgur.com/bTVnwpR.png" alt="StudyBuddy servo movement" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
                                     </div>
                                 </div>
                             </div>
