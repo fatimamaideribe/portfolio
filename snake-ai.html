@@ -673,11 +673,12 @@
             let obstacles = [];
             let score = 0;
             let direction = { x: 0, y: 0 };
-            let speed = 130;
+            let speed = 150; // Slower speed for better visualization
             let lastRenderTime = 0;
             let gameOver = false;
             let aiMode = true;
             let path = [];
+            let pathRecalcCounter = 0; // Counter to avoid recalculating path every frame
             
             // UI Elements
             const scoreDisplay = document.getElementById('game-score');
@@ -695,10 +696,17 @@
                 direction = { x: 0, y: 0 };
                 gameOver = false;
                 path = [];
+                pathRecalcCounter = 0;
                 
                 // Update UI
                 scoreDisplay.textContent = `Score: ${score}`;
                 messageDisplay.textContent = aiMode ? "AI is controlling the snake" : "Use WASD or arrow keys to move";
+                
+                // Start with an initial direction if in AI mode
+                if (aiMode) {
+                    // Force immediate path calculation
+                    updateAI();
+                }
             }
             
             // Generate random obstacles
@@ -753,7 +761,7 @@
                 return neighbors.filter(n => 
                     n.x >= 0 && n.x < canvas.width && 
                     n.y >= 0 && n.y < canvas.height &&
-                    !snake.some(s => s.x === n.x && s.y === n.y) &&
+                    !snake.slice(0, snake.length - 1).some(s => s.x === n.x && s.y === n.y) && // Ignore tail which will move
                     !obstacles.some(o => o.x === n.x && o.y === n.y)
                 );
             }
@@ -768,8 +776,31 @@
             }
             
             function findPath(start, goal) {
+                // Priority queue implementation
+                class PriorityQueue {
+                    constructor() {
+                        this.elements = [];
+                    }
+                    
+                    isEmpty() {
+                        return this.elements.length === 0;
+                    }
+                    
+                    put(item, priority) {
+                        this.elements.push({item, priority});
+                        this.elements.sort((a, b) => a.priority - b.priority);
+                    }
+                    
+                    get() {
+                        return this.elements.shift().item;
+                    }
+                }
+                
                 // Initialize data structures
-                const openSet = new Set([`${start.x},${start.y}`]);
+                const openSet = new PriorityQueue();
+                openSet.put(start, 0);
+                
+                const openSetHash = new Set([`${start.x},${start.y}`]);
                 const cameFrom = new Map();
                 
                 const gScore = new Map();
@@ -779,30 +810,18 @@
                 fScore.set(`${start.x},${start.y}`, manhattanDistance(start, goal));
                 
                 // Main A* algorithm loop
-                while (openSet.size > 0) {
-                    // Find node with lowest fScore
-                    let currentKey = null;
-                    let lowestFScore = Infinity;
+                while (!openSet.isEmpty()) {
+                    // Get the node with the lowest fScore
+                    const current = openSet.get();
+                    const currentKey = `${current.x},${current.y}`;
                     
-                    for (const pos of openSet) {
-                        const fScoreValue = fScore.get(pos) || Infinity;
-                        if (fScoreValue < lowestFScore) {
-                            currentKey = pos;
-                            lowestFScore = fScoreValue;
-                        }
-                    }
-                    
-                    // Get x,y coordinates from the key
-                    const [currentX, currentY] = currentKey.split(',').map(Number);
-                    const current = { x: currentX, y: currentY };
+                    // Remove from the hash set
+                    openSetHash.delete(currentKey);
                     
                     // If we reached the goal, reconstruct and return the path
                     if (current.x === goal.x && current.y === goal.y) {
                         return reconstructPath(cameFrom, current);
                     }
-                    
-                    // Remove current from open set
-                    openSet.delete(currentKey);
                     
                     // Check all neighbors
                     for (const neighbor of getNeighbors(current)) {
@@ -816,11 +835,14 @@
                             // Update this path as the best path to the neighbor
                             cameFrom.set(neighborKey, current);
                             gScore.set(neighborKey, tentativeGScore);
-                            fScore.set(neighborKey, tentativeGScore + manhattanDistance(neighbor, goal));
+                            
+                            const newFScore = tentativeGScore + manhattanDistance(neighbor, goal);
+                            fScore.set(neighborKey, newFScore);
                             
                             // Add to open set if not already there
-                            if (!openSet.has(neighborKey)) {
-                                openSet.add(neighborKey);
+                            if (!openSetHash.has(neighborKey)) {
+                                openSet.put(neighbor, newFScore);
+                                openSetHash.add(neighborKey);
                             }
                         }
                     }
@@ -862,18 +884,56 @@
             function updateAI() {
                 if (!aiMode || gameOver) return;
                 
-                // Recalculate path if needed
-                if (path.length === 0) {
+                // Only recalculate path periodically to avoid performance issues
+                // Or when there's no current path
+                if (path.length === 0 || pathRecalcCounter >= 5) {
+                    pathRecalcCounter = 0;
                     path = findPath(snake[0], food);
                     
-                    // If no path found, try to survive
+                    // If no path found, try to survive by finding the safest path
                     if (path.length === 0) {
+                        // Find all possible safe moves
                         const possibleMoves = getNeighbors(snake[0]);
+                        
                         if (possibleMoves.length > 0) {
-                            // Just move to first available safe spot
+                            // Sort possible moves by which one is furthest from the snake body
+                            // This helps prevent the snake from trapping itself
+                            possibleMoves.sort((a, b) => {
+                                // Calculate minimum distance to any snake segment for each move
+                                const aMinDist = Math.min(...snake.map(segment => 
+                                    manhattanDistance(a, segment)
+                                ));
+                                const bMinDist = Math.min(...snake.map(segment => 
+                                    manhattanDistance(b, segment)
+                                ));
+                                
+                                // Prefer moves that keep the snake away from its body
+                                return bMinDist - aMinDist;
+                            });
+                            
+                            // Take the safest move
                             path = [possibleMoves[0]];
+                            
+                            // Debug message
+                            messageDisplay.textContent = "No direct path to food - survival mode";
+                        } else {
+                            // No safe moves available - try to follow the snake's tail as a last resort
+                            if (snake.length > 1) {
+                                const tail = snake[snake.length - 1];
+                                path = findPath(snake[0], tail);
+                                
+                                if (path.length > 0) {
+                                    messageDisplay.textContent = "Trapped - following tail to survive";
+                                } else {
+                                    messageDisplay.textContent = "No safe path available!";
+                                }
+                            }
                         }
+                    } else {
+                        messageDisplay.textContent = "AI is controlling the snake";
                     }
+                } else {
+                    pathRecalcCounter++;
                 }
                 
                 // Move based on path
@@ -885,6 +945,16 @@
                         x: nextMove.x - snake[0].x,
                         y: nextMove.y - snake[0].y
                     };
+                } else {
+                    // If still no valid path, just take any safe move
+                    const possibleMoves = getNeighbors(snake[0]);
+                    if (possibleMoves.length > 0) {
+                        const nextMove = possibleMoves[0];
+                        direction = {
+                            x: nextMove.x - snake[0].x,
+                            y: nextMove.y - snake[0].y
+                        };
+                    }
                 }
             }
             
@@ -939,8 +1009,12 @@
                     // Place new food
                     placeFood();
                     
-                    // Reset path for AI
+                    // Force immediate path recalculation
                     path = [];
+                    pathRecalcCounter = 0;
+                    
+                    // Update message to show success
+                    messageDisplay.textContent = "Food eaten! Score: " + score;
                 } else {
                     // Remove tail if no food eaten
                     snake.pop();
