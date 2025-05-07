@@ -330,70 +330,6 @@
             padding: 0 15px;
             font-style: italic;
         }
-
-        /* Style the project header for better appearance */
-        .project-header {
-            margin-bottom: 30px;
-            padding: 20px;
-            background-color: rgba(26, 43, 60, 0.7);
-            border-radius: 8px;
-            border: 1px solid #00ffcc;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
-        }
-
-        .project-title {
-            color: #ff66ff;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 2.5rem;
-            text-shadow: 0 0 10px rgba(255, 102, 255, 0.5);
-        }
-
-        .project-overview {
-            background-color: #0a1929;
-            padding: 15px;
-            border-radius: 5px;
-            border-left: 3px solid #9933ff;
-        }
-
-        .terminal-prompt {
-            color: #ff66ff;
-            margin-right: 8px;
-        }
-
-        .terminal-command {
-            color: #00ffcc;
-        }
-
-        .terminal-output {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: rgba(0, 0, 51, 0.5);
-            border-radius: 3px;
-            color: #ffffff;
-        }
-
-        /* Improve file tree items styling */
-        .file-tree-item {
-            padding: 8px 12px;
-            margin-bottom: 5px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background-color: rgba(26, 43, 60, 0.7);
-            border-left: 3px solid transparent;
-        }
-
-        .file-tree-item:hover {
-            background-color: rgba(26, 43, 60, 0.9);
-            transform: translateX(5px);
-        }
-
-        .file-tree-item.active {
-            border-left-color: #00ffcc;
-            background-color: rgba(51, 51, 102, 0.8);
-            color: #00ffcc;
-        }
     </style>
 </head>
 <body>
@@ -421,8 +357,16 @@
             </div>
 
             <div class="file-content">
+                <div class="project-overview">
+                    <span class="terminal-prompt">$</span>
+                    <span class="terminal-command">cat README.md</span>
+                    <div class="terminal-output">
+                        A comprehensive wildlife conservation campaign targeting teens through social media, interactive website, and Roblox game. The project combines education with entertainment to raise awareness about endangered species.
+                    </div>
+                </div>
+
+                <!-- Project Case Study -->
                 <div class="project-case-study">
-                    <h2 class="case-study-title">WildWise: Engaging Youth in Wildlife Conservation</h2>
                     <!-- Overview Section -->
                     <div class="case-study-section">
                         <h3 class="section-title">Project Overview</h3>
@@ -492,6 +436,7 @@
                                     <p class="image-caption">Inspirational visuals for the interactive game featuring environmental challenges and conservation mechanics</p>
                                 </div>
                             </div>
+                            <img src="wildwise-branding.png" alt="Wildwise Branding" class="dev-step-image">
                         </div>
                     </div>
                     
