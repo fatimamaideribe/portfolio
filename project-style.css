@@ -1,3 +1,20 @@
+<<<<<<< HEAD
+/* 
+ * PROJECT STYLE CSS
+ * -----------------
+ * This stylesheet provides shared styling for all project portfolio pages.
+ * 
+ * RESPONSIVE DESIGN IMPROVEMENTS:
+ * - All pages now use flexible layouts that adapt to different screen sizes
+ * - Image and video containers automatically scale with the viewport
+ * - Typography adjusts for better readability on small screens
+ * - Improved navigation and UI element spacing on mobile devices
+ * - Three breakpoints: desktop (>1024px), tablet (768-1024px), and mobile (<768px)
+ * - Extra small device optimizations at 480px and below
+ */
+
+=======
+>>>>>>> 9394d56ceb59d964d69dd90dc743c2e5365323aa
 /* Base colors for accessibility */
 :root {
     /* Core colors */
@@ -358,6 +375,35 @@ blockquote {
 
 /* Back button */
 .back-button {
+<<<<<<< HEAD
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: rgba(26, 43, 60, 0.8);
+    border: 1px solid var(--accent-primary);
+    color: var(--accent-primary);
+    padding: 8px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    z-index: 100;
+}
+
+.back-button:hover {
+    background-color: rgba(0, 255, 204, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.back-button::before {
+    content: "←";
+    font-size: 18px;
+=======
     background-color: var(--bg-secondary);
     color: var(--accent-primary);
     border: 1px solid var(--accent-primary);
@@ -366,6 +412,7 @@ blockquote {
 .back-button:hover {
     background-color: var(--accent-primary);
     color: var(--bg-primary);
+>>>>>>> 9394d56ceb59d964d69dd90dc743c2e5365323aa
 }
 
 /* Dividers */
@@ -379,6 +426,54 @@ blockquote {
     color: var(--accent-secondary);
 }
 
+<<<<<<< HEAD
+/* Responsive Image and Video Containers */
+.image-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 25px auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.image-container img {
+    width: 100%;
+    display: block;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+.image-caption {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 10px;
+    padding: 0 10px;
+    font-style: italic;
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    margin: 20px 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+=======
+>>>>>>> 9394d56ceb59d964d69dd90dc743c2e5365323aa
 /* Responsive Design */
 @media (max-width: 768px) {
     .file-explorer {
@@ -393,4 +488,150 @@ blockquote {
         margin: 10px;
         padding: 15px;
     }
+<<<<<<< HEAD
+} 
+
+/* Enhanced Responsive Design */
+@media (max-width: 1024px) {
+    .project-container {
+        max-width: 95%;
+        padding: 15px;
+    }
+
+    .back-button {
+        top: 10px;
+        left: 10px;
+        z-index: 1000;
+    }
+}
+
+@media (max-width: 768px) {
+    /* General layout */
+    .file-explorer {
+        flex-direction: column;
+    }
+    
+    .file-tree {
+        width: 100%;
+        position: relative;
+        max-height: none;
+        padding-right: 0;
+        margin-bottom: 20px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .file-content {
+        padding: 10px 0;
+    }
+    
+    .project-container {
+        margin: 10px;
+        padding: 15px;
+    }
+    
+    /* Typography adjustments */
+    h1, .project-title {
+        font-size: 1.8rem;
+    }
+    
+    h2, .case-study-title {
+        font-size: 1.6rem;
+    }
+    
+    h3, .section-title {
+        font-size: 1.3rem;
+    }
+    
+    /* Back button */
+    .back-button {
+        position: relative;
+        top: 0;
+        left: 0;
+        margin-bottom: 15px;
+        display: inline-flex;
+    }
+    
+    /* Image containers */
+    .image-container {
+        margin: 15px auto;
+    }
+    
+    .image-caption {
+        font-size: 0.8rem;
+    }
+    
+    /* Spacing adjustments */
+    .section-content {
+        padding-left: 15px;
+    }
+    
+    .terminal-output {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+    
+    /* Demo containers */
+    .demo-container {
+        padding: 15px;
+    }
+    
+    .game-container {
+        max-width: 100%;
+    }
+    
+    .video-container {
+        margin-bottom: 15px;
+    }
+    
+    /* Challenge blocks */
+    .tech-note, .goals-block, .challenge-item {
+        padding: 10px;
+        margin: 10px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Tighter spacing for smallest screens */
+    .project-container {
+        padding: 10px;
+        margin: 5px;
+    }
+    
+    h1, .project-title {
+        font-size: 1.5rem;
+    }
+    
+    h2, .case-study-title {
+        font-size: 1.3rem;
+    }
+    
+    h3, .section-title {
+        font-size: 1.1rem;
+    }
+    
+    .section-content {
+        padding-left: 10px;
+    }
+    
+    /* Stack tech items and control buttons vertically */
+    .tech-list, .game-controls {
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+    }
+    
+    .tech-item {
+        width: 80%;
+        text-align: center;
+    }
+    
+    /* Adjust terminal display */
+    .terminal-prompt, .terminal-command {
+        display: block;
+        margin-bottom: 5px;
+    }
+} 
+=======
 } /* Responsive Design Improvements Added */
+>>>>>>> 9394d56ceb59d964d69dd90dc743c2e5365323aa
