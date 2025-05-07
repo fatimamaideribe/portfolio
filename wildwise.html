@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wildwise - Project Portfolio</title>
+    <title>WildWise - Project Portfolio</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="project-style.css">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
@@ -14,40 +14,44 @@
             padding: 0;
             height: 100%;
             width: 100%;
-            overflow-x: hidden; /* Prevent horizontal scrolling */
-            overflow-y: auto; /* Enable vertical scrolling */
+            overflow-x: hidden;
+            overflow-y: auto;
+            background: linear-gradient(45deg, #000033, #003366);
+            color: #ffffff;
+            font-family: 'Fira Code', monospace;
+            line-height: 1.6;
         }
         
         .project-container {
             padding: 20px;
             max-width: 1200px;
             margin: 0 auto;
-            overflow-y: auto; /* Ensure container itself is scrollable */
+            overflow-y: auto;
         }
         
         .file-explorer {
             display: flex;
-            min-height: 0; /* Allow content to determine height */
-            overflow: visible; /* Ensure overflow content is visible */
-            flex-direction: row; /* Force horizontal layout */
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            min-height: 0;
+            overflow: visible;
+            flex-direction: row;
+            flex-wrap: wrap;
         }
         
         .file-tree {
             min-width: 150px;
             padding-right: 20px;
             position: sticky;
-            top: 20px; /* Stick to top with some padding */
-            max-height: calc(100vh - 40px); /* Allow scrolling for very long file trees */
+            top: 20px;
+            max-height: calc(100vh - 40px);
             overflow-y: auto;
-            align-self: flex-start; /* Align to top of container */
+            align-self: flex-start;
         }
         
         .file-content {
             flex: 1;
-            overflow-y: visible; /* Allow vertical scrolling */
+            overflow-y: visible;
             padding: 20px;
-            min-width: 300px; /* Ensure content area has minimum width */
+            min-width: 300px;
         }
         
         /* Responsive handling */
@@ -69,6 +73,89 @@
                 width: 100%;
                 padding: 10px 0;
             }
+        }
+        
+        /* Case Study Specific Styling */
+        .case-study-title {
+            color: #00ffcc;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        .case-study-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px dashed rgba(153, 51, 255, 0.3);
+        }
+        
+        .section-title {
+            color: #9933ff;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .section-title::before {
+            content: ">";
+            position: absolute;
+            left: 0;
+            color: #ff66ff;
+        }
+        
+        .subsection-title {
+            color: #00ffcc;
+            font-size: 1.2rem;
+            margin: 1.2rem 0 0.8rem;
+            padding-left: 25px;
+        }
+        
+        .section-content {
+            padding-left: 25px;
+            line-height: 1.6;
+        }
+        
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .section-content ul, 
+        .section-content ol {
+            margin-bottom: 1rem;
+            padding-left: 20px;
+        }
+        
+        .section-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .goals-block, .tech-note, .skills-demonstrated, .project-artifacts {
+            background-color: rgba(26, 43, 60, 0.7);
+            border-left: 3px solid #9933ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .code-block {
+            background-color: #0a1929;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        
+        .code-block pre {
+            margin: 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .code-block code {
+            color: #ffffff;
         }
         
         /* Back to Portfolio Button */
@@ -102,6 +189,70 @@
             font-size: 18px;
         }
         
+        /* Project Header Styling */
+        .project-header {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: rgba(26, 43, 60, 0.7);
+            border-radius: 8px;
+            border: 1px solid #00ffcc;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+        }
+        
+        .project-title {
+            color: #ff66ff;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(255, 102, 255, 0.5);
+        }
+        
+        .project-overview {
+            background-color: #0a1929;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 3px solid #9933ff;
+        }
+        
+        .terminal-prompt {
+            color: #ff66ff;
+            margin-right: 8px;
+        }
+        
+        .terminal-command {
+            color: #00ffcc;
+        }
+        
+        .terminal-output {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: rgba(0, 0, 51, 0.5);
+            border-radius: 3px;
+            color: #ffffff;
+        }
+        
+        /* Improve file tree items styling */
+        .file-tree-item {
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: rgba(26, 43, 60, 0.7);
+            border-left: 3px solid transparent;
+        }
+        
+        .file-tree-item:hover {
+            background-color: rgba(26, 43, 60, 0.9);
+            transform: translateX(5px);
+        }
+        
+        .file-tree-item.active {
+            border-left-color: #00ffcc;
+            background-color: rgba(51, 51, 102, 0.8);
+            color: #00ffcc;
+        }
+
         /* Case Study Specific Styling */
         .case-study-title {
             color: #FFD1DC;
@@ -330,70 +481,6 @@
             padding: 0 15px;
             font-style: italic;
         }
-
-        /* Style the project header for better appearance */
-        .project-header {
-            margin-bottom: 30px;
-            padding: 20px;
-            background-color: rgba(26, 43, 60, 0.7);
-            border-radius: 8px;
-            border: 1px solid #00ffcc;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
-        }
-
-        .project-title {
-            color: #ff66ff;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 2.5rem;
-            text-shadow: 0 0 10px rgba(255, 102, 255, 0.5);
-        }
-
-        .project-overview {
-            background-color: #0a1929;
-            padding: 15px;
-            border-radius: 5px;
-            border-left: 3px solid #9933ff;
-        }
-
-        .terminal-prompt {
-            color: #ff66ff;
-            margin-right: 8px;
-        }
-
-        .terminal-command {
-            color: #00ffcc;
-        }
-
-        .terminal-output {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: rgba(0, 0, 51, 0.5);
-            border-radius: 3px;
-            color: #ffffff;
-        }
-
-        /* Improve file tree items styling */
-        .file-tree-item {
-            padding: 8px 12px;
-            margin-bottom: 5px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background-color: rgba(26, 43, 60, 0.7);
-            border-left: 3px solid transparent;
-        }
-
-        .file-tree-item:hover {
-            background-color: rgba(26, 43, 60, 0.9);
-            transform: translateX(5px);
-        }
-
-        .file-tree-item.active {
-            border-left-color: #00ffcc;
-            background-color: rgba(51, 51, 102, 0.8);
-            color: #00ffcc;
-        }
     </style>
 </head>
 <body>
@@ -401,7 +488,7 @@
     
     <div class="project-container">
         <div class="project-header">
-            <h1 class="project-title"><a href="index.html" style="text-decoration: none; color: inherit;">WildWise – Engaging Youth in Wildlife Conservation</a></h1>
+            <h1 class="project-title"><a href="index.html" style="text-decoration: none; color: inherit;">WildWise</a></h1>
             <div class="project-overview">
                 <span class="terminal-prompt">$</span>
                 <span class="terminal-command">cat README.md</span>
@@ -423,28 +510,26 @@
             <div class="file-content">
                 <!-- Project Case Study -->
                 <div class="project-case-study">
-                    <h2 class="case-study-title">WildWise: Engaging Youth in Wildlife Conservation</h2>
-                    
-                    <!-- Section 1 -->
+                    <!-- Overview Section -->
                     <div class="case-study-section">
-                        <h3 class="section-title">1. Project Overview</h3>
+                        <h3 class="section-title">Project Overview</h3>
                         <div class="section-content">
                             <p><strong>WildWise</strong> is a youth-focused brand designed to educate 13–16-year-olds about <strong>animal conservation</strong> through engaging digital content. The project addressed a key gap: while teens are motivated to make a difference, they lack accessible, engaging resources on the topic.</p>
                             
-                            <div class="goals-block">
-                                <h4>Key Deliverables:</h4>
-                                <ul>
-                                    <li><strong>Brand Identity:</strong> Name, logo, color palette, and typography.</li>
-                                    <li><strong>Social Media Strategy:</strong> Ads, posters, and educational content.</li>
-                                    <li><strong>Game Concept:</strong> A mobile game to teach conservation interactively.</li>
-                                </ul>
-                            </div>
+                            <h4 class="subsection-title">Key Deliverables:</h4>
+                            <ul>
+                                <li><strong>Brand Identity:</strong> Name, logo, color palette, and typography.</li>
+                                <li><strong>Social Media Strategy:</strong> Ads, posters, and educational content.</li>
+                                <li><strong>Game Concept:</strong> A mobile game to teach conservation interactively.</li>
+                            </ul>
                         </div>
                     </div>
                     
-                    <!-- Section 2 -->
+                    <div class="divider">---</div>
+                    
+                    <!-- Research Section -->
                     <div class="case-study-section">
-                        <h3 class="section-title">2. Research & Problem Identification</h3>
+                        <h3 class="section-title">Research & Problem Identification</h3>
                         <div class="section-content">
                             <h4 class="subsection-title">Key Insight:</h4>
                             <p>Recent studies show that <strong>13–16-year-olds want to help with conservation</strong> but don't learn about it in school, leaving them unsure how to contribute.</p>
@@ -459,11 +544,14 @@
                         </div>
                     </div>
                     
-                    <!-- Section 3 -->
+                    <div class="divider">---</div>
+                    
+                    <!-- Contributions Section -->
+                    <h2 class="case-study-title">My Contributions</h2>
+                    
+                    <!-- Research & Mood Board -->
                     <div class="case-study-section">
-                        <h3 class="section-title">3. My Contributions</h3>
-                        
-                        <h4 class="subsection-title">Research & Mood Board Development</h4>
+                        <h3 class="section-title">1. Research & Mood Board Development</h3>
                         <div class="section-content">
                             <ul>
                                 <li>Conducted surveys and competitor analysis to understand what resonates with teens.</li>
@@ -494,9 +582,9 @@
                         </div>
                     </div>
                     
-                    <!-- Section 4 -->
+                    <!-- Brand Identity Design -->
                     <div class="case-study-section">
-                        <h3 class="section-title">4. Brand Identity Design</h3>
+                        <h3 class="section-title">2. Brand Identity Design</h3>
                         
                         <h4 class="subsection-title">Logo & Name</h4>
                         <div class="section-content">
@@ -541,9 +629,11 @@
                         </div>
                     </div>
                     
-                    <!-- Section 5 -->
+                    <div class="divider">---</div>
+                    
+                    <!-- Social Media & Advertising -->
                     <div class="case-study-section">
-                        <h3 class="section-title">5. Social Media & Advertising Design</h3>
+                        <h3 class="section-title">3. Social Media & Advertising Design</h3>
                         
                         <h4 class="subsection-title">Ad/Poster Strategy</h4>
                         <div class="section-content">
@@ -552,6 +642,8 @@
                                 <li><strong>Eye-catching mascots</strong> – Used animal illustrations as the focal point.</li>
                                 <li><strong>Taglines</strong> – Short, impactful phrases (e.g., <em>"Save the Bees, Save the Future"</em>).</li>
                             </ul>
+                            
+                            
                             
                             <h4 class="subsection-title">Example Post:</h4>
                             <div class="example-post">
@@ -573,9 +665,9 @@
                         </div>
                     </div>
                     
-                    <!-- Section 6 -->
+                    <!-- Game Concept -->
                     <div class="case-study-section">
-                        <h3 class="section-title">6. Game Concept (Storyboarding)</h3>
+                        <h3 class="section-title">4. Game Concept (Storyboarding)</h3>
                         <div class="section-content">
                             <ul>
                                 <li>Proposed a <strong>tap-to-rescue mobile game</strong> where players:
@@ -594,6 +686,8 @@
                                     <p class="image-caption">Detailed storyboard showing the game flow and user journey through conservation challenges</p>
                                 </div>
                             </div>
+                            
+                       
                             
                             <div style="margin-top: 30px;">
                                 <h4 class="subsection-title">Digital Product Mockups</h4>
@@ -619,9 +713,11 @@
                         </div>
                     </div>
                     
-                    <!-- Section 7 -->
+                    <div class="divider">---</div>
+                    
+                    <!-- Design Challenges -->
                     <div class="case-study-section">
-                        <h3 class="section-title">7. Design Challenges & Solutions</h3>
+                        <h3 class="section-title">Design Challenges & Solutions</h3>
                         <div class="section-content">
                             <div class="challenge-item">
                                 <div class="challenge-title">Problem: Making conservation "cool" for teens.</div>
@@ -646,27 +742,36 @@
                         </div>
                     </div>
                     
-                    <!-- Conclusion -->
+                    <div class="divider">---</div>
+                    
+                    <!-- Outcome Section -->
                     <div class="case-study-section">
-                        <h3 class="section-title">Conclusion</h3>
+                        <h3 class="section-title">Outcome & Future Vision</h3>
                         <div class="section-content">
-                            <p>
-                                <em>WildWise</em> successfully bridges the gap between conservation education and youth engagement through <strong>strategic design and interactive content</strong>. The project demonstrates how thoughtful branding and multi-platform approaches can make complex environmental topics accessible to younger audiences.
-                            </p>
-                            
-                            <div class="tech-stack">
-                                <h2 class="tech-stack-title">Skills Demonstrated</h2>
-                                <div class="tech-list">
-                                    <span class="tech-item">Brand Design</span>
-                                    <span class="tech-item">UX Research</span>
-                                    <span class="tech-item">Typography</span>
-                                    <span class="tech-item">Color Theory</span>
-                                    <span class="tech-item">Collaborative Ideation</span>
-                                    <span class="tech-item">Photoshop</span>
-                                    <span class="tech-item">Illustrator</span>
-                                    <span class="tech-item">Figma</span>
-                                </div>
-                            </div>
+                            <ul>
+                                <li><strong>Final Feedback:</strong> Frog Design praised the <strong>consistent branding</strong> and <strong>youth-friendly approach</strong>.</li>
+                                <li><strong>Next Steps:</strong>
+                                    <ul>
+                                        <li>Develop the game prototype (Unity/Unreal Engine).</li>
+                                        <li>Expand social media campaigns with influencer collaborations.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Tech Stack -->
+                    <div class="tech-stack">
+                        <h2 class="tech-stack-title">Skills Demonstrated</h2>
+                        <div class="tech-list">
+                            <span class="tech-item">Brand Design</span>
+                            <span class="tech-item">UX Research</span>
+                            <span class="tech-item">Typography</span>
+                            <span class="tech-item">Color Theory</span>
+                            <span class="tech-item">Collaborative Ideation</span>
+                            <span class="tech-item">Photoshop</span>
+                            <span class="tech-item">Illustrator</span>
+                            <span class="tech-item">Figma</span>
                         </div>
                     </div>
                 </div>

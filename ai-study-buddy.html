@@ -171,11 +171,11 @@
         
         /* Case Study Specific Styling */
         .case-study-title {
-            color: #FFD1DC;
+            color: #00ffcc;
             font-size: 2rem;
             text-align: center;
             margin-bottom: 2rem;
-            text-shadow: 0 0 10px rgba(255, 209, 220, 0.5);
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
             letter-spacing: 1px;
         }
         
@@ -201,7 +201,7 @@
         }
         
         .subsection-title {
-            color: #A2D2FF;
+            color: #00ffcc;
             font-size: 1.2rem;
             margin: 1.2rem 0 0.8rem;
             padding-left: 25px;
@@ -299,6 +299,78 @@
             font-family: 'Fira Code', monospace;
             color: #E6C9A8;
         }
+
+        /* Improve file tree items styling */
+        .file-tree-item {
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: rgba(26, 43, 60, 0.7);
+            border-left: 3px solid transparent;
+        }
+        
+        .file-tree-item:hover {
+            background-color: rgba(26, 43, 60, 0.9);
+            transform: translateX(5px);
+        }
+        
+        .file-tree-item.active {
+            border-left-color: #00ffcc;
+            background-color: rgba(51, 51, 102, 0.8);
+            color: #00ffcc;
+        }
+
+        /* Add background with transparency and styling to improve appearance */
+        body {
+            background: linear-gradient(45deg, #000033, #003366);
+            color: #ffffff;
+            font-family: 'Fira Code', monospace;
+            line-height: 1.6;
+        }
+
+        /* Project Header Styling */
+        .project-header {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: rgba(26, 43, 60, 0.7);
+            border-radius: 8px;
+            border: 1px solid #00ffcc;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+        }
+        
+        .project-title {
+            color: #ff66ff;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(255, 102, 255, 0.5);
+        }
+        
+        .project-overview {
+            background-color: #0a1929;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 3px solid #9933ff;
+        }
+        
+        .terminal-prompt {
+            color: #ff66ff;
+            margin-right: 8px;
+        }
+        
+        .terminal-command {
+            color: #00ffcc;
+        }
+        
+        .terminal-output {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: rgba(0, 0, 51, 0.5);
+            border-radius: 3px;
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -322,7 +394,7 @@
                 <span class="terminal-prompt">$</span>
                 <span class="terminal-command">cat README.md</span>
                 <div class="terminal-output">
-                    An AI-powered voice-interactive study assistant built on ESP32, featuring real-time speech recognition, natural language processing, and personalized learning assistance.
+                    An AI-powered study companion that helps students learn more effectively through personalized quizzes, flashcards, and study schedules. Features include real-time progress tracking and adaptive learning paths.
                 </div>
             </div>
         </div>
@@ -330,11 +402,10 @@
         <div class="file-explorer">
             <div class="file-tree">
                 <div class="file-tree-item active">README.md</div>
-                <div class="file-tree-item">abstract.md</div>
-                <div class="file-tree-item">introduction/</div>
-                <div class="file-tree-item">methodology/</div>
-                <div class="file-tree-item">results/</div>
-                <div class="file-tree-item">conclusion/</div>
+                <div class="file-tree-item">source/</div>
+                <div class="file-tree-item">assets/</div>
+                <div class="file-tree-item">tests/</div>
+                <div class="file-tree-item">demo.mp4</div>
             </div>
 
             <div class="file-content">

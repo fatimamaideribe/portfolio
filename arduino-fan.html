@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arduino Fan Controller - Project Portfolio</title>
+    <title>Arduino Fan Project - Portfolio</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="project-style.css">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
@@ -16,6 +16,10 @@
             width: 100%;
             overflow-x: hidden; /* Prevent horizontal scrolling */
             overflow-y: auto; /* Enable vertical scrolling */
+            background: linear-gradient(45deg, #000033, #003366);
+            color: #ffffff;
+            font-family: 'Fira Code', monospace;
+            line-height: 1.6;
         }
         
         .project-container {
@@ -102,13 +106,35 @@
             font-size: 18px;
         }
         
+        /* Improve file tree items styling */
+        .file-tree-item {
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: rgba(26, 43, 60, 0.7);
+            border-left: 3px solid transparent;
+        }
+        
+        .file-tree-item:hover {
+            background-color: rgba(26, 43, 60, 0.9);
+            transform: translateX(5px);
+        }
+        
+        .file-tree-item.active {
+            border-left-color: #00ffcc;
+            background-color: rgba(51, 51, 102, 0.8);
+            color: #00ffcc;
+        }
+        
         /* Case Study Specific Styling */
         .case-study-title {
-            color: #FFD1DC;
+            color: #00ffcc;
             font-size: 2rem;
             text-align: center;
             margin-bottom: 2rem;
-            text-shadow: 0 0 10px rgba(255, 209, 220, 0.5);
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
             letter-spacing: 1px;
         }
         
@@ -250,6 +276,48 @@
             color: #9933ff;
             font-size: 20px;
         }
+
+        /* Project Header Styling */
+        .project-header {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: rgba(26, 43, 60, 0.7);
+            border-radius: 8px;
+            border: 1px solid #00ffcc;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+        }
+        
+        .project-title {
+            color: #ff66ff;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(255, 102, 255, 0.5);
+        }
+        
+        .project-overview {
+            background-color: #0a1929;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 3px solid #9933ff;
+        }
+        
+        .terminal-prompt {
+            color: #ff66ff;
+            margin-right: 8px;
+        }
+        
+        .terminal-command {
+            color: #00ffcc;
+        }
+        
+        .terminal-output {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: rgba(0, 0, 51, 0.5);
+            border-radius: 3px;
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -257,7 +325,7 @@
     
     <div class="project-container">
         <div class="project-header">
-            <h1 class="project-title"><a href="index.html" style="text-decoration: none; color: inherit;">Automated Exhaust Fan with Environmental Alerts</a></h1>
+            <h1 class="project-title"><a href="index.html" style="text-decoration: none; color: inherit;">Automated Exhaust Fan</a></h1>
             <div class="project-overview">
                 <span class="terminal-prompt">$</span>
                 <span class="terminal-command">cat README.md</span>
@@ -270,14 +338,13 @@
         <div class="file-explorer">
             <div class="file-tree">
                 <div class="file-tree-item active">README.md</div>
-                <div class="file-tree-item">schematic.pdf</div>
-                <div class="file-tree-item">code/</div>
-                <div class="file-tree-item">testing_logs/</div>
-                <div class="file-tree-item">demo_video.mp4</div>
+                <div class="file-tree-item">source/</div>
+                <div class="file-tree-item">assets/</div>
+                <div class="file-tree-item">tests/</div>
+                <div class="file-tree-item">demo.mp4</div>
             </div>
 
             <div class="file-content">
-                <!-- Project Case Study -->
                 <div class="project-case-study">
                     <!-- Overview Section -->
                     <div class="case-study-section">
@@ -356,24 +423,20 @@
                                 <h4 class="subsection-title">Prototyping & Testing</h4>
                                 
                                 <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
-                                    <div style="width: 100%; max-width: 500px; margin-bottom: 30px;">
-                                        <object data="https://imgur.com/ovU0jf3.png" type="image/png" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
-                                            <img src="https://imgur.com/ovU0jf3.png" alt="Initial breadboard circuit setup" style="width: 100%; border-radius: 8px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
-                                            Initial breadboard circuit setup
-                                        </object>
-                                        <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Test 1: Initial breadboard circuit setup</em></p>
+                                    <div class="image-container">
+                                        <img src="https://imgur.com/ovU0jf3.png" alt="Initial breadboard circuit setup">
+                                        <p class="image-caption">Test 1: Initial breadboard circuit setup</p>
                                     </div>
                                     
-                                    <div style="width: 100%; max-width: 500px; margin-bottom: 30px;">
-                                        <iframe width="100%" height="280" style="border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);" 
+                                    <div class="video-container">
+                                        <iframe 
                                             src="https://www.youtube.com/embed/txLBnHcgxs0" 
                                             title="Arduino Fan Test" 
-                                            frameborder="0" 
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                                             allowfullscreen>
                                         </iframe>
-                                        <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Test 3: Fan activation with temperature control</em></p>
                                     </div>
+                                    <p class="image-caption">Test 3: Fan activation with temperature control</p>
                                 </div>
                             </div>
                             
@@ -464,10 +527,7 @@ void loop() {<br>
                                 
                                 <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
                                     <div style="width: 100%; max-width: 500px; margin-bottom: 30px;">
-                                        <object data="https://imgur.com/l9I1RHo.png" type="image/png" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
-                                            <img src="https://imgur.com/l9I1RHo.png" alt="Front view of completed assembly" style="width: 100%; border-radius: 8px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
-                                            Front view of completed assembly
-                                        </object>
+                                        <img src="https://imgur.com/l9I1RHo.png" alt="Front view of completed assembly" style="width: 100%; border-radius: 8px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
                                         <p style="text-align: center; font-size: 0.9rem; margin-top: 10px; color: #A2D2FF;"><em>Front view of completed assembly</em></p>
                                     </div>
                                     
