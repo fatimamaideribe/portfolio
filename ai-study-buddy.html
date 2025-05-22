@@ -18,72 +18,7 @@
             overflow-y: auto; /* Enable vertical scrolling */
         }
         
-        /* Blur overlay */
-        .blur-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 51, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            cursor: not-allowed;
-        }
-        
-        .blur-message {
-            background-color: rgba(153, 51, 255, 0.3);
-            border: 2px solid #00ffcc;
-            border-radius: 10px;
-            padding: 30px;
-            max-width: 600px;
-            text-align: center;
-            box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
-        }
-        
-        .blur-message h2 {
-            color: #00ffcc;
-            font-family: 'Fira Code', monospace;
-            margin-bottom: 20px;
-            font-size: 28px;
-        }
-        
-        .blur-message p {
-            color: white;
-            font-family: 'Fira Code', monospace;
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        
-        .blur-message .emoji {
-            font-size: 36px;
-            margin: 20px 0;
-        }
-        
-        .back-btn {
-            background-color: #ff66ff;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-family: 'Fira Code', monospace;
-            font-size: 16px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        
-        .back-btn:hover {
-            background-color: #9933ff;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(153, 51, 255, 0.4);
-        }
+        /* Project styles */
         
         .project-container {
             padding: 20px;
@@ -374,17 +309,6 @@
     </style>
 </head>
 <body>
-    <!-- Blur overlay -->
-    <div class="blur-overlay">
-        <div class="blur-message">
-            <h2>Content Coming Soon</h2>
-            <div class="emoji">🔒</div>
-            <p>This project is currently under development and not ready for public viewing.</p>
-            <p>Check back later for updates on the AI Study Buddy project!</p>
-            <a href="index.html" class="back-btn">Return to Portfolio</a>
-        </div>
-    </div>
-
     <a href="index.html" class="back-button">Back to Portfolio</a>
     
     <div class="project-container">
