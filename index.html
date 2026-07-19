@@ -18,6 +18,7 @@
             --pink: #ff66ff;
             --teal: #00ffcc;
             --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
             --glow: 0 0 10px;
             --gradient: linear-gradient(45deg, var(--purple), var(--pink), var(--teal));
             --projects-gradient: linear-gradient(45deg, #ff3366, #ff9933);
@@ -25,12 +26,45 @@
             --skills-gradient: linear-gradient(45deg, #33ccff, #3366ff);
             --contact-gradient: linear-gradient(45deg, #33ff99, #66ffcc);
             --game-gradient: linear-gradient(45deg, #ff6633, #ffcc33);
+
+            /* Design Tokens */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.5);
+            --transition-fast: 0.15s ease;
+            --transition-base: 0.25s ease;
+            --transition-slow: 0.4s ease;
+            --focus-ring: 0 0 0 2px var(--teal), 0 0 8px rgba(0, 255, 204, 0.3);
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        /* ===== GLOBAL FOCUS & INTERACTION STYLES ===== */
+        :focus-visible {
+            outline: none;
+            box-shadow: var(--focus-ring);
+        }
+
+        ::selection {
+            background: var(--purple);
+            color: var(--text);
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
         }
         
         body {
@@ -51,51 +85,58 @@
         .desktop {
             position: relative;
             width: 100%;
-            height: 100vh;
-            padding: 20px;
-            display: grid;
-            grid-template-rows: 1fr auto;
-            gap: 20px;
+            height: calc(100vh - 40px);
+            padding: 15px;
         }
 
         .folder-area {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            align-content: flex-start;
-            padding: 20px;
+            display: grid;
+            grid-auto-flow: column;
+            grid-template-rows: repeat(auto-fill, 95px);
+            gap: 8px 5px;
+            align-content: start;
+            justify-content: start;
+            height: calc(100vh - 40px - 30px);
+            padding: 10px;
         }
 
         .folder {
-            width: 80px;
-            height: 90px;
+            width: 85px;
+            height: 85px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             cursor: pointer;
             transition: all 0.2s;
+            border-radius: 6px;
+            padding: 6px;
         }
 
         .folder:hover {
-            transform: scale(1.05);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .folder:active {
+            background-color: rgba(102, 255, 255, 0.12);
         }
 
         /* Reset all folder icons to base style */
         .folder-icon {
-            width: 60px;
-            height: 50px;
-            border-radius: 8px;
+            width: 48px;
+            height: 48px;
+            border-radius: 0;
             position: relative;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
             color: white;
-            text-shadow: 0 0 5px rgba(0,0,0,0.5);
-            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            text-shadow: none;
+            box-shadow: none;
             transition: all 0.3s ease;
-            border: 2px solid rgba(255,255,255,0.3);
+            border: none;
             background: transparent;
         }
 
@@ -104,8 +145,8 @@
         }
 
         .folder:hover .folder-icon {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            transform: translateY(-3px);
+            box-shadow: none;
         }
 
         /* Projects Folder */
@@ -158,17 +199,22 @@
             filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
         }
 
-        /* Restore original folder name styling */
+        /* Desktop icon label */
         .folder-name {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text);
             text-align: center;
-            margin-top: 5px;
-            text-shadow: none;
+            margin-top: 2px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8), 0 0 5px rgba(0, 0, 0, 0.5);
             background: transparent;
-            padding: 0;
-            border-radius: 0;
+            padding: 1px 4px;
+            border-radius: 2px;
             border: none;
+            line-height: 1.2;
+            max-width: 80px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         /* Sticky Notes */
@@ -221,20 +267,23 @@
 
         /* Terminal */
         .terminal-container {
-            grid-row: 2;
-            background-color: rgba(0, 0, 51, 0.9);
+            position: fixed;
+            bottom: 50px;
+            left: 140px;
+            width: 680px;
+            height: 250px;
+            background-color: rgba(0, 0, 51, 0.92);
             border-radius: 10px;
             border: 1px solid #8f8f9d;
-            box-shadow: 0 0 20px rgba(68, 221, 255, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(68, 221, 255, 0.15);
             overflow: hidden;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
+            z-index: 50;
+            resize: both;
         }
 
         .terminal-info {
-            padding: 10px;
-            color: var(--text);
-            font-size: 12px;
-            text-align: center;
+            display: none;
         }
 
         .terminal-header {
@@ -287,7 +336,7 @@
         }
 
         .terminal-body {
-            height: 250px;
+            height: calc(100% - 70px);
             padding: 15px;
             overflow-y: auto;
             font-size: 14px;
@@ -325,11 +374,10 @@
 
         /* Modal Windows */
         .modal {
-            display: none;
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) scale(0.9);
             background: var(--mid-blue);
             border: 1px solid var(--teal);
             border-radius: 8px;
@@ -368,7 +416,6 @@
         }
 
         .overlay {
-            display: none;
             position: fixed;
             top: 0;
             left: 0;
@@ -618,7 +665,921 @@
             background-color: rgba(0, 0, 0, 0.2);
             text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
         }
+
+        /* ===== FLOATING PARTICLES ===== */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background-image:
+                radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,0.15), transparent),
+                radial-gradient(1px 1px at 80px 60px, rgba(102,255,255,0.12), transparent),
+                radial-gradient(1.5px 1.5px at 150px 120px, rgba(255,255,255,0.1), transparent),
+                radial-gradient(1px 1px at 200px 80px, rgba(153,51,255,0.1), transparent),
+                radial-gradient(1px 1px at 300px 200px, rgba(255,255,255,0.12), transparent),
+                radial-gradient(1.5px 1.5px at 400px 150px, rgba(102,255,255,0.1), transparent),
+                radial-gradient(1px 1px at 500px 250px, rgba(255,255,255,0.08), transparent);
+            background-size: 550px 350px;
+            animation: floatParticles 60s linear infinite;
+        }
+
+        @keyframes floatParticles {
+            from { background-position: 0 0; }
+            to { background-position: 550px 350px; }
+        }
+
+        .desktop {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== CRT SCANLINES ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9999;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.02) 0px,
+                rgba(0, 0, 0, 0.02) 1px,
+                transparent 1px,
+                transparent 3px
+            );
+        }
+
+        /* ===== FOLDER IDLE FLOAT ===== */
+        @keyframes idleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .folder-icon {
+            animation: idleFloat 4s ease-in-out infinite;
+        }
+
+        .folder:nth-child(2) .folder-icon { animation-delay: -0.8s; }
+        .folder:nth-child(3) .folder-icon { animation-delay: -1.6s; }
+        .folder:nth-child(4) .folder-icon { animation-delay: -2.4s; }
+        .folder:nth-child(5) .folder-icon { animation-delay: -3.2s; }
+
+        .folder:hover .folder-icon {
+            animation: none;
+            transform: scale(1.05) translateY(-4px);
+            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.2));
+        }
+
+        /* ===== MODAL TRANSITIONS ===== */
+        .modal {
+            visibility: hidden;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.9);
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+        }
+
+        .modal.active {
+            visibility: visible;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .overlay {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s;
+        }
+
+        .overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal, .modal-content {
+            scroll-behavior: smooth;
+        }
+
+        /* ===== GLITCH TEXT ON TERMINAL TITLE ===== */
+        @keyframes glitch {
+            0%, 94%, 100% { transform: none; color: white; }
+            95% { transform: translate(-2px, 1px); color: var(--light-blue); }
+            96% { transform: translate(1px, -1px); color: var(--pink); }
+            97% { transform: translate(-1px, 0); color: white; }
+            98% { transform: translate(2px, 1px); color: var(--light-blue); }
+            99% { transform: none; color: var(--pink); }
+        }
+
+        .terminal-title {
+            animation: glitch 5s ease-in-out infinite;
+        }
+
+        /* ===== STICKY NOTE BREATHING ===== */
+        @keyframes noteBreath {
+            0%, 100% { transform: rotate(var(--rotation, -2deg)) translateY(0); }
+            50% { transform: rotate(var(--rotation, -2deg)) translateY(-2px); }
+        }
+
+        .sticky-note {
+            animation: noteBreath 5s ease-in-out infinite;
+        }
+
+        .sticky-note:nth-child(even) {
+            animation-delay: -1.5s;
+        }
+
+        .sticky-note:nth-child(3n) {
+            animation-delay: -3s;
+        }
+
+        /* ===== TASKBAR HOVER POLISH ===== */
+        .taskbar-icon {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .taskbar-icon:hover {
+            transform: translateY(-3px) scale(1.1);
+            text-shadow: 0 0 8px rgba(102, 255, 255, 0.4);
+        }
+
+        .start-button {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .start-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 10px rgba(90, 171, 222, 0.3);
+        }
+
+        /* ===== PROJECT CARD HOVER ===== */
+        .project-item {
+            transition: all 0.3s ease;
+        }
+
+        .project-item:hover {
+            transform: translateX(5px) translateY(-2px);
+            border-left-color: var(--teal);
+            box-shadow: 0 4px 15px rgba(102, 255, 255, 0.1), 0 2px 8px rgba(153, 51, 255, 0.1);
+        }
+
+        .project-item:hover .tech-tag {
+            filter: brightness(1.15);
+        }
+
+        /* ===== SKILL TAG GLOW ===== */
+        .skill-list li:hover {
+            box-shadow: 0 3px 12px rgba(153, 51, 255, 0.25);
+            text-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+        }
+
+        /* ============================================= */
+        /* ===== UX HEURISTICS & POLISH             ==== */
+        /* ============================================= */
+
+        /* --- 1. FOCUS STATES (Visibility of system status / Accessibility) --- */
+        .folder:focus-visible {
+            background-color: rgba(102, 255, 255, 0.12);
+            box-shadow: var(--focus-ring);
+            border-radius: var(--radius-md);
+        }
+
+        .close-modal:focus-visible {
+            box-shadow: var(--focus-ring);
+            border-radius: var(--radius-sm);
+        }
+
+        .submit-btn:focus-visible {
+            box-shadow: var(--focus-ring);
+        }
+
+        .start-button:focus-visible {
+            box-shadow: var(--focus-ring);
+        }
+
+        .taskbar-icon:focus-visible {
+            box-shadow: var(--focus-ring);
+            border-radius: var(--radius-sm);
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 2px rgba(0, 255, 204, 0.2);
+            outline: none;
+        }
+
+        #command-input:focus {
+            outline: none;
+        }
+
+        .skill-list li {
+            cursor: default;
+        }
+
+        .skill-list li:focus-visible {
+            box-shadow: var(--focus-ring);
+        }
+
+        /* --- 2. INTERACTION FEEDBACK (User control / System status) --- */
+
+        /* Close modal button */
+        .close-modal {
+            transition: all var(--transition-fast);
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            min-width: 32px;
+            min-height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover {
+            background-color: rgba(255, 95, 86, 0.2);
+            color: #ff5f56;
+            transform: scale(1.1);
+        }
+
+        .close-modal:active {
+            transform: scale(0.95);
+        }
+
+        /* Submit button states */
+        .submit-btn {
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.97);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(30%);
+        }
+
+        /* Terminal controls - larger click targets */
+        .terminal-control {
+            min-width: 16px;
+            min-height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+        }
+
+        .terminal-control:hover {
+            transform: scale(1.3);
+            filter: brightness(1.2);
+        }
+
+        .terminal-control:active {
+            transform: scale(0.9);
+        }
+
+        /* Delete note button */
+        .delete-note {
+            min-width: 28px;
+            min-height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all var(--transition-fast);
+        }
+
+        .delete-note:hover {
+            background-color: rgba(255, 68, 68, 0.2);
+            transform: scale(1.15);
+        }
+
+        /* Sticky note drag feedback */
+        .sticky-note {
+            transition: box-shadow var(--transition-base);
+        }
+
+        .sticky-note:hover {
+            box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.35);
+        }
+
+        .sticky-note.dragging {
+            box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.45);
+            opacity: 0.92;
+            z-index: 200 !important;
+        }
+
+        .sticky-note-header {
+            cursor: grab;
+        }
+
+        .sticky-note-header:active {
+            cursor: grabbing;
+        }
+
+        /* Project item click affordance */
+        .project-item {
+            cursor: pointer;
+        }
+
+        .project-title a {
+            transition: color var(--transition-fast);
+        }
+
+        .project-title a:hover {
+            color: var(--teal) !important;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .project-title a:active {
+            opacity: 0.8;
+        }
+
+        /* Widget close buttons */
+        .close-widget {
+            min-width: 24px;
+            min-height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all var(--transition-fast);
+        }
+
+        .close-widget:hover {
+            background-color: rgba(255, 95, 86, 0.3);
+            color: #ff5f56;
+        }
+
+        /* Carousel indicators - larger click targets */
+        .indicator {
+            min-width: 14px !important;
+            min-height: 14px !important;
+            transition: all var(--transition-fast);
+        }
+
+        .indicator:hover {
+            transform: scale(1.3);
+            background-color: var(--teal) !important;
+        }
+
+        /* --- 3. VISUAL HIERARCHY & CONSISTENCY --- */
+
+        /* Consistent modal styling */
+        .modal {
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+        }
+
+        .modal-title {
+            font-size: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Improve modal content readability */
+        .modal-content {
+            padding: var(--spacing-lg);
+            line-height: 1.6;
+        }
+
+        .modal-content p {
+            line-height: 1.7;
+            color: var(--text);
+        }
+
+        .modal-content h3 {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .modal-content h4 {
+            margin-bottom: var(--spacing-sm);
+        }
+
+        /* Consistent project item spacing */
+        .project-item {
+            padding: var(--spacing-md) var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        /* Consistent form styling */
+        .form-input,
+        .form-textarea {
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-base);
+            padding: 10px 14px;
+            font-size: 14px;
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Consistent skill list */
+        .skill-list li {
+            transition: all var(--transition-base);
+        }
+
+        /* Contact section links */
+        .modal-content a {
+            color: var(--teal);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+            border-bottom: 1px solid transparent;
+        }
+
+        .modal-content a:hover {
+            color: var(--light-blue);
+            border-bottom-color: var(--light-blue);
+        }
+
+        /* Taskbar clock polish */
+        .taskbar-clock {
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 1px;
+        }
+
+        /* --- 4. ERROR PREVENTION & RECOVERY (Heuristic 5 & 9) --- */
+
+        /* Visual validation on form inputs */
+        .form-input:invalid:not(:placeholder-shown),
+        .form-textarea:invalid:not(:placeholder-shown) {
+            border-color: #ff5f56;
+            box-shadow: 0 0 0 2px rgba(255, 95, 86, 0.15);
+        }
+
+        .form-input:valid:not(:placeholder-shown),
+        .form-textarea:valid:not(:placeholder-shown) {
+            border-color: var(--teal);
+        }
+
+        /* --- 5. RESPONSIVE DESIGN --- */
+
+        @media (max-width: 768px) {
+            /* Terminal responsive */
+            .terminal-container {
+                left: 10px !important;
+                width: calc(100vw - 20px) !important;
+                height: 200px !important;
+                bottom: 45px !important;
+            }
+
+            /* Sticky notes smaller on mobile */
+            .sticky-note {
+                width: 160px !important;
+                height: 160px !important;
+                font-size: 14px;
+            }
+
+            .sticky-note-content {
+                font-size: 14px !important;
+            }
+
+            /* Modal responsive */
+            .modal {
+                width: 95% !important;
+                max-height: 85vh !important;
+            }
+
+            /* Hide desktop-only widgets on mobile */
+            .calendar-widget,
+            .weather-widget,
+            .system-monitor,
+            .notepad-widget,
+            .carousel-widget,
+            .gif-widget {
+                display: none !important;
+            }
+
+            /* Folder grid adjustments */
+            .folder-area {
+                grid-template-rows: repeat(auto-fill, 80px);
+                gap: 4px;
+            }
+
+            .folder {
+                width: 70px;
+                height: 70px;
+            }
+
+            .folder-name {
+                font-size: 10px;
+            }
+
+            /* Taskbar compact */
+            .taskbar {
+                height: 36px;
+            }
+
+            .start-button {
+                padding: 3px 10px;
+                font-size: 12px;
+            }
+
+            .taskbar-icon {
+                width: 26px;
+                height: 26px;
+                font-size: 15px;
+            }
+
+            .taskbar-clock {
+                font-size: 12px;
+                padding: 3px 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal {
+                width: 98% !important;
+            }
+
+            .modal-content {
+                padding: var(--spacing-md);
+            }
+
+            .project-item {
+                padding: var(--spacing-sm) var(--spacing-md);
+            }
+
+            .project-tech {
+                gap: 4px;
+            }
+
+            .tech-tag {
+                font-size: 10px;
+                padding: 2px 6px;
+            }
+
+            body {
+                font-size: 14px;
+            }
+
+            .folder-area {
+                padding: 5px;
+            }
+        }
+
+        /* --- 6. REDUCED MOTION (Accessibility) --- */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* --- 7. PRINT STYLES --- */
+        @media print {
+            .taskbar,
+            .terminal-container,
+            .sticky-note,
+            .overlay,
+            .gif-widget,
+            .carousel-widget,
+            .calendar-widget,
+            .weather-widget,
+            .notepad-widget,
+            .system-monitor {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+                color: black;
+            }
+
+            .modal {
+                position: static;
+                transform: none;
+                visibility: visible;
+                opacity: 1;
+                box-shadow: none;
+                border: 1px solid #ccc;
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+
+        /* --- 8. BROWSER COMPATIBILITY --- */
+        .terminal-container {
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* Firefox scrollbar */
+        .modal,
+        .terminal-body {
+            scrollbar-width: thin;
+            scrollbar-color: var(--purple) var(--deep-blue);
+        }
+
+        /* ============================================= */
+        /* ===== BOOT SEQUENCE                     ===== */
+        /* ============================================= */
+        .boot-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #000011;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'VT323', monospace;
+            color: var(--teal);
+            transition: opacity 0.8s ease;
+        }
+
+        .boot-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .boot-logo {
+            font-size: 48px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+            opacity: 0;
+            animation: bootFadeIn 0.6s ease forwards;
+        }
+
+        .boot-text {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: left;
+            width: 450px;
+            max-width: 90vw;
+            line-height: 1.8;
+        }
+
+        .boot-text .line {
+            opacity: 0;
+            transform: translateY(5px);
+        }
+
+        .boot-text .line.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .boot-text .line.ok {
+            color: var(--teal);
+        }
+
+        .boot-text .line.warn {
+            color: #ffcc00;
+        }
+
+        .boot-progress {
+            width: 450px;
+            max-width: 90vw;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 25px;
+            overflow: hidden;
+        }
+
+        .boot-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--teal), var(--purple));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .boot-welcome {
+            font-size: 20px;
+            margin-top: 30px;
+            opacity: 0;
+            color: var(--pink);
+            letter-spacing: 2px;
+        }
+
+        .boot-welcome.visible {
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        @keyframes bootFadeIn {
+            to { opacity: 1; }
+        }
+
+        /* ============================================= */
+        /* ===== DRAGGABLE WINDOW SYSTEM           ===== */
+        /* ============================================= */
+
+        /* Override modal centered positioning for window mode */
+        .modal {
+            top: auto;
+            left: auto;
+            transform: none !important;
+            position: fixed;
+        }
+
+        .modal.active {
+            transform: none !important;
+        }
+
+        /* Window title bar — draggable handle */
+        .modal-header {
+            cursor: grab;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .modal-header:active {
+            cursor: grabbing;
+        }
+
+        /* Window control buttons (minimize, maximize, close) */
+        .window-controls {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .window-control {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            line-height: 1;
+            padding: 0;
+            transition: all var(--transition-fast);
+            color: transparent;
+        }
+
+        .window-control:hover {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .window-control.win-minimize {
+            background: #ffbd2e;
+        }
+
+        .window-control.win-maximize {
+            background: #28c940;
+        }
+
+        .window-control.win-close {
+            background: #ff5f56;
+        }
+
+        .window-control:hover {
+            transform: scale(1.15);
+            filter: brightness(1.1);
+        }
+
+        /* Minimized state */
+        .modal.minimized {
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transition: none !important;
+        }
+
+        /* Maximized state */
+        .modal.maximized {
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            max-width: 100vw !important;
+            height: calc(100vh - 40px) !important;
+            max-height: calc(100vh - 40px) !important;
+            border-radius: 0 !important;
+        }
+
+        .modal.maximized .modal-header {
+            border-radius: 0;
+        }
+
+        /* ===== TASKBAR WINDOW BUTTONS ===== */
+        .taskbar-windows {
+            display: flex;
+            gap: 4px;
+            margin-left: 12px;
+            flex: 1;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: none;
+        }
+
+        .taskbar-windows::-webkit-scrollbar {
+            display: none;
+        }
+
+        .taskbar-win-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            padding: 3px 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
+            cursor: pointer;
+            border-radius: 3px;
+            white-space: nowrap;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: all var(--transition-fast);
+            height: 28px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .taskbar-win-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .taskbar-win-btn.active {
+            background: rgba(102, 255, 255, 0.15);
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        .taskbar-win-btn.minimized {
+            opacity: 0.6;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .taskbar-win-btn .win-icon {
+            font-size: 13px;
+        }
+
+        /* Desktop hidden during boot */
+        .desktop-wrapper {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .desktop-wrapper.ready {
+            opacity: 1;
+        }
+
+        /* Folder double-click hint */
+        .folder {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .folder::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 6px;
+            border: 2px solid transparent;
+            transition: border-color 0.2s ease;
+            pointer-events: none;
+        }
+
+        .folder.selected {
+            background-color: rgba(102, 255, 255, 0.1);
+        }
+
+        .folder.selected::after {
+            border-color: rgba(102, 255, 255, 0.3);
+        }
     </style>
+
+    <!-- Boot Screen -->
+    <div class="boot-screen" id="boot-screen">
+        <div class="boot-logo">⌘ FatOS v2.0</div>
+        <div class="boot-text" id="boot-text">
+            <div class="line">[BIOS] Initializing system...</div>
+            <div class="line">[OK] Memory check: 640K conventional</div>
+            <div class="line">[OK] Loading kernel modules...</div>
+            <div class="line">[OK] Mounting filesystem...</div>
+            <div class="line">[OK] Starting display server...</div>
+            <div class="line warn">[WARN] No coffee detected ☕</div>
+            <div class="line">[OK] Loading portfolio assets...</div>
+            <div class="line">[OK] Initializing desktop environment...</div>
+            <div class="line ok">[READY] Welcome to FatOS — Design Engineering OS</div>
+        </div>
+        <div class="boot-progress">
+            <div class="boot-progress-bar" id="boot-progress-bar"></div>
+        </div>
+        <div class="boot-welcome" id="boot-welcome">Press any key or click to continue...</div>
+    </div>
+
+    <!-- Desktop Wrapper (hidden during boot) -->
+    <div class="desktop-wrapper" id="desktop-wrapper">
 
     <!-- Tutorial Sticky Note -->
     <div class="sticky-note" style="top: 60px; right: 60px; background-color: rgba(160, 255, 200, 0.9); z-index: 100; width: 240px; height: 240px;">
@@ -627,10 +1588,10 @@
             <span class="delete-note">×</span>
         </div>
         <div class="sticky-note-content">
+            <p>• Double-click folders to open</p>
+            <p>• Drag windows by title bar</p>
             <p>• Drag & drop sticky notes</p>
-            <p>• Click folders to explore</p>
             <p>• Type commands in terminal</p>
-            <p>• Press 'x' to close popups</p>
             <p>• Try hidden easter eggs!</p>
             <br>
             <p style="font-size: 14px; font-style: italic;">Grab this note's header to move it around!</p>
@@ -641,24 +1602,24 @@
     <div class="desktop">
         <div class="folder-area">
             <!-- Folders -->
-            <div class="folder" data-folder="projects">
-                <div class="folder-icon"></div>
+            <div class="folder" data-folder="projects" role="button" tabindex="0" aria-label="Open Projects folder">
+                <div class="folder-icon" aria-hidden="true"></div>
                 <div class="folder-name">Projects</div>
             </div>
-            <div class="folder" data-folder="about">
-                <div class="folder-icon"></div>
+            <div class="folder" data-folder="about" role="button" tabindex="0" aria-label="Open About Me folder">
+                <div class="folder-icon" aria-hidden="true"></div>
                 <div class="folder-name">About Me</div>
             </div>
-            <div class="folder" data-folder="skills">
-                <div class="folder-icon"></div>
+            <div class="folder" data-folder="skills" role="button" tabindex="0" aria-label="Open Skills folder">
+                <div class="folder-icon" aria-hidden="true"></div>
                 <div class="folder-name">Skills</div>
             </div>
-            <div class="folder" data-folder="contact">
-                <div class="folder-icon"></div>
+            <div class="folder" data-folder="contact" role="button" tabindex="0" aria-label="Open Contact folder">
+                <div class="folder-icon" aria-hidden="true"></div>
                 <div class="folder-name">Contact</div>
             </div>
-            <div class="folder" data-folder="game">
-                <div class="folder-icon"></div>
+            <div class="folder" data-folder="game" role="button" tabindex="0" aria-label="Open Snake Game">
+                <div class="folder-icon" aria-hidden="true"></div>
                 <div class="folder-name">Snake Game</div>
             </div>
 
@@ -828,65 +1789,68 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Terminal Interface -->
-        <div class="terminal-container">
-            <div class="terminal-info">A terminal is a text-based interface where you can type commands to interact with a computer. It's like a text conversation with your computer instead of using buttons and menus.</div>
-            <div class="terminal-header">
-                <div class="terminal-title">fatimas@Portfolio ~ Terminal</div>
-                <div class="terminal-controls">
-                    <span class="terminal-control minimize">─</span>
-                    <span class="terminal-control maximize">□</span>
-                    <span class="terminal-control close">×</span>
-                </div>
-            </div>
-            <div class="terminal-body">
-                <div class="terminal-output">
-Welcome to my Creative Computing Portfolio
-
-Type 'help' to see available commands.
-                </div>
-                <div class="command-prompt">
-                    <span class="prompt-symbol">></span>
-                    <input type="text" id="command-input" autofocus placeholder="Type a command...">
-                </div>
+    <!-- Terminal Interface (floating window) -->
+    <div class="terminal-container">
+        <div class="terminal-info">A terminal is a text-based interface where you can type commands to interact with a computer. It's like a text conversation with your computer instead of using buttons and menus.</div>
+        <div class="terminal-header">
+            <div class="terminal-title">fatimas@Portfolio ~ Terminal</div>
+            <div class="terminal-controls">
+                <span class="terminal-control minimize">─</span>
+                <span class="terminal-control maximize">□</span>
+                <span class="terminal-control close">×</span>
             </div>
         </div>
-
-        <!-- Taskbar -->
-        <div class="taskbar">
-            <button class="start-button">
-                <span>Start</span>
-            </button>
-            <div class="taskbar-icons">
-                <a href="#" class="taskbar-icon" id="terminal-icon" title="Terminal">
-                    <span>💻</span>
-                </a>
-                <a href="#" class="taskbar-icon" id="calendar-icon" title="Calendar">
-                    <span>📅</span>
-                </a>
-                <a href="#" class="taskbar-icon" id="notepad-icon" title="Notepad">
-                    <span>📝</span>
-                </a>
-                <a href="#" class="taskbar-icon" id="weather-icon" title="Weather">
-                    <span>🌤️</span>
-                </a>
-                <a href="#" class="taskbar-icon" id="system-icon" title="System Monitor">
-                    <span>📊</span>
-                </a>
+        <div class="terminal-body">
+            <div class="terminal-output" role="log" aria-live="polite" aria-label="Terminal output"></div>
+            <div class="command-prompt">
+                <span class="prompt-symbol" aria-hidden="true">></span>
+                <input type="text" id="command-input" autofocus placeholder="Type a command..." aria-label="Terminal command input" autocomplete="off" spellcheck="false">
             </div>
-            <div class="taskbar-clock" id="clock">00:00:00</div>
         </div>
     </div>
 
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <button class="start-button">
+            <span>⌘ Start</span>
+        </button>
+        <div class="taskbar-icons">
+            <a href="#" class="taskbar-icon" id="terminal-icon" title="Terminal">
+                <span>💻</span>
+            </a>
+            <a href="#" class="taskbar-icon" id="calendar-icon" title="Calendar">
+                <span>📅</span>
+            </a>
+            <a href="#" class="taskbar-icon" id="notepad-icon" title="Notepad">
+                <span>📝</span>
+            </a>
+            <a href="#" class="taskbar-icon" id="weather-icon" title="Weather">
+                <span>🌤️</span>
+            </a>
+            <a href="#" class="taskbar-icon" id="system-icon" title="System Monitor">
+                <span>📊</span>
+            </a>
+        </div>
+        <div class="taskbar-windows" id="taskbar-windows"></div>
+        <div class="taskbar-clock" id="clock">00:00:00</div>
+    </div>
+
+    </div><!-- /desktop-wrapper -->
+
     <!-- Modal Overlay -->
-    <div class="overlay"></div>
+    <div class="overlay" aria-hidden="true"></div>
 
     <!-- Projects Modal -->
-    <div id="projects-modal" class="modal">
+    <div id="projects-modal" class="modal" role="dialog" aria-labelledby="projects-modal-title" aria-modal="true" data-window-title="Projects" data-window-icon="🗂️">
         <div class="modal-header">
-            <div class="modal-title">Projects</div>
-            <button class="close-modal">&times;</button>
+            <div class="modal-title" id="projects-modal-title">🗂️ Projects</div>
+            <div class="window-controls">
+                <button class="window-control win-minimize" aria-label="Minimize" title="Minimize">−</button>
+                <button class="window-control win-maximize" aria-label="Maximize" title="Maximize">□</button>
+                <button class="window-control win-close" aria-label="Close Projects">×</button>
+            </div>
         </div>
         <div class="modal-content">
             <div class="project-item">
@@ -951,10 +1915,14 @@ Type 'help' to see available commands.
     </div>
 
     <!-- About Modal -->
-    <div id="about-modal" class="modal">
+    <div id="about-modal" class="modal" role="dialog" aria-labelledby="about-modal-title" aria-modal="true" data-window-title="About Me" data-window-icon="🌺">
         <div class="modal-header">
-            <div class="modal-title">About Me</div>
-            <button class="close-modal">&times;</button>
+            <div class="modal-title" id="about-modal-title">🌺 About Me</div>
+            <div class="window-controls">
+                <button class="window-control win-minimize" aria-label="Minimize" title="Minimize">−</button>
+                <button class="window-control win-maximize" aria-label="Maximize" title="Maximize">□</button>
+                <button class="window-control win-close" aria-label="Close About Me">×</button>
+            </div>
         </div>
         <div class="modal-content">
             <h3 style="color: var(--teal); margin-bottom: 15px;">Hello, World!</h3>
@@ -967,15 +1935,20 @@ Type 'help' to see available commands.
             <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--light-blue);">
                 <h4 style="color: var(--pink); margin-bottom: 10px;">Education</h4>
                 <p>Bachelor of Science in Creative Computing</p>
+                <p style="margin-top: 8px;">Masters in Design Engineering <span style="color: var(--light-blue); font-size: 13px;">(current)</span></p>
             </div>
         </div>
     </div>
 
     <!-- Skills Modal -->
-    <div id="skills-modal" class="modal">
+    <div id="skills-modal" class="modal" role="dialog" aria-labelledby="skills-modal-title" aria-modal="true" data-window-title="Skills" data-window-icon="✨">
         <div class="modal-header">
-            <div class="modal-title">Skills & Expertise</div>
-            <button class="close-modal">&times;</button>
+            <div class="modal-title" id="skills-modal-title">✨ Skills & Expertise</div>
+            <div class="window-controls">
+                <button class="window-control win-minimize" aria-label="Minimize" title="Minimize">−</button>
+                <button class="window-control win-maximize" aria-label="Maximize" title="Maximize">□</button>
+                <button class="window-control win-close" aria-label="Close Skills">×</button>
+            </div>
         </div>
         <div class="modal-content">
             <div class="skill-category">
@@ -1018,10 +1991,14 @@ Type 'help' to see available commands.
     </div>
 
     <!-- Contact Modal -->
-    <div id="contact-modal" class="modal">
+    <div id="contact-modal" class="modal" role="dialog" aria-labelledby="contact-modal-title" aria-modal="true" data-window-title="Contact" data-window-icon="✉️">
         <div class="modal-header">
-            <div class="modal-title">Contact Me</div>
-            <button class="close-modal">&times;</button>
+            <div class="modal-title" id="contact-modal-title">✉️ Contact Me</div>
+            <div class="window-controls">
+                <button class="window-control win-minimize" aria-label="Minimize" title="Minimize">−</button>
+                <button class="window-control win-maximize" aria-label="Maximize" title="Maximize">□</button>
+                <button class="window-control win-close" aria-label="Close Contact">×</button>
+            </div>
         </div>
         <div class="modal-content">
             <div style="margin-bottom: 20px;">
@@ -1040,22 +2017,22 @@ Type 'help' to see available commands.
                 </div>
             </div>
             
-            <form class="contact-form">
+            <form class="contact-form" novalidate>
                 <div class="form-group">
-                    <label class="form-label">Name</label>
-                    <input type="text" class="form-input" placeholder="Your Name">
+                    <label class="form-label" for="contact-name">Name</label>
+                    <input type="text" id="contact-name" class="form-input" placeholder="Your Name" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-input" placeholder="your.email@example.com">
+                    <label class="form-label" for="contact-email">Email</label>
+                    <input type="email" id="contact-email" class="form-input" placeholder="your.email@example.com" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Subject</label>
-                    <input type="text" class="form-input" placeholder="What's this about?">
+                    <label class="form-label" for="contact-subject">Subject</label>
+                    <input type="text" id="contact-subject" class="form-input" placeholder="What's this about?">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Message</label>
-                    <textarea class="form-textarea" placeholder="Your message here..."></textarea>
+                    <label class="form-label" for="contact-message">Message</label>
+                    <textarea id="contact-message" class="form-textarea" placeholder="Your message here..." required></textarea>
                 </div>
                 <button type="submit" class="submit-btn">Send Message</button>
             </form>
@@ -1063,10 +2040,14 @@ Type 'help' to see available commands.
     </div>
 
     <!-- Game Modal -->
-    <div id="game-modal" class="modal">
+    <div id="game-modal" class="modal" role="dialog" aria-labelledby="game-modal-title" aria-modal="true" data-window-title="Snake Game" data-window-icon="🐍">
         <div class="modal-header">
-            <div class="modal-title">Snake*Search</div>
-            <button class="close-modal">&times;</button>
+            <div class="modal-title" id="game-modal-title">🐍 Snake*Search</div>
+            <div class="window-controls">
+                <button class="window-control win-minimize" aria-label="Minimize" title="Minimize">−</button>
+                <button class="window-control win-maximize" aria-label="Maximize" title="Maximize">□</button>
+                <button class="window-control win-close" aria-label="Close Snake Game">×</button>
+            </div>
         </div>
         <div class="modal-content" style="background-color: #0033cc; padding: 20px; border-radius: 8px; text-align: center;">
             <div style="text-align: center; margin-bottom: 20px;">
@@ -1100,141 +2081,564 @@ Type 'help' to see available commands.
     </div>
 
     <script>document.addEventListener('DOMContentLoaded', function() {
-        // Terminal functionality
+
+        // =============================================
+        // ===== 1. BOOT SEQUENCE                  =====
+        // =============================================
+        const bootScreen = document.getElementById('boot-screen');
+        const bootText = document.getElementById('boot-text');
+        const bootProgressBar = document.getElementById('boot-progress-bar');
+        const bootWelcome = document.getElementById('boot-welcome');
+        const desktopWrapper = document.getElementById('desktop-wrapper');
+        const bootLines = bootText.querySelectorAll('.line');
+        let bootComplete = false;
+
+        function runBootSequence() {
+            let delay = 300;
+            bootLines.forEach((line, i) => {
+                setTimeout(() => {
+                    line.classList.add('visible');
+                    bootProgressBar.style.width = ((i + 1) / bootLines.length * 100) + '%';
+                }, delay);
+                delay += 250 + Math.random() * 200;
+            });
+
+            // After all lines, show "press any key"
+            setTimeout(() => {
+                bootWelcome.classList.add('visible');
+                bootComplete = true;
+            }, delay + 300);
+        }
+
+        function dismissBoot() {
+            if (!bootComplete) return;
+            bootScreen.classList.add('fade-out');
+            desktopWrapper.classList.add('ready');
+            setTimeout(() => {
+                bootScreen.style.display = 'none';
+                commandInput.focus();
+            }, 800);
+            // Remove listeners
+            document.removeEventListener('keydown', onBootKey);
+            document.removeEventListener('click', onBootClick);
+        }
+
+        function onBootKey(e) { dismissBoot(); }
+        function onBootClick(e) {
+            if (bootScreen.contains(e.target)) dismissBoot();
+        }
+
+        document.addEventListener('keydown', onBootKey);
+        document.addEventListener('click', onBootClick);
+        runBootSequence();
+
+        // =============================================
+        // ===== 2. CORE ELEMENTS                  =====
+        // =============================================
         const commandInput = document.getElementById('command-input');
         const terminalBody = document.querySelector('.terminal-body');
         const terminalOutput = document.querySelector('.terminal-output');
         const terminalContainer = document.querySelector('.terminal-container');
         const clock = document.getElementById('clock');
-        
+        const overlay = document.querySelector('.overlay');
+        const modals = document.querySelectorAll('.modal');
+        const taskbarWindows = document.getElementById('taskbar-windows');
+
+        // =============================================
+        // ===== 3. WINDOW MANAGEMENT SYSTEM       =====
+        // =============================================
+        let topZIndex = 200;
+        let windowOpenCount = 0; // For cascading position offset
+        const windowStates = {}; // Track state per modal id
+
+        function bringToFront(element) {
+            topZIndex++;
+            element.style.zIndex = topZIndex;
+            // Update taskbar active state
+            updateTaskbarButtons();
+        }
+
+        // Position a new window with cascade offset
+        function positionWindow(modal) {
+            const offset = (windowOpenCount % 6) * 30;
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+            const mw = Math.min(800, vw * 0.8);
+            const mh = vh * 0.75;
+            modal.style.top = (60 + offset) + 'px';
+            modal.style.left = Math.max(20, (vw - mw) / 2 + offset) + 'px';
+            modal.style.width = mw + 'px';
+            modal.style.maxHeight = mh + 'px';
+            windowOpenCount++;
+        }
+
+        // Create/update taskbar button for a window
+        function createTaskbarButton(modal) {
+            const id = modal.id;
+            let btn = taskbarWindows.querySelector(`[data-window-id="${id}"]`);
+            if (!btn) {
+                btn = document.createElement('button');
+                btn.className = 'taskbar-win-btn active';
+                btn.setAttribute('data-window-id', id);
+                const icon = modal.getAttribute('data-window-icon') || '📁';
+                const title = modal.getAttribute('data-window-title') || 'Window';
+                btn.innerHTML = `<span class="win-icon">${icon}</span>${title}`;
+                btn.addEventListener('click', () => toggleWindowFromTaskbar(id));
+                taskbarWindows.appendChild(btn);
+            }
+            btn.classList.remove('minimized');
+            btn.classList.add('active');
+            return btn;
+        }
+
+        function removeTaskbarButton(modalId) {
+            const btn = taskbarWindows.querySelector(`[data-window-id="${modalId}"]`);
+            if (btn) btn.remove();
+        }
+
+        function updateTaskbarButtons() {
+            taskbarWindows.querySelectorAll('.taskbar-win-btn').forEach(btn => {
+                const id = btn.getAttribute('data-window-id');
+                const modal = document.getElementById(id);
+                if (!modal) return;
+                const isActive = modal.classList.contains('active') && !modal.classList.contains('minimized');
+                btn.classList.toggle('active', isActive);
+                btn.classList.toggle('minimized', modal.classList.contains('minimized'));
+            });
+        }
+
+        function toggleWindowFromTaskbar(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+
+            if (modal.classList.contains('minimized')) {
+                // Restore from minimize
+                modal.classList.remove('minimized');
+                bringToFront(modal);
+            } else if (parseInt(modal.style.zIndex) === topZIndex) {
+                // If it's the top window, minimize it
+                minimizeWindow(modal);
+            } else {
+                // Bring to front
+                bringToFront(modal);
+            }
+            updateTaskbarButtons();
+        }
+
+        function minimizeWindow(modal) {
+            modal.classList.add('minimized');
+            updateTaskbarButtons();
+        }
+
+        function maximizeWindow(modal) {
+            if (modal.classList.contains('maximized')) {
+                // Restore from maximized
+                modal.classList.remove('maximized');
+                const state = windowStates[modal.id];
+                if (state && state.preMaximize) {
+                    modal.style.top = state.preMaximize.top;
+                    modal.style.left = state.preMaximize.left;
+                    modal.style.width = state.preMaximize.width;
+                    modal.style.maxHeight = state.preMaximize.maxHeight;
+                }
+            } else {
+                // Save current state
+                if (!windowStates[modal.id]) windowStates[modal.id] = {};
+                windowStates[modal.id].preMaximize = {
+                    top: modal.style.top,
+                    left: modal.style.left,
+                    width: modal.style.width,
+                    maxHeight: modal.style.maxHeight
+                };
+                modal.classList.add('maximized');
+            }
+        }
+
+        // Open a window (replaces old openModal)
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+
+            // If already open, just bring to front
+            if (modal.classList.contains('active') && !modal.classList.contains('minimized')) {
+                bringToFront(modal);
+                return;
+            }
+
+            // If minimized, restore
+            if (modal.classList.contains('minimized')) {
+                modal.classList.remove('minimized');
+                bringToFront(modal);
+                updateTaskbarButtons();
+                return;
+            }
+
+            // Position if not already positioned
+            if (!modal.style.top || modal.style.top === 'auto') {
+                positionWindow(modal);
+            }
+
+            modal.classList.add('active');
+            bringToFront(modal);
+            createTaskbarButton(modal);
+
+            // Focus first close button
+            const closeBtn = modal.querySelector('.win-close');
+            if (closeBtn) setTimeout(() => closeBtn.focus(), 100);
+        }
+
+        function closeWindow(modal) {
+            modal.classList.remove('active', 'minimized', 'maximized');
+            modal.style.top = '';
+            modal.style.left = '';
+            modal.style.width = '';
+            modal.style.maxHeight = '';
+            removeTaskbarButton(modal.id);
+            delete windowStates[modal.id];
+        }
+
+        // ===== Window control button handlers =====
+        modals.forEach(modal => {
+            // Click anywhere on window to bring to front
+            modal.addEventListener('mousedown', () => {
+                if (modal.classList.contains('active')) bringToFront(modal);
+            });
+
+            // Window control buttons
+            const minBtn = modal.querySelector('.win-minimize');
+            const maxBtn = modal.querySelector('.win-maximize');
+            const closeBtn = modal.querySelector('.win-close');
+
+            if (minBtn) minBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                minimizeWindow(modal);
+            });
+            if (maxBtn) maxBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                maximizeWindow(modal);
+            });
+            if (closeBtn) closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeWindow(modal);
+            });
+        });
+
+        // ===== Make windows draggable by title bar =====
+        modals.forEach(modal => {
+            const header = modal.querySelector('.modal-header');
+            if (!header) return;
+            let isDragging = false, startX, startY, startLeft, startTop;
+
+            header.addEventListener('mousedown', (e) => {
+                // Don't drag if clicking a button
+                if (e.target.closest('button')) return;
+                // Don't drag if maximized
+                if (modal.classList.contains('maximized')) return;
+
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                startLeft = modal.offsetLeft;
+                startTop = modal.offsetTop;
+                bringToFront(modal);
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                modal.style.left = (startLeft + dx) + 'px';
+                modal.style.top = Math.max(0, startTop + dy) + 'px';
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+        });
+
+        // Close with Escape — close topmost active window
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // Find topmost active non-minimized modal
+                let topModal = null;
+                let topZ = 0;
+                modals.forEach(m => {
+                    if (m.classList.contains('active') && !m.classList.contains('minimized')) {
+                        const z = parseInt(m.style.zIndex) || 0;
+                        if (z >= topZ) { topZ = z; topModal = m; }
+                    }
+                });
+                if (topModal) {
+                    closeWindow(topModal);
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // Focus trapping inside top modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key !== 'Tab') return;
+            // Find topmost active non-minimized modal
+            let topModal = null;
+            let topZ = 0;
+            modals.forEach(m => {
+                if (m.classList.contains('active') && !m.classList.contains('minimized')) {
+                    const z = parseInt(m.style.zIndex) || 0;
+                    if (z >= topZ) { topZ = z; topModal = m; }
+                }
+            });
+            if (!topModal) return;
+
+            const focusable = topModal.querySelectorAll('button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])');
+            if (focusable.length === 0) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+
+            if (e.shiftKey && document.activeElement === first) {
+                last.focus(); e.preventDefault();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                first.focus(); e.preventDefault();
+            }
+        });
+
+        // Hide overlay (we no longer use it for window system)
+        overlay.style.display = 'none';
+
+        // =============================================
+        // ===== 4. DOUBLE-CLICK TO OPEN FOLDERS   =====
+        // =============================================
+        const folders = document.querySelectorAll('.folder');
+        let selectedFolder = null;
+
+        folders.forEach(folder => {
+            // Single click = select (highlight)
+            folder.addEventListener('click', function(e) {
+                // Deselect previous
+                if (selectedFolder) selectedFolder.classList.remove('selected');
+                this.classList.add('selected');
+                selectedFolder = this;
+            });
+
+            // Double-click = open
+            folder.addEventListener('dblclick', function() {
+                const folderId = this.getAttribute('data-folder');
+                openModal(folderId + '-modal');
+
+                // Initialize snake game if game folder
+                if (folderId === 'game') {
+                    const gameContainer = document.getElementById('snake-game');
+                    if (gameContainer) {
+                        gameContainer.innerHTML = '';
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 400;
+                        canvas.height = 400;
+                        canvas.style.border = '2px solid var(--teal)';
+                        canvas.style.backgroundColor = '#000033';
+                        gameContainer.appendChild(canvas);
+                    }
+                    document.getElementById('game-message').textContent = 'Press Player Mode to start playing!';
+                }
+            });
+
+            // Keyboard: Enter to open
+            folder.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const folderId = this.getAttribute('data-folder');
+                    openModal(folderId + '-modal');
+                }
+            });
+        });
+
+        // Click desktop background to deselect folder
+        document.querySelector('.desktop').addEventListener('click', function(e) {
+            if (e.target === this || e.target.classList.contains('folder-area')) {
+                if (selectedFolder) {
+                    selectedFolder.classList.remove('selected');
+                    selectedFolder = null;
+                }
+            }
+        });
+
+        // =============================================
+        // ===== 5. TERMINAL                       =====
+        // =============================================
+
+        // Terminal typing effect on load (delayed until boot done)
+        function typeWelcome() {
+            const lines = [
+                'FatOS v2.0 — Design Engineering Terminal',
+                '',
+                "Type 'help' to see available commands."
+            ];
+            const fullText = lines.join('\n');
+            let i = 0;
+            terminalOutput.textContent = '';
+            function typeChar() {
+                if (i < fullText.length) {
+                    terminalOutput.textContent += fullText[i];
+                    i++;
+                    setTimeout(typeChar, 30 + Math.random() * 40);
+                }
+            }
+            typeChar();
+        }
+        // Start typing after boot
+        setTimeout(typeWelcome, 4000);
+
+        // Terminal window controls
+        const termMinBtn = terminalContainer.querySelector('.minimize');
+        const termMaxBtn = terminalContainer.querySelector('.maximize');
+        const termCloseBtn = terminalContainer.querySelector('.close');
+
+        termMinBtn.addEventListener('click', () => {
+            terminalContainer.style.display = 'none';
+        });
+
+        termMaxBtn.addEventListener('click', () => {
+            if (terminalContainer.dataset.maximized === 'true') {
+                terminalContainer.style.width = '680px';
+                terminalContainer.style.height = '250px';
+                terminalContainer.style.top = '';
+                terminalContainer.style.left = '140px';
+                terminalContainer.style.bottom = '50px';
+                terminalContainer.dataset.maximized = 'false';
+            } else {
+                terminalContainer.style.width = '100%';
+                terminalContainer.style.height = 'calc(100vh - 40px)';
+                terminalContainer.style.top = '0';
+                terminalContainer.style.left = '0';
+                terminalContainer.style.bottom = 'auto';
+                terminalContainer.dataset.maximized = 'true';
+            }
+        });
+
+        termCloseBtn.addEventListener('click', () => {
+            terminalContainer.style.display = 'none';
+        });
+
+        // Make terminal draggable by header
+        (function() {
+            const header = terminalContainer.querySelector('.terminal-header');
+            let isDragging = false, startX, startY, startLeft, startTop;
+
+            header.addEventListener('mousedown', (e) => {
+                if (e.target.closest('.terminal-control')) return;
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                startLeft = terminalContainer.offsetLeft;
+                startTop = terminalContainer.offsetTop;
+                // Switch from bottom positioning to top positioning
+                if (terminalContainer.style.bottom) {
+                    terminalContainer.style.top = terminalContainer.offsetTop + 'px';
+                    terminalContainer.style.bottom = 'auto';
+                }
+                bringToFront(terminalContainer);
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                terminalContainer.style.left = (startLeft + dx) + 'px';
+                terminalContainer.style.top = Math.max(0, startTop + dy) + 'px';
+            });
+
+            document.addEventListener('mouseup', () => { isDragging = false; });
+        })();
+
+        // Click terminal to bring to front
+        terminalContainer.addEventListener('mousedown', () => bringToFront(terminalContainer));
+
         // Widget elements
         const calendarWidget = document.querySelector('.calendar-widget');
         const notepadWidget = document.querySelector('.notepad-widget');
         const weatherWidget = document.querySelector('.weather-widget');
         const systemMonitor = document.querySelector('.system-monitor');
-        
+
         // Taskbar icons
         const terminalIcon = document.getElementById('terminal-icon');
         const calendarIcon = document.getElementById('calendar-icon');
         const notepadIcon = document.getElementById('notepad-icon');
         const weatherIcon = document.getElementById('weather-icon');
         const systemIcon = document.getElementById('system-icon');
-        
-        // Terminal window controls
-        const minimizeBtn = document.querySelector('.minimize');
-        const maximizeBtn = document.querySelector('.maximize');
-        const closeBtn = document.querySelector('.close');
-        
-        // Add close functionality to all widgets
-        const closeWidgets = document.querySelectorAll('.close-widget');
-        closeWidgets.forEach(button => {
+
+        // Close widget buttons
+        document.querySelectorAll('.close-widget').forEach(button => {
             button.addEventListener('click', function() {
                 this.closest('.calendar-widget, .notepad-widget, .weather-widget, .system-monitor').style.display = 'none';
             });
         });
-        
-        // Toggle widgets and terminal visibility
+
+        // Toggle widgets
         terminalIcon.addEventListener('click', function(e) {
             e.preventDefault();
             terminalContainer.style.display = terminalContainer.style.display === 'none' ? 'block' : 'none';
             if (terminalContainer.style.display !== 'none') {
+                bringToFront(terminalContainer);
                 commandInput.focus();
             }
         });
-        
+
         calendarIcon.addEventListener('click', function(e) {
             e.preventDefault();
             calendarWidget.style.display = calendarWidget.style.display === 'none' ? 'block' : 'none';
         });
-        
+
         notepadIcon.addEventListener('click', function(e) {
             e.preventDefault();
             notepadWidget.style.display = notepadWidget.style.display === 'none' ? 'block' : 'none';
         });
-        
+
         weatherIcon.addEventListener('click', function(e) {
             e.preventDefault();
             weatherWidget.style.display = weatherWidget.style.display === 'none' ? 'block' : 'none';
-            if (weatherWidget.style.display !== 'none') {
-                updateWeather(); // Refresh weather when opened
-            }
+            if (weatherWidget.style.display !== 'none') updateWeather();
         });
-        
+
         systemIcon.addEventListener('click', function(e) {
             e.preventDefault();
             systemMonitor.style.display = systemMonitor.style.display === 'none' ? 'block' : 'none';
         });
-    
-        minimizeBtn.addEventListener('click', () => {
-            terminalContainer.style.display = 'none';
-        });
-    
-        maximizeBtn.addEventListener('click', () => {
-            if (terminalContainer.style.height === '40px') {
-                terminalContainer.style.height = '300px';
-                terminalBody.style.display = 'block';
-            } else {
-                terminalContainer.style.width = '100%';
-                terminalContainer.style.height = '100%';
-                terminalContainer.style.top = '0';
-                terminalContainer.style.left = '0';
-            }
-        });
-    
-        closeBtn.addEventListener('click', () => {
-            terminalContainer.style.display = 'none';
-        });
-    
-        // Update clock
+
+        // =============================================
+        // ===== 6. CLOCK & CALENDAR               =====
+        // =============================================
         function updateClock() {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
             clock.textContent = `${hours}:${minutes}:${seconds}`;
-            
-            // Update calendar widget time and date
             const currentDate = document.getElementById('current-date');
             const currentTime = document.getElementById('current-time');
-            
             if (currentDate && currentTime) {
                 currentDate.textContent = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
                 currentTime.textContent = `${hours}:${minutes}`;
             }
         }
-    
         setInterval(updateClock, 1000);
         updateClock();
-        
-        // Initialize Calendar Grid
+
         function initCalendar() {
             const calendarGrid = document.querySelector('.calendar-widget div:nth-child(2) div:nth-child(3)');
             if (!calendarGrid) return;
-            
             const now = new Date();
             const today = now.getDate();
             const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
             const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-            
-            // Add empty cells for days before the first of the month
             for (let i = 0; i < firstDay; i++) {
                 const emptyDay = document.createElement('div');
-                emptyDay.style.color = 'var(--light-blue)';
-                emptyDay.style.fontSize = '10px';
-                emptyDay.style.textAlign = 'center';
-                emptyDay.style.padding = '2px 0';
+                emptyDay.style.cssText = 'color: var(--light-blue); font-size: 10px; text-align: center; padding: 2px 0;';
                 calendarGrid.appendChild(emptyDay);
             }
-            
-            // Add days of the month
             for (let i = 1; i <= daysInMonth; i++) {
                 const dayCell = document.createElement('div');
                 dayCell.textContent = i;
-                dayCell.style.fontSize = '10px';
-                dayCell.style.textAlign = 'center';
-                dayCell.style.padding = '2px 0';
-                
-                // Highlight today
+                dayCell.style.cssText = 'font-size: 10px; text-align: center; padding: 2px 0;';
                 if (i === today) {
                     dayCell.style.backgroundColor = 'var(--teal)';
                     dayCell.style.color = 'var(--deep-blue)';
@@ -1243,22 +2647,18 @@ Type 'help' to see available commands.
                 } else {
                     dayCell.style.color = 'var(--text)';
                 }
-                
                 calendarGrid.appendChild(dayCell);
             }
         }
-        
-        // Initialize calendar if it exists
         initCalendar();
-        
-        // Weather widget functionality
+
+        // =============================================
+        // ===== 7. WEATHER                        =====
+        // =============================================
         const refreshWeatherBtn = document.querySelector('.refresh-weather');
-        if (refreshWeatherBtn) {
-            refreshWeatherBtn.addEventListener('click', updateWeather);
-        }
-        
+        if (refreshWeatherBtn) refreshWeatherBtn.addEventListener('click', updateWeather);
+
         function updateWeather() {
-            // In a real implementation, you would fetch from a weather API
             const weatherIcons = ['☀️', '⛅', '🌧️', '❄️', '🌩️'];
             const temps = [18, 22, 24, 19, 21];
             const icon = weatherIcons[Math.floor(Math.random() * weatherIcons.length)];
@@ -1266,28 +2666,21 @@ Type 'help' to see available commands.
             const high = Math.floor(Math.random() * 5) + 23;
             const low = Math.floor(Math.random() * 5) + 15;
             const humidity = Math.floor(Math.random() * 30) + 50;
-            
-            const weatherWidget = document.querySelector('.weather-widget');
-            if (weatherWidget) {
-                const iconEl = weatherWidget.querySelector('div:nth-child(2) div:nth-child(1)');
-                const tempEl = weatherWidget.querySelector('div:nth-child(2) div:nth-child(2)');
-                const detailsEl = weatherWidget.querySelector('div:nth-child(2) div:nth-child(4)');
-                
+            const ww = document.querySelector('.weather-widget');
+            if (ww) {
+                const iconEl = ww.querySelector('div:nth-child(2) div:nth-child(1)');
+                const tempEl = ww.querySelector('div:nth-child(2) div:nth-child(2)');
+                const detailsEl = ww.querySelector('div:nth-child(2) div:nth-child(4)');
                 if (iconEl) iconEl.textContent = icon;
                 if (tempEl) tempEl.textContent = `${temp}°C`;
-                if (detailsEl) {
-                    detailsEl.innerHTML = `
-                        <span>H: ${high}° L: ${low}°</span>
-                        <span>Humidity: ${humidity}%</span>
-                    `;
-                }
+                if (detailsEl) detailsEl.innerHTML = `<span>H: ${high}° L: ${low}°</span><span>Humidity: ${humidity}%</span>`;
             }
         }
-        
-        // Initialize weather
         updateWeather();
-    
-        // Command handling
+
+        // =============================================
+        // ===== 8. TERMINAL COMMANDS              =====
+        // =============================================
         commandInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 const command = this.value.trim().toLowerCase();
@@ -1295,10 +2688,9 @@ Type 'help' to see available commands.
                 this.value = '';
             }
         });
-    
+
         function processCommand(command) {
             terminalOutput.innerHTML += `\n> ${command}\n`;
-    
             switch(command) {
                 case 'help':
                     terminalOutput.innerHTML += `
@@ -1315,8 +2707,8 @@ Type 'help' to see available commands.
       ls         - List directory contents
       cd         - Change directory
       cat        - Display file contents
-      sudo       - Nice try, you're not root 😏
-      
+      sudo       - Nice try, you're not root
+
     Try to find hidden commands for easter eggs!`;
                     break;
                 case 'about':
@@ -1354,24 +2746,16 @@ Type 'help' to see available commands.
                 case 'fix-game':
                     openModal('game-modal');
                     terminalOutput.innerHTML += 'Initializing Snake Game...\n';
-                    
-                    // Initialize a basic snake game canvas
                     setTimeout(() => {
-                        const gameContainer = document.getElementById('snake-game');
-                        if (gameContainer && !gameContainer.querySelector('canvas')) {
-                            // Create canvas if it doesn't exist
+                        const gc = document.getElementById('snake-game');
+                        if (gc && !gc.querySelector('canvas')) {
                             const canvas = document.createElement('canvas');
-                            canvas.width = 400;
-                            canvas.height = 400;
+                            canvas.width = 400; canvas.height = 400;
                             canvas.style.border = '1px solid var(--teal)';
                             canvas.style.backgroundColor = '#000033';
-                            gameContainer.appendChild(canvas);
-                            
-                            // Update message
+                            gc.appendChild(canvas);
                             document.getElementById('game-message').textContent = 'Game initialized! Press AI Mode or Player Mode to start.';
                             terminalOutput.innerHTML += 'Snake game has been fixed and initialized!\n';
-                        } else {
-                            terminalOutput.innerHTML += 'Snake game was already initialized or container not found.\n';
                         }
                     }, 500);
                     break;
@@ -1384,8 +2768,7 @@ Type 'help' to see available commands.
                 case 'sudo':
                     terminalOutput.innerHTML += 'Nice try, you\'re not root 😏\n';
                     break;
-                case 'hello':
-                case 'hi':
+                case 'hello': case 'hi':
                     terminalOutput.innerHTML += 'Hello there! Nice to meet you. Type "help" to see what I can do.\n';
                     break;
                 case '42':
@@ -1399,84 +2782,31 @@ Type 'help' to see available commands.
           |       |]
           \\       /
            \`-----'
-                            
+
     Error: Coffee machine not found. Please insert coin to continue.\n`;
                     break;
                 default:
                     terminalOutput.innerHTML += `Command not found: ${command}. Type "help" for available commands.\n`;
             }
-            
-            // Scroll to the bottom
             terminalBody.scrollTop = terminalBody.scrollHeight;
         }
-    
-        // Modal functionality
-        const overlay = document.querySelector('.overlay');
-        const modals = document.querySelectorAll('.modal');
-        const closeButtons = document.querySelectorAll('.close-modal');
-        
-        function openModal(modalId) {
-            // Hide all modals first
-            modals.forEach(modal => {
-                modal.style.display = 'none';
-            });
-            
-            // Show the overlay
-            overlay.style.display = 'block';
-            
-            // Show the requested modal
-            document.getElementById(modalId).style.display = 'block';
-        }
-        
-        function closeAllModals() {
-            modals.forEach(modal => {
-                modal.style.display = 'none';
-            });
-            overlay.style.display = 'none';
-        }
-        
-        // Attach close events
-        closeButtons.forEach(button => {
-            button.addEventListener('click', closeAllModals);
-        });
-        
-        overlay.addEventListener('click', function(e) {
-            if (e.target === overlay) {
-                closeAllModals();
+
+        terminalBody.addEventListener('click', function() { commandInput.focus(); });
+
+        // =============================================
+        // ===== 9. STICKY NOTES & DRAGGABLE       =====
+        // =============================================
+        document.addEventListener('mousedown', function(e) {
+            const header = e.target.closest('.sticky-note-header');
+            if (header) {
+                const note = header.closest('.sticky-note');
+                if (note) note.classList.add('dragging');
             }
         });
-    
-        // Folder click handlers
-        const folders = document.querySelectorAll('.folder');
-        folders.forEach(folder => {
-            folder.addEventListener('click', function() {
-                const folderId = this.getAttribute('data-folder');
-                openModal(folderId + '-modal');
-                
-                // Initialize snake game if the game folder is clicked
-                if (folderId === 'game') {
-                    // Clear any existing canvas first to prevent stacking
-                    const gameContainer = document.getElementById('snake-game');
-                    if (gameContainer) {
-                        // Clear any existing canvases
-                        gameContainer.innerHTML = '';
-                        
-                        // Create a fresh canvas
-                        const canvas = document.createElement('canvas');
-                        canvas.width = 400;
-                        canvas.height = 400;
-                        canvas.style.border = '2px solid var(--teal)';
-                        canvas.style.backgroundColor = '#000033';
-                        gameContainer.appendChild(canvas);
-                    }
-                    
-                    // Reset game message
-                    document.getElementById('game-message').textContent = 'Press Player Mode to start playing!';
-                }
-            });
+        document.addEventListener('mouseup', function() {
+            document.querySelectorAll('.sticky-note.dragging').forEach(n => n.classList.remove('dragging'));
         });
-    
-        // Sticky note functionality
+
         function createStickyNote() {
             const note = document.createElement('div');
             note.className = 'sticky-note';
@@ -1484,405 +2814,197 @@ Type 'help' to see available commands.
             note.style.left = Math.random() * 500 + 'px';
             const header = document.createElement('div');
             header.className = 'sticky-note-header';
-            
             const title = document.createElement('span');
             title.textContent = 'New Note';
-            
             const closeBtn = document.createElement('span');
             closeBtn.className = 'delete-note';
             closeBtn.textContent = '×';
-            closeBtn.addEventListener('click', function() {
-                note.remove();
-            });
-            
+            closeBtn.addEventListener('click', () => note.remove());
             const content = document.createElement('div');
             content.className = 'sticky-note-content';
             content.contentEditable = true;
             content.textContent = 'Click to edit this note...';
-            
             header.appendChild(title);
             header.appendChild(closeBtn);
             note.appendChild(header);
             note.appendChild(content);
-            
             document.querySelector('.folder-area').appendChild(note);
             makeDraggable(note);
         }
-        
-        // Make existing notes draggable
-        const stickyNotes = document.querySelectorAll('.sticky-note');
-        stickyNotes.forEach(note => {
+
+        document.querySelectorAll('.sticky-note').forEach(note => {
             makeDraggable(note);
-            
-            // Add delete functionality
-            note.querySelector('.delete-note').addEventListener('click', function() {
-                note.remove();
-            });
+            note.querySelector('.delete-note').addEventListener('click', () => note.remove());
         });
-        
-        // Make all widgets draggable
-        const widgets = document.querySelectorAll('.calendar-widget, .notepad-widget, .weather-widget, .system-monitor, .gif-widget');
-        widgets.forEach(widget => {
+
+        document.querySelectorAll('.calendar-widget, .notepad-widget, .weather-widget, .system-monitor, .gif-widget').forEach(widget => {
             makeDraggable(widget);
         });
-        
+
         function makeDraggable(element) {
             let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-            
             const header = element.querySelector('.widget-header') || element.querySelector('.sticky-note-header') || element;
             header.style.cursor = 'move';
             header.addEventListener('mousedown', dragMouseDown);
-            
             function dragMouseDown(e) {
                 e.preventDefault();
-                // Get mouse position
-                pos3 = e.clientX;
-                pos4 = e.clientY;
+                pos3 = e.clientX; pos4 = e.clientY;
                 document.addEventListener('mouseup', closeDragElement);
                 document.addEventListener('mousemove', elementDrag);
             }
-    
             function elementDrag(e) {
                 e.preventDefault();
-                // Calculate new position
-                pos1 = pos3 - e.clientX;
-                pos2 = pos4 - e.clientY;
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                // Set element's new position
-                element.style.top = (element.offsetTop - pos2) + "px";
-                element.style.left = (element.offsetLeft - pos1) + "px";
+                pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY;
+                pos3 = e.clientX; pos4 = e.clientY;
+                element.style.top = (element.offsetTop - pos2) + 'px';
+                element.style.left = (element.offsetLeft - pos1) + 'px';
             }
-            
             function closeDragElement() {
-                // Stop tracking mouse movements
                 document.removeEventListener('mouseup', closeDragElement);
                 document.removeEventListener('mousemove', elementDrag);
             }
         }
-    
-        // Initial focus on terminal input
-        commandInput.focus();
-        
-        // Focus terminal input when clicking anywhere in terminal
-        terminalBody.addEventListener('click', function() {
-            commandInput.focus();
-        });
 
-        // Carousel functionality
+        // Make carousel widget draggable
+        const carouselWidget = document.querySelector('.carousel-widget');
+        if (carouselWidget) makeDraggable(carouselWidget);
+
+        // =============================================
+        // ===== 10. CAROUSEL                      =====
+        // =============================================
         const carousel = document.querySelector('.carousel-slides');
         const prevButton = document.getElementById('prev-slide');
         const nextButton = document.getElementById('next-slide');
         const indicators = document.querySelectorAll('.indicator');
         let currentSlide = 0;
         const slideCount = document.querySelectorAll('.carousel-slide').length;
-        
+
         function updateCarousel() {
             if (!carousel) return;
             carousel.style.transform = `translateX(-${currentSlide * 100 / slideCount}%)`;
-            
-            // Update indicators
-            document.querySelectorAll('.indicator').forEach((indicator, index) => {
-                if (index === currentSlide) {
-                    indicator.style.backgroundColor = 'var(--teal)';
-                } else {
-                    indicator.style.backgroundColor = 'rgba(255,255,255,0.5)';
-                }
+            document.querySelectorAll('.indicator').forEach((ind, i) => {
+                ind.style.backgroundColor = i === currentSlide ? 'var(--teal)' : 'rgba(255,255,255,0.5)';
             });
         }
-        
-        if (nextButton) {
-            nextButton.addEventListener('click', () => {
-                currentSlide = (currentSlide + 1) % slideCount;
-                updateCarousel();
-            });
-        }
-        
-        if (prevButton) {
-            prevButton.addEventListener('click', () => {
-                currentSlide = (currentSlide - 1 + slideCount) % slideCount;
-                updateCarousel();
-            });
-        }
-        
-        // Make indicators clickable
-        indicators.forEach((indicator, index) => {
-            indicator.addEventListener('click', () => {
-                currentSlide = index;
-                updateCarousel();
-            });
-        });
-        
-        // Auto-rotate slides
-        setInterval(() => {
-            if (carousel) {
-                currentSlide = (currentSlide + 1) % slideCount;
-                updateCarousel();
-            }
-        }, 5000);
+        if (nextButton) nextButton.addEventListener('click', () => { currentSlide = (currentSlide + 1) % slideCount; updateCarousel(); });
+        if (prevButton) prevButton.addEventListener('click', () => { currentSlide = (currentSlide - 1 + slideCount) % slideCount; updateCarousel(); });
+        indicators.forEach((ind, i) => { ind.addEventListener('click', () => { currentSlide = i; updateCarousel(); }); });
+        setInterval(() => { if (carousel) { currentSlide = (currentSlide + 1) % slideCount; updateCarousel(); } }, 5000);
 
-        // Make carousel widget draggable
-        const carouselWidget = document.querySelector('.carousel-widget');
-        if (carouselWidget) {
-            makeDraggable(carouselWidget);
-        }
-
-        // Snake Game functionality
+        // =============================================
+        // ===== 11. SNAKE GAME                    =====
+        // =============================================
         const aiModeBtn = document.getElementById('ai-mode');
         const playerModeBtn = document.getElementById('player-mode');
         let gameCanvas, gameContext, snake, food, direction, gameInterval;
 
         function initializeSnakeGame() {
-            // First, clean up any existing game elements
             const gameContainer = document.getElementById('snake-game');
             if (gameContainer) {
-                // Clear any existing canvases
                 gameContainer.innerHTML = '';
-                
-                // Create a fresh canvas
                 gameCanvas = document.createElement('canvas');
-                gameCanvas.width = 400;
-                gameCanvas.height = 400;
+                gameCanvas.width = 400; gameCanvas.height = 400;
                 gameCanvas.style.border = '2px solid var(--teal)';
                 gameCanvas.style.backgroundColor = '#000033';
                 gameContainer.appendChild(gameCanvas);
             } else {
-                // If game container doesn't exist, try to get existing canvas
                 gameCanvas = document.querySelector('#snake-game canvas');
             }
-            
-            // Make sure we have a canvas before proceeding
-            if (!gameCanvas) {
-                console.error("Could not initialize game canvas");
-                return;
-            }
-            
-            // Always get a new context to avoid potential issues
-            gameContext = gameCanvas.getContext('2d');
-            
-            // Initialize game variables
-            snake = [
-                {x: 200, y: 200},
-                {x: 190, y: 200},
-                {x: 180, y: 200},
-                {x: 170, y: 200},
-                {x: 160, y: 200}
-            ];
-            
-            // Set initial direction
-            direction = 'right';
-            
-            // Generate initial food
-            if (gameCanvas) {
-                generateFood();
-            }
-            
-            // Reset score
-            const scoreElement = document.getElementById('game-score');
-            if (scoreElement) {
-                scoreElement.textContent = '0';
-            }
-            
-            // Clear any existing interval to avoid multiple intervals
-            if (gameInterval) {
-                clearInterval(gameInterval);
-                gameInterval = null;
-            }
-            
-            // Draw the initial snake to show it's initialized
-            if (gameContext && snake) {
-                drawSnake();
-            }
-        }
-        
-        function generateFood() {
-            // Make sure gameCanvas exists before generating food
             if (!gameCanvas) return;
-            
-            // Generate random coordinates for food
+            gameContext = gameCanvas.getContext('2d');
+            snake = [{x:200,y:200},{x:190,y:200},{x:180,y:200},{x:170,y:200},{x:160,y:200}];
+            direction = 'right';
+            generateFood();
+            document.getElementById('game-score').textContent = '0';
+            if (gameInterval) { clearInterval(gameInterval); gameInterval = null; }
+            drawSnake();
+        }
+
+        function generateFood() {
+            if (!gameCanvas) return;
             food = {
                 x: Math.floor(Math.random() * (gameCanvas.width - 10) / 10) * 10,
                 y: Math.floor(Math.random() * (gameCanvas.height - 10) / 10) * 10
             };
-            
-            // Check if food is on snake body
             if (snake) {
                 for (let i = 0; i < snake.length; i++) {
-                    if (food.x === snake[i].x && food.y === snake[i].y) {
-                        // Regenerate food
-                        generateFood();
-                        return;
-                    }
+                    if (food.x === snake[i].x && food.y === snake[i].y) { generateFood(); return; }
                 }
             }
         }
-        
+
         function drawSnake() {
             if (!gameContext || !gameCanvas) return;
-            
-            // Clear canvas
             gameContext.fillStyle = '#000033';
             gameContext.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-            
-            // Draw snake with brighter colors
             for (let i = 0; i < snake.length; i++) {
-                // Head is bright teal, body is bright purple with gradient effect
-                if (i === 0) {
-                    // Head
-                    gameContext.fillStyle = '#00FFCC'; // Bright teal
-                } else {
-                    // Body segments with slight gradient
-                    const gradient = 1 - (i / snake.length * 0.5); // Creates a gradient effect
-                    gameContext.fillStyle = `rgba(153, 51, 255, ${gradient})`; // Bright purple with gradient
-                }
-                
-                // Make segments slightly smaller with spacing to distinguish them better
+                gameContext.fillStyle = i === 0 ? '#00FFCC' : `rgba(153, 51, 255, ${1 - (i / snake.length * 0.5)})`;
                 gameContext.fillRect(snake[i].x, snake[i].y, 10, 10);
-                
-                // Add a bright outline to make segments more visible
-                gameContext.strokeStyle = '#FFFFFF'; // White
+                gameContext.strokeStyle = '#FFFFFF';
                 gameContext.lineWidth = 1;
                 gameContext.strokeRect(snake[i].x, snake[i].y, 10, 10);
             }
-            
-            // Draw food with a bright color and glowing effect
             if (food) {
-                // Main food circle
                 gameContext.beginPath();
                 gameContext.arc(food.x + 5, food.y + 5, 5, 0, Math.PI * 2);
-                gameContext.fillStyle = '#FF66FF'; // Bright pink
+                gameContext.fillStyle = '#FF66FF';
                 gameContext.fill();
-                
-                // Glowing effect
                 gameContext.beginPath();
                 gameContext.arc(food.x + 5, food.y + 5, 7, 0, Math.PI * 2);
-                gameContext.strokeStyle = 'rgba(255, 102, 255, 0.5)'; // Faded pink
+                gameContext.strokeStyle = 'rgba(255, 102, 255, 0.5)';
                 gameContext.stroke();
             }
         }
-        
+
         function moveSnake() {
-            // Create new head based on direction
             const head = {x: snake[0].x, y: snake[0].y};
-            
             switch(direction) {
-                case 'right':
-                    head.x += 10;
-                    break;
-                case 'left':
-                    head.x -= 10;
-                    break;
-                case 'up':
-                    head.y -= 10;
-                    break;
-                case 'down':
-                    head.y += 10;
-                    break;
+                case 'right': head.x += 10; break;
+                case 'left': head.x -= 10; break;
+                case 'up': head.y -= 10; break;
+                case 'down': head.y += 10; break;
             }
-            
-            // Check for collision with walls
-            if (head.x < 0 || head.x >= gameCanvas.width || 
-                head.y < 0 || head.y >= gameCanvas.height) {
-                gameOver();
-                return;
-            }
-            
-            // Check for collision with self
-            for (let i = 0; i < snake.length; i++) {
-                if (head.x === snake[i].x && head.y === snake[i].y) {
-                    gameOver();
-                    return;
-                }
-            }
-            
-            // Add new head
+            if (head.x < 0 || head.x >= gameCanvas.width || head.y < 0 || head.y >= gameCanvas.height) { gameOver(); return; }
+            for (let i = 0; i < snake.length; i++) { if (head.x === snake[i].x && head.y === snake[i].y) { gameOver(); return; } }
             snake.unshift(head);
-            
-            // Check for food collision
             if (head.x === food.x && head.y === food.y) {
-                // Increase score
-                const score = parseInt(document.getElementById('game-score').textContent) + 10;
-                document.getElementById('game-score').textContent = score;
-                
-                // Generate new food
+                document.getElementById('game-score').textContent = parseInt(document.getElementById('game-score').textContent) + 10;
                 generateFood();
-            } else {
-                // Remove tail if not eating
-                snake.pop();
-            }
+            } else { snake.pop(); }
         }
-        
+
         function gameOver() {
             clearInterval(gameInterval);
             document.getElementById('game-message').textContent = 'Game Over! Press Player Mode to play again.';
         }
-        
+
         function startPlayerMode() {
-            // Initialize game
             initializeSnakeGame();
-            
-            // Make sure keyboard events are properly captured
             document.removeEventListener('keydown', handleKeyPress);
             document.addEventListener('keydown', handleKeyPress);
-            
-            // Clear any existing game interval
-            if (gameInterval) {
-                clearInterval(gameInterval);
-            }
-            
-            // Update game message
+            if (gameInterval) clearInterval(gameInterval);
             document.getElementById('game-message').textContent = 'Use arrow keys to control the snake!';
-            
-            // Start game loop
-            gameInterval = setInterval(() => {
-                moveSnake();
-                drawSnake();
-            }, 100);
+            gameInterval = setInterval(() => { moveSnake(); drawSnake(); }, 100);
         }
-        
+
         function handleKeyPress(e) {
-            // Check if game canvas exists
             if (!gameCanvas) return;
-            
-            // Handle arrow keys
             switch(e.key) {
-                case 'ArrowRight':
-                    if (direction !== 'left') direction = 'right';
-                    break;
-                case 'ArrowLeft':
-                    if (direction !== 'right') direction = 'left';
-                    break;
-                case 'ArrowUp':
-                    if (direction !== 'down') direction = 'up';
-                    break;
-                case 'ArrowDown':
-                    if (direction !== 'up') direction = 'down';
-                    break;
+                case 'ArrowRight': if (direction !== 'left') direction = 'right'; break;
+                case 'ArrowLeft': if (direction !== 'right') direction = 'left'; break;
+                case 'ArrowUp': if (direction !== 'down') direction = 'up'; break;
+                case 'ArrowDown': if (direction !== 'up') direction = 'down'; break;
             }
         }
-        
-        // Add event listeners to game mode buttons
-        if (playerModeBtn) {
-            playerModeBtn.addEventListener('click', startPlayerMode);
-        }
-        
-        if (aiModeBtn) {
-            aiModeBtn.addEventListener('click', function() {
-                // Initialize the game first
-                initializeSnakeGame();
-                
-                // Update game message
-                const messageElement = document.getElementById('game-message');
-                if (messageElement) {
-                    messageElement.textContent = 'AI mode not fully implemented yet. Use Player Mode instead.';
-                }
-                
-                // Draw the initial snake to show it's initialized
-                if (gameContext && snake) {
-                    drawSnake();
-                }
-            });
-        }
+
+        if (playerModeBtn) playerModeBtn.addEventListener('click', startPlayerMode);
+        if (aiModeBtn) aiModeBtn.addEventListener('click', function() {
+            initializeSnakeGame();
+            const msg = document.getElementById('game-message');
+            if (msg) msg.textContent = 'AI mode not fully implemented yet. Use Player Mode instead.';
+            if (gameContext && snake) drawSnake();
+        });
+
     });
     </script>
 </body>
