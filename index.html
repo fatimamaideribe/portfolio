@@ -1282,99 +1282,6 @@
         }
 
         /* ============================================= */
-        /* ===== BOOT SEQUENCE                     ===== */
-        /* ============================================= */
-        .boot-screen {
-            position: fixed;
-            inset: 0;
-            z-index: 99999;
-            background: #000011;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-family: 'VT323', monospace;
-            color: var(--teal);
-            transition: opacity 0.8s ease;
-        }
-
-        .boot-screen.fade-out {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .boot-logo {
-            font-size: 48px;
-            margin-bottom: 30px;
-            text-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
-            opacity: 0;
-            animation: bootFadeIn 0.6s ease forwards;
-        }
-
-        .boot-text {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.6);
-            text-align: left;
-            width: 450px;
-            max-width: 90vw;
-            line-height: 1.8;
-        }
-
-        .boot-text .line {
-            opacity: 0;
-            transform: translateY(5px);
-        }
-
-        .boot-text .line.visible {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-
-        .boot-text .line.ok {
-            color: var(--teal);
-        }
-
-        .boot-text .line.warn {
-            color: #ffcc00;
-        }
-
-        .boot-progress {
-            width: 450px;
-            max-width: 90vw;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-            margin-top: 25px;
-            overflow: hidden;
-        }
-
-        .boot-progress-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--teal), var(--purple));
-            border-radius: 2px;
-            transition: width 0.3s ease;
-        }
-
-        .boot-welcome {
-            font-size: 20px;
-            margin-top: 30px;
-            opacity: 0;
-            color: var(--pink);
-            letter-spacing: 2px;
-        }
-
-        .boot-welcome.visible {
-            opacity: 1;
-            transition: opacity 0.5s ease;
-        }
-
-        @keyframes bootFadeIn {
-            to { opacity: 1; }
-        }
-
-        /* ============================================= */
         /* ===== DRAGGABLE WINDOW SYSTEM           ===== */
         /* ============================================= */
 
@@ -1523,13 +1430,7 @@
             font-size: 13px;
         }
 
-        /* Desktop hidden during boot */
         .desktop-wrapper {
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .desktop-wrapper.ready {
             opacity: 1;
         }
 
@@ -1558,27 +1459,7 @@
         }
     </style>
 
-    <!-- Boot Screen -->
-    <div class="boot-screen" id="boot-screen">
-        <div class="boot-logo">⌘ FatOS v2.0</div>
-        <div class="boot-text" id="boot-text">
-            <div class="line">[BIOS] Initializing system...</div>
-            <div class="line">[OK] Memory check: 640K conventional</div>
-            <div class="line">[OK] Loading kernel modules...</div>
-            <div class="line">[OK] Mounting filesystem...</div>
-            <div class="line">[OK] Starting display server...</div>
-            <div class="line warn">[WARN] No coffee detected ☕</div>
-            <div class="line">[OK] Loading portfolio assets...</div>
-            <div class="line">[OK] Initializing desktop environment...</div>
-            <div class="line ok">[READY] Welcome to FatOS — Design Engineering OS</div>
-        </div>
-        <div class="boot-progress">
-            <div class="boot-progress-bar" id="boot-progress-bar"></div>
-        </div>
-        <div class="boot-welcome" id="boot-welcome">Press any key or click to continue...</div>
-    </div>
-
-    <!-- Desktop Wrapper (hidden during boot) -->
+    <!-- Desktop Wrapper -->
     <div class="desktop-wrapper" id="desktop-wrapper">
 
     <!-- Tutorial Sticky Note -->
@@ -2083,57 +1964,7 @@
     <script>document.addEventListener('DOMContentLoaded', function() {
 
         // =============================================
-        // ===== 1. BOOT SEQUENCE                  =====
-        // =============================================
-        const bootScreen = document.getElementById('boot-screen');
-        const bootText = document.getElementById('boot-text');
-        const bootProgressBar = document.getElementById('boot-progress-bar');
-        const bootWelcome = document.getElementById('boot-welcome');
-        const desktopWrapper = document.getElementById('desktop-wrapper');
-        const bootLines = bootText.querySelectorAll('.line');
-        let bootComplete = false;
-
-        function runBootSequence() {
-            let delay = 300;
-            bootLines.forEach((line, i) => {
-                setTimeout(() => {
-                    line.classList.add('visible');
-                    bootProgressBar.style.width = ((i + 1) / bootLines.length * 100) + '%';
-                }, delay);
-                delay += 250 + Math.random() * 200;
-            });
-
-            // After all lines, show "press any key"
-            setTimeout(() => {
-                bootWelcome.classList.add('visible');
-                bootComplete = true;
-            }, delay + 300);
-        }
-
-        function dismissBoot() {
-            if (!bootComplete) return;
-            bootScreen.classList.add('fade-out');
-            desktopWrapper.classList.add('ready');
-            setTimeout(() => {
-                bootScreen.style.display = 'none';
-                commandInput.focus();
-            }, 800);
-            // Remove listeners
-            document.removeEventListener('keydown', onBootKey);
-            document.removeEventListener('click', onBootClick);
-        }
-
-        function onBootKey(e) { dismissBoot(); }
-        function onBootClick(e) {
-            if (bootScreen.contains(e.target)) dismissBoot();
-        }
-
-        document.addEventListener('keydown', onBootKey);
-        document.addEventListener('click', onBootClick);
-        runBootSequence();
-
-        // =============================================
-        // ===== 2. CORE ELEMENTS                  =====
+        // ===== 1. CORE ELEMENTS                  =====
         // =============================================
         const commandInput = document.getElementById('command-input');
         const terminalBody = document.querySelector('.terminal-body');
@@ -2465,7 +2296,7 @@
         // ===== 5. TERMINAL                       =====
         // =============================================
 
-        // Terminal typing effect on load (delayed until boot done)
+        // Terminal typing effect on load
         function typeWelcome() {
             const lines = [
                 'FatOS v2.0 — Design Engineering Terminal',
@@ -2484,8 +2315,8 @@
             }
             typeChar();
         }
-        // Start typing after boot
-        setTimeout(typeWelcome, 4000);
+        // Start typing shortly after load
+        setTimeout(typeWelcome, 400);
 
         // Terminal window controls
         const termMinBtn = terminalContainer.querySelector('.minimize');
