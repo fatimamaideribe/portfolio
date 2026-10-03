@@ -1413,7 +1413,7 @@ Type <span class="ok">flowstate</span> or <span class="ok">plant</span> to open 
             const logo = ['      .-.      ', '   .-(   )-.   ', '  (    o    )  ', "   '-(   )-'   ", "      '-'      ", '       |       ', '     \\ | /     ', '      \\|/      ', '    ~~~~~~~    ', '               ', '               '];
             const info = [
                 '<span class="ok">fatima</span>@<span class="ok">laptop</span>', '------------',
-                `<span class="ok">OS</span>: Fatima's Laptop (Y2K edition)`,
+                `<span class="ok">OS</span>: Fatima's Laptop`,
                 `<span class="ok">Host</span>: Dyson School of Design Engineering, Imperial`,
                 `<span class="ok">Kernel</span>: BSc @ Ravensbourne → MSc @ Imperial`,
                 `<span class="ok">Uptime</span>: ${mins} min`,
@@ -1857,7 +1857,7 @@ function renderSettings(w) {
         <div class="toggle"><span>Screensaver<small>Bouncing logo after 2 minutes idle</small></span><button class="switch" data-setting="saver" role="switch" aria-checked="${Settings.saver}" aria-label="Screensaver"></button></div>
         <div class="toggle"><span>Reset desktop<small>Put icons, notes &amp; widgets back where they started</small></span><button class="btn" data-reset>Reset</button></div>
         <h3>About this computer</h3>
-        <p class="muted" style="font-size:12.5px;line-height:1.7">Y2K edition · hand-built with HTML, CSS &amp; vanilla JavaScript by Fatima Ibrahim Maideribe.<br>Screen ${window.innerWidth}×${window.innerHeight} · ${PROJECTS.length} projects installed · no frameworks were harmed.</p>
+        <p class="muted" style="font-size:12.5px;line-height:1.7">Hand-built with HTML, CSS &amp; vanilla JavaScript by Fatima Ibrahim Maideribe.<br>Screen ${window.innerWidth}×${window.innerHeight} · ${PROJECTS.length} projects installed · no frameworks were harmed.</p>
     </div>`;
     $$('.wp-opt', w.body).forEach((b) => b.addEventListener('click', () => Settings.setWallpaper(b.dataset.wp)));
     $$('.accents button', w.body).forEach((b) => b.addEventListener('click', () => Settings.setAccent(b.dataset.c)));
@@ -1999,7 +1999,7 @@ const Power = {
         }, 250);
     },
     boot() {
-        this.el.innerHTML = '<div class="boot"><h1>Fatima&rsquo;s Laptop</h1><p style="font-size:22px;color:#aaa">Y2K edition</p><div class="bar"><i></i></div></div>';
+        this.el.innerHTML = '<div class="boot"><h1>Fatima&rsquo;s Laptop</h1><div class="bar"><i></i></div></div>';
         setTimeout(() => {
             this.el.classList.remove('on');
             this.el.innerHTML = '';

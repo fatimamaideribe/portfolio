@@ -299,8 +299,7 @@ async function init() {
             c.fillStyle = '#000'; c.fillRect(0, 0, scW, scH);
             const g = c.createLinearGradient(300, 0, 980, 0); g.addColorStop(0, '#00ffcc'); g.addColorStop(1, '#ff66ff');
             c.fillStyle = g; c.font = '130px VT323'; c.textAlign = 'center'; c.textBaseline = 'middle';
-            c.fillText("Fatima's Laptop", scW / 2, scH / 2 - 60);
-            c.fillStyle = '#9a9ab0'; c.font = '44px VT323'; c.fillText('Y2K edition', scW / 2, scH / 2 + 30);
+            c.fillText("Fatima's Laptop", scW / 2, scH / 2 - 20);
             c.strokeStyle = '#555'; c.lineWidth = 4; rr(c, scW / 2 - 200, scH / 2 + 90, 400, 34, 6); c.stroke();
             c.save(); rr(c, scW / 2 - 196, scH / 2 + 94, 392, 26, 4); c.clip();
             const off = ((t * 360) % 480) - 90;
