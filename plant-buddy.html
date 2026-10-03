@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Plant Buddy · Fatima Ibrahim Maideribe</title>
+    <meta name="description" content="Smart Plant Buddy: an ESP32 plant monitor with four sensors, Firebase logging, a live dashboard and an OLED face that shows how the plant feels.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--accent:#5ef28a">
+
+<header class="cs-bar">
+    <a class="cs-start" href="index.html#desktop">⊞ Desktop</a>
+    <span class="cs-crumb">C:\Projects\SmartPlantBuddy\case-study.exe</span>
+    <nav class="cs-bar-nav" aria-label="Project navigation">
+        <a class="hide-sm" href="flowstate.html">← Prev</a>
+        <a href="ai-study-buddy.html">Next →</a>
+    </nav>
+    <span class="cs-progress" aria-hidden="true"></span>
+</header>
+
+<main class="cs-wrap">
+
+    <section class="cs-hero">
+        <p class="cs-kicker">IoT · sensing · data · MSc Design Engineering, Imperial College London</p>
+        <h1 class="cs-title">Smart Plant Buddy</h1>
+        <p class="cs-lede">"Is my green thumb not so green?" An ESP32 plant monitor that reads soil, light, temperature and humidity, logs them to the cloud, and shows a little face on an OLED screen so the plant can tell you how it feels.</p>
+        <div class="cs-actions">
+            <a class="cs-btn" href="#video">▶ Watch the demo</a>
+            <a class="cs-btn ghost" href="https://github.com/fatimamaideribe/Smart-Plant-Buddy-Code" target="_blank" rel="noopener">Code &amp; data on GitHub ↗</a>
+        </div>
+        <dl class="cs-meta">
+            <div><dt>Role</dt><dd>Solo: hardware, firmware, cloud, dashboard, analysis</dd></div>
+            <div><dt>Module</dt><dd>Sensing &amp; Internet of Things, Dyson School of Design Engineering</dd></div>
+            <div><dt>Date</dt><dd>December 2025</dd></div>
+            <div><dt>Stack</dt><dd>ESP32 (C++), Firebase RTDB, JavaScript + Chart.js, Python</dd></div>
+        </dl>
+        <div class="cs-hero-media">
+            <img src="assets/PlantBuddy/setup.webp" alt="ESP32 on a breadboard wired to sensors in a potted Polyscias plant, with the OLED display glowing" width="1400" height="1462" style="aspect-ratio:16/9;object-fit:cover;object-position:center 40%">
+        </div>
+    </section>
+
+    <div class="cs-stats reveal">
+        <div class="cs-stat"><b>693</b><span>readings over 7 days, 100% uploaded</span></div>
+        <div class="cs-stat"><b>95%</b><span>mood classifier accuracy (n=40 checks)</span></div>
+        <div class="cs-stat"><b>237ms</b><span>average upload latency; dashboard &lt; 2s</span></div>
+        <div class="cs-stat"><b>£19</b><span>hardware cost, 84% cheaper than a £129 smart pot</span></div>
+    </div>
+
+    <section class="cs-window reveal" id="problem">
+        <div class="cs-window-bar">🌱 01_problem.txt <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">01</span>
+            <h2>Plants can't say what they need</h2>
+            <p>Most houseplants don't die from neglect. They die because their owners can't tell what they need or when. People end up watering too much or too little, and the existing smart pots are either expensive or just show numbers you have to interpret yourself.</p>
+            <p><strong>Aim:</strong> give the plant a voice by combining multi-sensor sensing, cloud logging and <em>expressive</em> feedback, so that plant care is easier to read and more fun to do.</p>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="system">
+        <div class="cs-window-bar">🧩 02_system_design/ <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">02</span>
+            <h2>Three-tier architecture</h2>
+            <p>The <strong>sensing layer</strong> is an ESP32 polling four sensors. The <strong>network layer</strong> sends HTTP POSTs to Firebase every 15 minutes, with WebSockets for live updates. The <strong>application layer</strong> is a web dashboard. The OLED handles feedback <em>at the edge</em>, so the face updates instantly without waiting on the cloud.</p>
+            <figure class="cs-fig"><img src="assets/PlantBuddy/architecture.webp" alt="Diagram: sensing layer (ESP32 + sensors + OLED) to network layer (WiFi, HTTP, WebSocket) to Firebase and the web dashboard" loading="lazy"><figcaption>Data flow: sensors → ESP32 → WiFi → Firebase → dashboard, with local OLED feedback</figcaption></figure>
+
+            <div class="cs-split">
+                <div>
+                    <h3>Bill of materials</h3>
+                    <div class="cs-table-wrap">
+                        <table class="cs-table" style="min-width:0">
+                            <thead><tr><th>Part</th><th>Pin</th><th>Cost</th></tr></thead>
+                            <tbody>
+                                <tr><td>ESP32-WROOM (240 MHz, WiFi)</td><td>—</td><td>£8</td></tr>
+                                <tr><td>Resistive soil moisture</td><td>GPIO34</td><td>£2</td></tr>
+                                <tr><td>LDR + 10 kΩ divider</td><td>GPIO35</td><td>£1</td></tr>
+                                <tr><td>DHT11 temp / humidity</td><td>GPIO4</td><td>£3</td></tr>
+                                <tr><td>SSD1306 OLED 128×64 (I²C)</td><td>GPIO14/15</td><td>£5</td></tr>
+                                <tr><td><strong>Total</strong></td><td></td><td><strong>£19</strong></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <figure class="cs-fig"><img src="assets/PlantBuddy/circuit.webp" alt="Circuit schematic of the ESP32 with soil sensor, LDR, DHT11 and OLED" loading="lazy"><figcaption>Circuit schematic</figcaption></figure>
+            </div>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="sensing">
+        <div class="cs-window-bar">📡 03_sensing.cpp <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">03</span>
+            <h2>Calibrating the senses</h2>
+            <div class="cs-cards">
+                <div class="cs-card"><span class="tag">SOIL MOISTURE</span><h4>2-point calibration</h4><p>Calibrated between dry air and full submersion. For my Polyscias: &lt;1500 is dry, 1500–2400 is healthy, and &gt;3500 only happens right after watering. I checked it against a two-day drying cycle.</p></div>
+                <div class="cs-card"><span class="tag">LIGHT</span><h4>LDR voltage divider</h4><p>Covered it reads about 120, indirect daylight 800–2500, and a bright window 3000+. The logs show a clear day/night pattern that peaks around 1–3pm.</p></div>
+                <div class="cs-card"><span class="tag">TEMP + HUMIDITY</span><h4>DHT11</h4><p>Accurate to ±2 °C / ±5% RH, which is fine indoors. I checked it against a thermometer, and the firmware respects the sensor's 2-second minimum between reads.</p></div>
+            </div>
+            <p>Every reading averages <strong>10 samples</strong> to smooth out ADC noise, especially the WiFi interference during transmits. Each log is about 150 bytes of JSON stored under <code>/plants/plant1/logs/{id}</code> and indexed by timestamp, so "last 24h / 3 days / week" queries stay fast.</p>
+            <figure class="cs-fig dark"><img src="assets/PlantBuddy/serial-log.webp" alt="Serial monitor output showing soil, light, temperature, humidity and mood=happy readings" loading="lazy"><figcaption>Serial monitor during calibration</figcaption></figure>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="mood">
+        <div class="cs-window-bar">😊 04_mood.h <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">04</span>
+            <h2>Giving it a face</h2>
+            <div class="cs-split">
+                <div>
+                    <p>A rule-based classifier turns the readings into a mood. Critical states are checked first so the plant never shows two moods that contradict each other:</p>
+<pre class="cs-code"><span class="k">String</span> getMood() {
+  <span class="k">if</span> (soilRaw &lt; SOIL_DRY_THRESH)  <span class="k">return</span> <span class="s">"thirsty"</span>;
+  <span class="k">if</span> (soilRaw &gt; SOIL_WET_THRESH)  <span class="k">return</span> <span class="s">"overwatered"</span>;
+  <span class="k">if</span> (tempC &gt; TEMP_HOT_THRESH)    <span class="k">return</span> <span class="s">"hot"</span>;
+  <span class="k">if</span> (lightRaw &lt; LIGHT_LOW_THRESH) <span class="k">return</span> <span class="s">"dark"</span>;
+  <span class="k">return</span> <span class="s">"happy"</span>;
+}</pre>
+                    <p>The OLED redraws every 2 seconds with a title bar, a big emoji-style face and a compact sensor summary:</p>
+                    <div class="cs-chips">
+                        <span class="cs-chip">Happy ^ ^</span><span class="cs-chip">Thirsty O O</span><span class="cs-chip">Hot &gt; &lt;</span><span class="cs-chip">Drowning @ @</span><span class="cs-chip">OK :—</span>
+                    </div>
+                    <p>In a small pilot (N=5), everyone understood the faces without being told what they meant. People checked the OLED <strong>80%</strong> of the time, compared with 40% for an earlier phone-only prototype.</p>
+                </div>
+                <figure class="cs-fig dark"><img src="assets/PlantBuddy/oled.webp" alt="Hand holding the OLED display showing the Smart Plant Buddy happy face" loading="lazy"><figcaption>The OLED showing "happy"</figcaption></figure>
+            </div>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="data">
+        <div class="cs-window-bar">📈 05_analysis.py <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">05</span>
+            <h2>What a week of data showed</h2>
+            <p>I logged 693 readings at 15-minute intervals. Soil moisture follows a zigzag: it jumps to about 3800–4000 after watering, then drains over 60–80 hours. Light is almost perfectly diurnal. Temperature and humidity barely move indoors.</p>
+            <figure class="cs-fig"><img src="assets/PlantBuddy/time-series.webp" alt="Four stacked time-series charts of soil moisture, light, temperature and humidity over 7 days" loading="lazy"><figcaption>7-day time series: soil drying cycles, daily light rhythm, stable indoor climate</figcaption></figure>
+            <div class="cs-gallery" style="--cols:2">
+                <figure class="cs-fig"><img src="assets/PlantBuddy/correlation.webp" alt="Correlation heatmap between soil, light, temperature and humidity" loading="lazy"><figcaption>Soil ↔ temperature r = 0.74: warmer periods dry the soil faster</figcaption></figure>
+                <figure class="cs-fig"><img src="assets/PlantBuddy/mood-distribution.webp" alt="Pie chart of mood classifications: 56% happy, 22% ok, 12% drowning, 8% thirsty, 2% hot" loading="lazy"><figcaption>Mood distribution: mostly happy, with periodic thirst</figcaption></figure>
+            </div>
+            <p>Combining sensors made it more useful. A sharp soil jump (&gt;800 ADC) <em>plus</em> a small humidity bump detected <strong>all 7 watering events with zero false positives</strong>. The strong soil–temperature link also makes predicting when to water feel within reach.</p>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="dashboard">
+        <div class="cs-window-bar">🖥️ 06_dashboard.html <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">06</span>
+            <h2>A friendly dashboard</h2>
+            <div class="cs-split">
+                <div>
+                    <p>It's built in plain JavaScript, Chart.js and the Firebase Web SDK, with no framework so I had full control over layout and performance. It has live sensor cards, a big mood emoji, time filters, a carousel of four charts, live stats and a CSV export.</p>
+                    <ul class="cs-list">
+                        <li><strong>Downsampled</strong> ~700 points to ~200 before plotting, which cut render time with no visible loss.</li>
+                        <li><strong>Species profiles</strong> (Polyscias, succulent, Musa, fern) change the thresholds and the care advice.</li>
+                        <li>WebSocket updates show up in about <strong>1.8s</strong>, and the first load takes under 2s.</li>
+                    </ul>
+                </div>
+                <figure class="cs-fig"><img src="assets/PlantBuddy/dashboard-live.webp" alt="Dashboard showing plant type selector, mood emoji, live readings, care tips and a soil moisture chart" loading="lazy"><figcaption>Live dashboard with care tips for the selected species</figcaption></figure>
+            </div>
+            <figure class="cs-fig"><img src="assets/PlantBuddy/dashboard-overview.webp" alt="Dashboard overview with all sensor charts, mood pie chart, statistics and correlations" loading="lazy"><figcaption>Overview: every sensor, the mood breakdown and live statistics</figcaption></figure>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="evaluation">
+        <div class="cs-window-bar">✅ 07_evaluation.csv <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">07</span>
+            <h2>Did it work?</h2>
+            <div class="cs-table-wrap">
+                <table class="cs-table">
+                    <thead><tr><th>Metric</th><th>Target</th><th>Achieved</th></tr></thead>
+                    <tbody>
+                        <tr><td>Data completeness</td><td>&gt; 95%</td><td class="good">100% (693/693)</td></tr>
+                        <tr><td>Upload latency</td><td>&lt; 500 ms</td><td class="good">237 ms (P95 312 ms)</td></tr>
+                        <tr><td>Dashboard load</td><td>&lt; 3 s</td><td class="good">1.8 s</td></tr>
+                        <tr><td>OLED response</td><td>&lt; 1 s</td><td class="good">0.1 s</td></tr>
+                        <tr><td>Mood accuracy</td><td>&gt; 85%</td><td class="good">95%</td></tr>
+                        <tr><td>Uptime</td><td>&gt; 95%</td><td class="good">99.7% (one 28 s WiFi drop)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <h3>Challenges</h3>
+            <div class="cs-cards">
+                <div class="cs-card"><span class="tag">NOISE</span><h4>WiFi interference</h4><p>Soil readings jittered whenever the board transmitted. A 10-sample moving average fixed it.</p></div>
+                <div class="cs-card"><span class="tag">HARDWARE</span><h4>Probe corrosion</h4><p>After about two weeks, copper oxide started skewing the resistive probe. I cleaned the probes or swapped them for spares.</p></div>
+                <div class="cs-card"><span class="tag">PERFORMANCE</span><h4>Laggy charts</h4><p>Plotting every point made Chart.js sluggish, so I downsample before plotting.</p></div>
+            </div>
+            <h3>Next steps</h3>
+            <p>Automatic watering, a camera for checking leaf health visually, more species profiles, and proper security: Firebase Auth rules, credentials stored in NVS and certificate pinning, since the prototype uses open rules and hardcoded WiFi credentials.</p>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="video">
+        <div class="cs-window-bar">▶ demo.mp4 <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <h2>See it running</h2>
+            <div class="cs-embed">
+                <iframe loading="lazy" title="Smart Plant Buddy demo video" src="https://www.youtube-nocookie.com/embed/xPJluhWnMcI" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+    <nav class="cs-next" aria-label="More projects">
+        <a href="flowstate.html"><small>← Previous</small><span>FlowState</span></a>
+        <a href="ai-study-buddy.html"><small>Next →</small><span>AI Study Buddy</span></a>
+    </nav>
+
+    <footer class="cs-footer">
+        <span>© Fatima Ibrahim Maideribe</span>
+        <a href="index.html#desktop">Back to desktop</a>
+    </footer>
+</main>
+
+<script src="case-study.js"></script>
+</body>
+</html>

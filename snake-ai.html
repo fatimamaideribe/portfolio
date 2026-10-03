@@ -3,1341 +3,542 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake*Search</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="project-style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>A* Pathfinding Snake · Fatima Ibrahim Maideribe</title>
+    <meta name="description" content="Snake*Search: a self-playing Snake game that uses A* search to find the shortest path to food while avoiding obstacles and its own body. Includes a playable demo.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="case-study.css">
     <style>
-        /* Basic page setup for scrolling */
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            overflow-x: hidden; /* Prevent horizontal scrolling */
-            overflow-y: auto; /* Enable vertical scrolling */
-        }
-        
-        .project-container {
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            overflow-y: auto; /* Ensure container itself is scrollable */
-        }
-        
-        .file-explorer {
-            display: flex;
-            min-height: 0; /* Allow content to determine height */
-            overflow: visible; /* Ensure overflow content is visible */
-            flex-direction: row; /* Force horizontal layout */
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
-        }
-        
-        .file-tree {
-            min-width: 150px;
-            padding-right: 20px;
-            position: sticky;
-            top: 20px; /* Stick to top with some padding */
-            max-height: calc(100vh - 40px); /* Allow scrolling for very long file trees */
-            overflow-y: auto;
-            align-self: flex-start; /* Align to top of container */
-        }
-        
-        .file-content {
-            flex: 1;
-            overflow-y: visible; /* Allow vertical scrolling */
-            padding: 20px;
-            min-width: 300px; /* Ensure content area has minimum width */
-        }
-        
-        /* Responsive handling */
-        @media (max-width: 768px) {
-            .file-explorer {
-                flex-direction: column;
-            }
-            
-            .file-tree {
-                width: 100%;
-                padding-right: 0;
-                margin-bottom: 20px;
-                position: relative;
-                max-height: none;
-                overflow-y: visible;
-            }
-            
-            .file-content {
-                width: 100%;
-                padding: 10px 0;
-            }
-        }
-        
-        /* Case Study Specific Styling */
-        .case-study-title {
-            color: #00ffcc;
-            font-size: 2rem;
-            text-align: center;
-            margin-bottom: 2rem;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-            letter-spacing: 1px;
-        }
-        
-        .case-study-section {
-            margin-bottom: 2.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px dashed rgba(153, 51, 255, 0.3);
-        }
-        
-        .section-title {
-            color: #9933ff;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            padding-left: 20px;
-            position: relative;
-        }
-        
-        .section-title::before {
-            content: ">";
-            position: absolute;
-            left: 0;
-            color: #ff66ff;
-        }
-        
-        .subsection-title {
-            color: #00ffcc;
-            font-size: 1.2rem;
-            margin: 1.2rem 0 0.8rem;
-            padding-left: 25px;
-        }
-        
-        .section-content {
-            padding-left: 25px;
-            line-height: 1.6;
-        }
-        
-        .section-content p {
-            margin-bottom: 1rem;
-        }
-        
-        .section-content ul, 
-        .section-content ol {
-            margin-bottom: 1rem;
-            padding-left: 20px;
-        }
-        
-        .section-content li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .goals-block, .tech-note, .skills-demonstrated, .project-artifacts {
-            background-color: rgba(26, 43, 60, 0.7);
-            border-left: 3px solid #9933ff;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 0 5px 5px 0;
-        }
-        
-        .code-block {
-            background-color: #0a1929;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 15px 0;
-            overflow-x: auto;
-        }
-        
-        .code-block pre {
-            margin: 0;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.9rem;
-        }
-        
-        .code-block code {
-            color: #ffffff;
-        }
-        
-        .skills-demonstrated p, .project-artifacts p {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        /* Demo container styling */
-        .demo-container {
-            background-color: rgba(26, 43, 60, 0.7);
-            border: 1px solid #00ffcc;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 2rem;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
-        }
-        
-        .demo-title {
-            color: #ff66ff;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            font-family: 'Fira Code', monospace;
-            font-size: 1.8rem;
-            text-shadow: 0 0 10px rgba(255, 102, 255, 0.5);
-        }
-        
-        .game-container {
-            background-color: #000033;
-            border: 2px solid #00ffcc;
-            width: 100%;
-            aspect-ratio: 1/1;
-            max-width: 500px;
-            margin: 0 auto 1.5rem;
-            position: relative;
-            border-radius: 4px;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
-            overflow: hidden;
-        }
-        
-        .game-controls {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 1rem;
-        }
-        
-        .control-btn {
-            background-color: #9933ff;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            font-family: 'Fira Code', monospace;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-weight: 500;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-        
-        .control-btn:hover {
-            background-color: #b366ff;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
-        }
-        
-        .control-btn:active {
-            transform: translateY(1px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-        }
-        
-        #game-score, #game-message {
-            text-align: center;
-            margin: 10px 0;
-            font-family: 'Fira Code', monospace;
-            color: #00ffcc;
-        }
-        
-        #game-score {
-            font-size: 1.2rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-        
-        #game-message {
-            color: #ff66ff;
-            height: 1.5em;
-            margin-top: 15px;
-        }
-        
-        .game-instructions {
-            background-color: rgba(10, 25, 41, 0.6);
-            padding: 15px;
-            border-radius: 4px;
-            margin-top: 20px;
-            border-left: 3px solid #00ffcc;
-        }
-        
-        .game-instructions h4 {
-            color: #00ffcc;
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
-        
-        .game-instructions ul {
-            color: #ffffff;
-            margin-bottom: 0;
-        }
-        
-        .game-instructions li {
-            margin-bottom: 5px;
-        }
-        
-        /* Improved responsive game controls */
-        @media (max-width: 480px) {
-            .game-container {
-                max-width: 100%;
-                aspect-ratio: 1/1;
-            }
-            
-            .game-controls {
-                flex-direction: column;
-                align-items: center;
-                gap: 10px;
-            }
-            
-            .control-btn {
-                width: 80%;
-                padding: 12px 0;
-                margin: 0 auto;
-            }
-            
-            #game-score, #game-message {
-                text-align: center;
-                margin: 10px 0;
-            }
-            
-            .game-instructions ul {
-                padding-left: 15px;
-            }
-        }
-        
-        /* Add background with transparency and styling to improve appearance */
-        body {
-            background: linear-gradient(45deg, #000033, #003366);
-            color: #ffffff;
-            font-family: 'Fira Code', monospace;
-            line-height: 1.6;
-        }
-        
-        /* Improve file tree items styling */
-        .file-tree-item {
-            padding: 8px 12px;
-            margin-bottom: 5px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background-color: rgba(26, 43, 60, 0.7);
-            border-left: 3px solid transparent;
-        }
-        
-        .file-tree-item:hover {
-            background-color: rgba(26, 43, 60, 0.9);
-            transform: translateX(5px);
-        }
-        
-        .file-tree-item.active {
-            border-left-color: #00ffcc;
-            background-color: rgba(51, 51, 102, 0.8);
-            color: #00ffcc;
-        }
-        
-        /* Style the project header for better appearance */
-        .project-header {
-            margin-bottom: 30px;
-            padding: 20px;
-            background-color: rgba(26, 43, 60, 0.7);
-            border-radius: 8px;
-            border: 1px solid #00ffcc;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
-        }
-        
-        .project-title {
-            color: #ff66ff;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 2.5rem;
-            text-shadow: 0 0 10px rgba(255, 102, 255, 0.5);
-        }
-        
-        .project-overview {
-            background-color: #0a1929;
-            padding: 15px;
-            border-radius: 5px;
-            border-left: 3px solid #9933ff;
-        }
-        
-        .terminal-prompt {
-            color: #ff66ff;
-            margin-right: 8px;
-        }
-        
-        .terminal-command {
-            color: #00ffcc;
-        }
-        
-        .terminal-output {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: rgba(0, 0, 51, 0.5);
-            border-radius: 3px;
-            color: #ffffff;
-        }
-        
-        /* Back to Portfolio Button */
-        .back-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background-color: rgba(26, 43, 60, 0.8);
-            border: 1px solid #00ffcc;
-            color: #00ffcc;
-            padding: 8px 15px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-family: 'Fira Code', monospace;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-            z-index: 100;
-        }
-        
-        .back-button:hover {
-            background-color: rgba(0, 255, 204, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .back-button::before {
-            content: "←";
-            font-size: 18px;
-        }
+        .snake-board { width: 100%; max-width: 500px; aspect-ratio: 1 / 1; margin: 18px auto 14px; border: 2px solid var(--accent); border-radius: 6px; box-shadow: 0 0 20px rgba(0, 255, 204, 0.35); background: #000033; overflow: hidden; touch-action: none; }
+        .snake-board canvas { display: block; width: 100%; height: 100%; }
+        .snake-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+        .snake-controls button { cursor: pointer; font: inherit; font-family: var(--font-mono); font-size: 14px; }
+        .snake-controls button[aria-pressed="false"] { background: transparent; color: var(--text); border-color: var(--line); }
+        .snake-readout { text-align: center; font-family: var(--font-mono); margin: 12px 0 0; }
+        .snake-readout b { color: var(--accent); font-weight: 500; font-size: 18px; }
+        .snake-readout span { display: block; min-height: 1.6em; font-size: 13px; color: var(--pink); }
     </style>
 </head>
-<body>
-    <a href="index.html" class="back-button">Back to Portfolio</a>
-    
-    <div class="project-container">
-        <div class="project-header">
-            <h1 class="project-title"><a href="index.html" style="text-decoration: none; color: inherit;">snake*search.exe</a></h1>
-            <div class="project-overview">
-                <span class="terminal-prompt">$</span>
-                <span class="terminal-command">cat README.md</span>
-                <div class="terminal-output">
-                    A classic snake game implementation with intelligent pathfinding using the A* algorithm. The snake automatically finds the shortest path to food while avoiding obstacles and its own body.
-                </div>
-            </div>
+<body style="--accent:#00ffcc">
+
+<header class="cs-bar">
+    <a class="cs-start" href="index.html#desktop">⊞ Desktop</a>
+    <span class="cs-crumb">C:\Projects\SnakeSearch\case-study.exe</span>
+    <nav class="cs-bar-nav" aria-label="Project navigation">
+        <a class="hide-sm" href="ai-study-buddy.html">← Prev</a>
+        <a href="wildwise.html">Next →</a>
+    </nav>
+    <span class="cs-progress" aria-hidden="true"></span>
+</header>
+
+<main class="cs-wrap">
+
+    <section class="cs-hero">
+        <p class="cs-kicker">Algorithms · game AI · Python + Pygame</p>
+        <h1 class="cs-title">Snake*Search</h1>
+        <p class="cs-lede">A Snake game that plays itself. It uses A* search to find the shortest path to the food while steering around obstacles and its own growing body.</p>
+        <div class="cs-actions">
+            <a class="cs-btn" href="#play">▶ Play the demo</a>
+            <a class="cs-btn ghost" href="#astar">How the A* works</a>
         </div>
+        <dl class="cs-meta">
+            <div><dt>Type</dt><dd>Self-playing game / algorithm study</dd></div>
+            <div><dt>Focus</dt><dd>A* pathfinding with a Manhattan-distance heuristic</dd></div>
+            <div><dt>Stack</dt><dd>Python, Pygame; JavaScript for the web demo</dd></div>
+            <div><dt>Context</dt><dd>Grew out of my studies in distributed systems and graph algorithms</dd></div>
+        </dl>
+        <div class="cs-hero-media">
+            <img src="assets/thumbs/snake.webp" alt="Pixel illustration of a snake on a dark grid, its path bending around an obstacle to reach a pink food dot" width="800" height="500">
+        </div>
+    </section>
 
-        <div class="file-explorer">
-            <div class="file-tree">
-                <div class="file-tree-item active">README.md</div>
-                <div class="file-tree-item">source/</div>
-                <div class="file-tree-item">assets/</div>
-                <div class="file-tree-item">tests/</div>
-                <div class="file-tree-item">demo.mp4</div>
+    <section class="cs-window reveal" id="idea">
+        <div class="cs-window-bar">💡 01_conception.txt <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">01</span>
+            <h2>From curiosity to code</h2>
+            <p>The project started with a simple question: <em>how do game characters find their way around complex environments so efficiently?</em> While studying distributed systems and graph algorithms I got interested in pathfinding methods like DFS, BFS and Dijkstra's algorithm. <strong>A* search</strong> stood out because it combines a heuristic with the actual path cost, which balances speed and accuracy.</p>
+            <h3>Initial goals</h3>
+            <ul class="cs-list">
+                <li>Build a self-playing Snake game using A*.</li>
+                <li>Compare its efficiency against other algorithms. Time constraints later narrowed the project to A* only.</li>
+                <li>Learn Pygame so I could connect the theory to something I could see running.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="basic">
+        <div class="cs-window-bar">🐍 02_basic_snake.py <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">02</span>
+            <h2>Phase 1: the basic snake</h2>
+            <p>I started from a Pygame tutorial (Coder Space, 2022) to build the core mechanics:</p>
+            <ul class="cs-list">
+                <li><strong>Snake movement</strong> on a grid, with WASD controls.</li>
+                <li><strong>Food spawning</strong> at random coordinates.</li>
+                <li><strong>Collision detection</strong> for walls and the snake's own body.</li>
+            </ul>
+            <p><strong>Early struggle:</strong> the movement felt rigid, and to make the snake autonomous I had to replace player input with algorithmic decision-making.</p>
+            <div class="cs-embed">
+                <iframe loading="lazy" title="The original Snake game with manual controls" src="https://www.youtube-nocookie.com/embed/mcM4dV8pY7w" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
+            <p>The original game, played with manual controls.</p>
+        </div>
+    </section>
 
-            <div class="file-content">
-                <!-- Project Case Study -->
-                <div class="project-case-study">
-                    <h2 class="case-study-title">Snake*Search: A Journey Through Algorithmic Game Design</h2>
-                    
-                    <!-- Section 1 -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">1. Conception: From Curiosity to Code</h3>
-                        <div class="section-content">
-                            <p>
-                                The project began with a simple question: <em>How do game characters navigate complex environments so efficiently?</em> During my studies in <strong>distributed systems and graph algorithms</strong>, I became fascinated by pathfinding methods like <strong>DFS, BFS, and Dijkstra's Algorithm</strong>. But it was <em>A*</em><strong>search</strong>—a hybrid of heuristic-driven and cost-based navigation—that stood out for its balance of speed and accuracy.
-                            </p>
-                            
-                            <div class="goals-block">
-                                <h4>Initial Goals:</h4>
-                                <ul>
-                                    <li>Implement a self-playing Snake game using A*.</li>
-                                    <li>Compare its efficiency against other algorithms (time constraints later narrowed this focus).</li>
-                                    <li>Learn Pygame to bridge theory with tangible results.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Section 2 -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">2. Building the Foundation</h3>
-                        
-                        <h4 class="subsection-title">Phase 1: The Basic Snake</h4>
-                        <div class="section-content">
-                            <p>
-                                I started with a <strong>Pygame tutorial</strong> (Coder Space, 2022) to create the core mechanics:
-                            </p>
-                            <ul>
-                                <li><strong>Snake movement</strong> (grid-based, WASD controls).</li>
-                                <li><strong>Food spawning</strong> (random coordinates).</li>
-                                <li><strong>Collision detection</strong> (walls, self).</li>
-                            </ul>
-                            
-                            <div class="tech-note">
-                                <p><strong>Early Struggle:</strong> The snake's movement felt rigid. To make it autonomous, I needed to replace player input with <strong>algorithmic decision-making</strong>.</p>
-                            </div>
-                            
-                            <div class="basic-game-video">
-                                <!-- Video is now embedded from YouTube -->
-                                <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);">
-                                    <iframe src="https://www.youtube.com/embed/mcM4dV8pY7w?ab_channel=Amaan" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
-                                </div>
-                                <p style="text-align: center; font-size: 0.9rem; color: #A2D2FF;"><em>The original snake game with manual controls</em></p>
-                            </div>
-                        </div>
-                        
-                        <h4 class="subsection-title">Phase 2: A* Integration</h4>
-                        <div class="section-content">
-                            <p><strong>Key Steps:</strong></p>
-                            <ol>
-                                <li>
-                                    <strong>Grid Representation:</strong>
-                                    <ul>
-                                        <li>Treated the game window as a graph where each pixel was a node.</li>
-                                        <li>Defined neighbors (up/down/left/right) with a <strong>Manhattan distance heuristic</strong>.</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <strong>Path Calculation:</strong>
-                                    <ul>
-                                        <li>Used A* to find the shortest path from the snake's head to the food, avoiding:
-                                            <ul>
-                                                <li>Its own body (<code>snake_body</code> list).</li>
-                                                <li>Randomly placed obstacles (<code>obstacle_positions</code>).</li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <strong>Dynamic Adaptation:</strong>
-                                    <ul>
-                                        <li>Recalculated the path after every move to account for the growing body.</li>
-                                    </ul>
-                                </li>
-                            </ol>
-                            
-                            <div class="code-block">
-                                <h4>Code Breakthrough:</h4>
-                                <pre><code>def A_Star(start, goal, grid_size, snake_body, obstacle_positions):
+    <section class="cs-window reveal" id="astar">
+        <div class="cs-window-bar">🧭 03_a_star.py <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">03</span>
+            <h2>Phase 2: adding A*</h2>
+            <div class="cs-cards">
+                <div class="cs-card"><span class="tag">STEP 1</span><h4>Grid as a graph</h4><p>I treated the game window as a graph where each grid position is a node, with up/down/left/right neighbours and a Manhattan-distance heuristic.</p></div>
+                <div class="cs-card"><span class="tag">STEP 2</span><h4>Path calculation</h4><p>A* finds the shortest path from the head to the food, avoiding the snake's body (<code>snake_body</code>) and randomly placed obstacles (<code>obstacle_positions</code>).</p></div>
+                <div class="cs-card"><span class="tag">STEP 3</span><h4>Dynamic adaptation</h4><p>The path is recalculated after every move so it accounts for the growing body.</p></div>
+            </div>
+            <h3>The breakthrough</h3>
+<pre class="cs-code"><span class="k">def</span> A_Star(start, goal, grid_size, snake_body, obstacle_positions):
     open_set = {start}
-    came_from = {}  # Tracks the optimal path
-    g_score = {start: 0}  # Cost from start
-    f_score = {start: m_distance(start, goal)}  # Estimated total cost
-    ...</code></pre>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Section 3 -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">3. Challenges & Iterations</h3>
-                        
-                        <h4 class="subsection-title">Problem 1: Food Spawning in Obstacles</h4>
-                        <div class="section-content">
-                            <ul>
-                                <li>Initially, food appeared inside obstacles, causing instant collisions.</li>
-                                <li><strong>Solution:</strong> Added validation to regenerate food until it spawned in a valid location.</li>
-                            </ul>
-                        </div>
-                        
-                        <h4 class="subsection-title">Problem 2: Algorithmic Bottlenecks</h4>
-                        <div class="section-content">
-                            <ul>
-                                <li>A* slowed when the snake grew long (many body segments to avoid).</li>
-                                <li><strong>Optimization:</strong> Limited path recalculation to every <em>N</em> frames and prioritized recent moves.</li>
-                            </ul>
-                        </div>
-                        
-                        <h4 class="subsection-title">Problem 3: Visual Clarity</h4>
-                        <div class="section-content">
-                            <ul>
-                                <li>Debugging paths was hard without visual aids.</li>
-                                <li><strong>Fix:</strong> Added temporary debug lines to display A*'s chosen path (removed in the final version).</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <!-- Section 4 -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">4. Polishing the Experience</h3>
-                        <div class="section-content">
-                            <p>To make the game engaging, I:</p>
-                            <ul>
-                                <li><strong>Added Assets:</strong> Replaced rectangles with pixel-art sprites (snake, food, obstacles).</li>
-                                <li><strong>Fine-Tuned Gameplay:</strong> Adjusted snake speed (<code>time_step</code>) and obstacle density.</li>
-                                <li><strong>Scoring System:</strong> +10 points per food, with a reset on collision.</li>
-                            </ul>
-                            
-                            <div class="tech-note">
-                                <h4>Final Mechanics:</h4>
-                                <ul>
-                                    <li>The snake autonomously navigates to food while dodging obstacles and its tail.</li>
-                                    <li>Obstacles reset on each game over, ensuring variability.</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="ai-game-video">
-                            
-                                <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);">
-                                    <iframe src="https://www.youtube.com/embed/WFWpAtqTk5E" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
-                                </div>
-                                <p style="text-align: center; font-size: 0.9rem; color: #A2D2FF;"><em>The A* pathfinding algorithm in action, automatically navigating the snake</em></p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Section 5 -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">5. Lessons Learned</h3>
-                        <div class="section-content">
-                            <ol>
-                                <li>
-                                    <strong>Theory vs. Practice:</strong>
-                                    <ul>
-                                        <li>A*'s elegance in textbooks didn't account for real-world edge cases (e.g., dead ends).</li>
-                                        <li>Debugging forced me to deeply understand heuristic trade-offs.</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <strong>Adaptability Matters:</strong>
-                                    <ul>
-                                        <li>My initial plan to compare multiple algorithms was scrapped due to time, but A* alone taught me more about optimization.</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <strong>User Experience:</strong>
-                                    <ul>
-                                        <li>Even a technical demo benefits from polish (e.g., sprites, score displays).</li>
-                                    </ul>
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
-                    
-                    <!-- Section 6 -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">6. Future Directions</h3>
-                        <div class="section-content">
-                            <ol>
-                                <li>
-                                    <strong>Advanced AI:</strong>
-                                    <ul>
-                                        <li>Replace A* with <strong>Q-learning</strong> to let the snake learn from mistakes.</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <strong>Multi-Algorithm Mode:</strong>
-                                    <ul>
-                                        <li>Let users toggle between A*, Dijkstra, and BFS to see differences in real time.</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <strong>Hardware Integration:</strong>
-                                    <ul>
-                                        <li>Port the game to a <strong>Raspberry Pi</strong> and connect it to a physical robotic snake.</li>
-                                    </ul>
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
-                    
-                    <!-- Conclusion -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">Conclusion</h3>
-                        <div class="section-content">
-                            <p>
-                                <em>Snake*Search</em> evolved from a simple coding exercise into a deep dive into <strong>algorithmic decision-making</strong>. The project honed my skills in <strong>Python, Pygame, and heuristic design</strong>, while teaching me to embrace iterative problem-solving. Most importantly, it proved that even classic games can become gateways to advanced computational thinking.
-                            </p>
-                            
-                            <div class="skills-demonstrated">
-                                <h4>Skills Demonstrated:</h4>
-                                <p>⌙ Pathfinding Algorithms (A*) | Pygame Development | Debugging & Optimization | AI Fundamentals</p>
-                            </div>
-                            
-                            <div class="project-artifacts">
-                                <h4>Project Artifacts:</h4>
-                                <p>Code | Demo Video | Technical Write-Up</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Interactive Demo -->
-                    <div class="demo-container">
-                        <h3 class="demo-title">Live Demo</h3>
-                        <div id="snake-game" class="game-container">
-                            <!-- Game will be initialized here -->
-                        </div>
-                        <div class="game-controls">
-                            <button id="ai-mode" class="control-btn">AI Mode</button>
-                            <button id="player-mode" class="control-btn">Player Mode</button>
-                        </div>
-                        <div id="game-score">Score: 0</div>
-                        <div id="game-message"></div>
-                        
-                        <div class="game-instructions">
-                            <h4>How to Play:</h4>
-                            <ul>
-                                <li><strong>AI Mode:</strong> Watch as the A* algorithm navigates the snake through obstacles to find food</li>
-                                <li><strong>Player Mode:</strong> Control the snake using WASD or arrow keys</li>
-                                <li><strong>Objective:</strong> Collect food (pink circles) and avoid obstacles (red X's) and walls</li>
-                                <li><strong>A* Algorithm:</strong> In AI mode, the pathfinding algorithm calculates the optimal route to food</li>
-                                <li><strong>Restart:</strong> Click AI Mode or Player Mode to restart after game over</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+    came_from = {}  <span class="c"># Tracks the optimal path</span>
+    g_score = {start: 0}  <span class="c"># Cost from start</span>
+    f_score = {start: m_distance(start, goal)}  <span class="c"># Estimated total cost</span>
+    ...</pre>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="challenges">
+        <div class="cs-window-bar">🐞 04_challenges.log <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">04</span>
+            <h2>Challenges and iterations</h2>
+            <div class="cs-cards">
+                <div class="cs-card"><span class="tag">PROBLEM 1</span><h4>Food inside obstacles</h4><p>Food sometimes spawned inside an obstacle, causing instant collisions. I added validation that regenerates the food until it lands somewhere valid.</p></div>
+                <div class="cs-card"><span class="tag">PROBLEM 2</span><h4>Slow when long</h4><p>A* slowed down as the snake grew and had more segments to avoid. I limited recalculation to every <em>N</em> frames and prioritised recent moves.</p></div>
+                <div class="cs-card"><span class="tag">PROBLEM 3</span><h4>Hard to debug</h4><p>Paths were hard to debug without seeing them, so I drew temporary debug lines for A*'s chosen path and removed them from the final version.</p></div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get the canvas element
-            const gameContainer = document.getElementById('snake-game');
-            const canvas = document.createElement('canvas');
-            canvas.width = gameContainer.clientWidth;
-            canvas.height = gameContainer.clientHeight;
-            gameContainer.appendChild(canvas);
-            const ctx = canvas.getContext('2d');
-            
-            // Game variables
-            const TILE_SIZE = Math.floor(canvas.width / 20);
-            let snake = [];
-            let food = {};
-            let obstacles = [];
-            let score = 0;
-            let direction = { x: 0, y: 0 };
-            let speed = 150; // Slower speed for better visualization
-            let lastRenderTime = 0;
-            let gameOver = false;
-            let aiMode = true;
-            let path = [];
-            
-            // UI Elements
-            const scoreDisplay = document.getElementById('game-score');
-            const messageDisplay = document.getElementById('game-message');
-            const aiModeBtn = document.getElementById('ai-mode');
-            const playerModeBtn = document.getElementById('player-mode');
-            
-            // Initialize game
-            function initGame() {
-                // Reset variables
-                snake = [{ x: 10 * TILE_SIZE, y: 10 * TILE_SIZE }];
-                placeFood();
-                generateObstacles(5);
-                score = 0;
-                direction = { x: 0, y: 0 };
-                gameOver = false;
-                path = [];
-                
-                // Update UI
-                scoreDisplay.textContent = `Score: ${score}`;
-                messageDisplay.textContent = aiMode ? "AI is controlling the snake" : "Use WASD or arrow keys to move";
-                
-                // Start with an initial path calculation if in AI mode
-                if (aiMode) {
-                    // Allow a short delay for rendering before starting AI
-                    setTimeout(updateAI, 100);
-                }
-            }
-            
-            // Generate random obstacles
-            function generateObstacles(num) {
-                obstacles = [];
-                let attempts = 0;
-                const maxAttempts = 100; // Prevent infinite loops
-                
-                // Ensure obstacles don't block all paths
-                while (obstacles.length < num && attempts < maxAttempts) {
-                    attempts++;
-                    
-                    // Generate a candidate obstacle
-                    const candidate = {
-                            x: Math.floor(Math.random() * (canvas.width / TILE_SIZE)) * TILE_SIZE,
-                            y: Math.floor(Math.random() * (canvas.height / TILE_SIZE)) * TILE_SIZE
-                        };
-                    
-                    // Don't place obstacles too close to snake's starting position
-                    const distanceToSnake = Math.abs(candidate.x - snake[0].x) + Math.abs(candidate.y - snake[0].y);
-                    if (distanceToSnake < TILE_SIZE * 3) continue;
-                    
-                    // Don't place obstacles on existing obstacles, snake, or food
-                    if (
-                        snake.some(segment => segment.x === candidate.x && segment.y === candidate.y) ||
-                        (food.x === candidate.x && food.y === candidate.y) ||
-                        obstacles.some(obs => obs.x === candidate.x && obs.y === candidate.y)
-                    ) {
-                        continue;
-                    }
-                    
-                    // Add the candidate obstacle
-                    obstacles.push(candidate);
-                    
-                    // After adding each obstacle, check if a path still exists to various areas
-                    // This prevents the snake from being trapped
-                    if (obstacles.length > 1) {
-                        // Make a temporary copy of obstacles
-                        const tempObstacles = [...obstacles];
-                        
-                        // Try to find a path from center to a corner
-                        const testStart = snake[0];
-                        const testGoals = [
-                            { x: 0, y: 0 },  // Top-left
-                            { x: canvas.width - TILE_SIZE, y: 0 },  // Top-right
-                            { x: 0, y: canvas.height - TILE_SIZE },  // Bottom-left
-                            { x: canvas.width - TILE_SIZE, y: canvas.height - TILE_SIZE }  // Bottom-right
-                        ];
-                        
-                        // Check if at least one corner is reachable
-                        let pathExists = false;
-                        for (const goal of testGoals) {
-                            // Temporarily remove the food condition
-                            const originalObstacles = obstacles;
-                            obstacles = tempObstacles;
-                            
-                            const testPath = findPath(testStart, goal);
-                            
-                            // Restore original obstacles
-                            obstacles = originalObstacles;
-                            
-                            if (testPath.length > 0) {
-                                pathExists = true;
-                                break;
-                            }
-                        }
-                        
-                        // If no path exists, remove the last obstacle
-                        if (!pathExists) {
-                            obstacles.pop();
-                        }
-                    }
-                }
-            }
-            
-            // Place food randomly
-            function placeFood() {
-                let newFood;
-                let foundValidFood = false;
-                let attempts = 0;
-                const maxAttempts = 100; // Prevent infinite loops
-                
-                while (!foundValidFood && attempts < maxAttempts) {
-                    attempts++;
-                    
-                    newFood = {
-                        x: Math.floor(Math.random() * (canvas.width / TILE_SIZE)) * TILE_SIZE,
-                        y: Math.floor(Math.random() * (canvas.height / TILE_SIZE)) * TILE_SIZE
-                    };
-                    
-                    // Don't place food on snake or obstacles
-                    if (
-                        snake.some(segment => segment.x === newFood.x && segment.y === newFood.y) ||
-                        obstacles.some(obstacle => obstacle.x === newFood.x && obstacle.y === newFood.y)
-                    ) {
-                        continue;
-                    }
-                    
-                    // Verify a path exists to the food
-                    const pathToFood = findPath(snake[0], newFood);
-                    if (pathToFood.length > 0) {
-                        foundValidFood = true;
-                    }
-                }
-                
-                // If no valid location found after max attempts, just place it anywhere valid
-                if (!foundValidFood) {
-                do {
-                    newFood = {
-                        x: Math.floor(Math.random() * (canvas.width / TILE_SIZE)) * TILE_SIZE,
-                        y: Math.floor(Math.random() * (canvas.height / TILE_SIZE)) * TILE_SIZE
-                    };
-                } while (
-                    snake.some(segment => segment.x === newFood.x && segment.y === newFood.y) ||
-                    obstacles.some(obstacle => obstacle.x === newFood.x && obstacle.y === newFood.y)
-                );
-                }
-                
-                food = newFood;
-            }
-            
-            // A* pathfinding algorithm
-            function manhattanDistance(a, b) {
-                return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
-            }
-            
-            function getNeighbors(node) {
-                const neighbors = [
-                    { x: node.x + TILE_SIZE, y: node.y },
-                    { x: node.x - TILE_SIZE, y: node.y },
-                    { x: node.x, y: node.y + TILE_SIZE },
-                    { x: node.x, y: node.y - TILE_SIZE }
+    <section class="cs-window reveal" id="polish">
+        <div class="cs-window-bar">✨ 05_polish.py <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">05</span>
+            <h2>Polishing the game</h2>
+            <ul class="cs-list">
+                <li><strong>Assets:</strong> replaced the plain rectangles with pixel-art sprites for the snake, food and obstacles.</li>
+                <li><strong>Tuning:</strong> adjusted the snake's speed (<code>time_step</code>) and the obstacle density.</li>
+                <li><strong>Scoring:</strong> +10 points per food, reset on collision.</li>
+            </ul>
+            <p>In the final version the snake navigates to food on its own while dodging obstacles and its tail. Obstacles reset on every game over, so each run is different.</p>
+            <div class="cs-embed">
+                <iframe loading="lazy" title="A* pathfinding steering the snake automatically" src="https://www.youtube-nocookie.com/embed/WFWpAtqTk5E" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <p>A* steering the snake automatically in the Pygame version.</p>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="play">
+        <div class="cs-window-bar">🎮 snake_search.exe <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">06</span>
+            <h2>Try it yourself</h2>
+            <p>I rebuilt the game in JavaScript so it runs here. In AI mode the faint dots show the path A* has planned. Collect the pink food and avoid the red X obstacles and the walls.</p>
+            <div class="snake-controls">
+                <button type="button" id="ai-mode" class="cs-btn" aria-pressed="true">AI mode</button>
+                <button type="button" id="player-mode" class="cs-btn" aria-pressed="false">Player mode</button>
+            </div>
+            <div id="snake-game" class="snake-board" role="img" aria-label="Snake game board"></div>
+            <p class="snake-readout" aria-live="polite"><b id="game-score">Score: 0</b><span id="game-message"></span></p>
+            <h3>How to play</h3>
+            <ul class="cs-list">
+                <li><strong>AI mode:</strong> watch A* steer the snake through the obstacles to the food.</li>
+                <li><strong>Player mode:</strong> steer with WASD or the arrow keys, or swipe on the board on a phone.</li>
+                <li><strong>Restart:</strong> press AI mode or Player mode after a game over.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="reflection">
+        <div class="cs-window-bar">📝 07_reflection.md <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">07</span>
+            <h2>What I learned</h2>
+            <div class="cs-cards">
+                <div class="cs-card"><span class="tag">THEORY VS PRACTICE</span><h4>Textbooks skip edge cases</h4><p>The textbook version of A* didn't account for real edge cases like dead ends. Debugging made me properly understand heuristic trade-offs.</p></div>
+                <div class="cs-card"><span class="tag">ADAPTABILITY</span><h4>Narrowing scope</h4><p>I dropped the plan to compare several algorithms because of time, but working deeply on A* alone taught me more about optimisation.</p></div>
+                <div class="cs-card"><span class="tag">EXPERIENCE</span><h4>Polish matters</h4><p>Even a technical demo benefits from polish like sprites and a score display.</p></div>
+            </div>
+            <p>Snake*Search went from a simple coding exercise to a close look at algorithmic decision-making. It improved my Python, Pygame and heuristic design, taught me to work through problems iteratively, and showed me that a classic game can be a good way into computational thinking.</p>
+            <h3>What I'd do next</h3>
+            <ul class="cs-list">
+                <li><strong>Learning AI:</strong> replace A* with Q-learning so the snake learns from its mistakes.</li>
+                <li><strong>Multi-algorithm mode:</strong> let players switch between A*, Dijkstra and BFS and see the differences in real time.</li>
+                <li><strong>Hardware:</strong> port the game to a Raspberry Pi and connect it to a physical robotic snake.</li>
+            </ul>
+            <h3>Skills</h3>
+            <div class="cs-chips">
+                <span class="cs-chip">Pathfinding (A*)</span><span class="cs-chip">Pygame</span><span class="cs-chip">Python</span><span class="cs-chip">Debugging &amp; optimisation</span><span class="cs-chip">AI fundamentals</span>
+            </div>
+        </div>
+    </section>
+
+    <nav class="cs-next" aria-label="More projects">
+        <a href="ai-study-buddy.html"><small>← Previous</small><span>AI Study Buddy</span></a>
+        <a href="wildwise.html"><small>Next →</small><span>Wildwise</span></a>
+    </nav>
+
+    <footer class="cs-footer">
+        <span>© Fatima Ibrahim Maideribe</span>
+        <a href="index.html#desktop">Back to desktop</a>
+    </footer>
+</main>
+
+<script src="case-study.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const GRID = 20;
+    const gameContainer = document.getElementById('snake-game');
+    const canvas = document.createElement('canvas');
+    // Snap the canvas to a whole number of tiles so the grid lines up exactly
+    const TILE_SIZE = Math.max(12, Math.floor(Math.min(gameContainer.clientWidth || 400, 500) / GRID));
+    canvas.width = TILE_SIZE * GRID;
+    canvas.height = TILE_SIZE * GRID;
+    gameContainer.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+
+    let snake = [];
+    let food = {};
+    let obstacles = [];
+    let score = 0;
+    let direction = { x: 0, y: 0 };
+    const speed = 150;
+    let lastRenderTime = 0;
+    let gameOver = false;
+    let aiMode = true;
+    let path = [];
+
+    const scoreDisplay = document.getElementById('game-score');
+    const messageDisplay = document.getElementById('game-message');
+    const aiModeBtn = document.getElementById('ai-mode');
+    const playerModeBtn = document.getElementById('player-mode');
+
+    function initGame() {
+        snake = [{ x: 10 * TILE_SIZE, y: 10 * TILE_SIZE }];
+        food = {};
+        obstacles = [];
+        placeFood();
+        generateObstacles(5);
+        score = 0;
+        direction = { x: 0, y: 0 };
+        gameOver = false;
+        path = [];
+        scoreDisplay.textContent = 'Score: ' + score;
+        messageDisplay.textContent = aiMode ? 'AI is controlling the snake' : 'Use WASD, arrow keys or swipe to move';
+        aiModeBtn.setAttribute('aria-pressed', aiMode);
+        playerModeBtn.setAttribute('aria-pressed', !aiMode);
+        if (aiMode) setTimeout(updateAI, 100);
+    }
+
+    function generateObstacles(num) {
+        obstacles = [];
+        let attempts = 0;
+        while (obstacles.length < num && attempts < 100) {
+            attempts++;
+            const candidate = {
+                x: Math.floor(Math.random() * GRID) * TILE_SIZE,
+                y: Math.floor(Math.random() * GRID) * TILE_SIZE
+            };
+            // Keep obstacles away from the snake's start
+            if (Math.abs(candidate.x - snake[0].x) + Math.abs(candidate.y - snake[0].y) < TILE_SIZE * 3) continue;
+            if (
+                snake.some(s => s.x === candidate.x && s.y === candidate.y) ||
+                (food.x === candidate.x && food.y === candidate.y) ||
+                obstacles.some(o => o.x === candidate.x && o.y === candidate.y)
+            ) continue;
+
+            obstacles.push(candidate);
+
+            // Make sure at least one corner is still reachable so the snake can't be boxed in
+            if (obstacles.length > 1) {
+                const corners = [
+                    { x: 0, y: 0 },
+                    { x: canvas.width - TILE_SIZE, y: 0 },
+                    { x: 0, y: canvas.height - TILE_SIZE },
+                    { x: canvas.width - TILE_SIZE, y: canvas.height - TILE_SIZE }
                 ];
-                
-                // Filter neighbors to valid positions (within bounds, not on snake or obstacles)
-                return neighbors.filter(n => 
-                    n.x >= 0 && n.x < canvas.width && 
-                    n.y >= 0 && n.y < canvas.height &&
-                    !snake.slice(0, snake.length - 1).some(s => s.x === n.x && s.y === n.y) && // Ignore tail which will move
-                    !obstacles.some(o => o.x === n.x && o.y === n.y)
-                );
+                const reachable = corners.some(goal => findPath(snake[0], goal).length > 0);
+                if (!reachable) obstacles.pop();
             }
-            
-            function reconstructPath(cameFrom, current) {
-                const totalPath = [current];
-                while (cameFrom.has(`${current.x},${current.y}`)) {
-                    current = cameFrom.get(`${current.x},${current.y}`);
-                    totalPath.unshift(current);
-                }
-                return totalPath.slice(1); // exclude the starting point
+        }
+    }
+
+    function randomFreeCell() {
+        let cell;
+        do {
+            cell = {
+                x: Math.floor(Math.random() * GRID) * TILE_SIZE,
+                y: Math.floor(Math.random() * GRID) * TILE_SIZE
+            };
+        } while (
+            snake.some(s => s.x === cell.x && s.y === cell.y) ||
+            obstacles.some(o => o.x === cell.x && o.y === cell.y)
+        );
+        return cell;
+    }
+
+    function placeFood() {
+        // Regenerate until the food lands somewhere A* can reach
+        for (let attempts = 0; attempts < 100; attempts++) {
+            const candidate = randomFreeCell();
+            if (findPath(snake[0], candidate).length > 0) { food = candidate; return; }
+        }
+        food = randomFreeCell();
+    }
+
+    // ---- A* ----
+    function manhattanDistance(a, b) {
+        return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+    }
+
+    function getNeighbors(node) {
+        return [
+            { x: node.x + TILE_SIZE, y: node.y },
+            { x: node.x - TILE_SIZE, y: node.y },
+            { x: node.x, y: node.y + TILE_SIZE },
+            { x: node.x, y: node.y - TILE_SIZE }
+        ].filter(n =>
+            n.x >= 0 && n.x < canvas.width &&
+            n.y >= 0 && n.y < canvas.height &&
+            !snake.slice(0, snake.length - 1).some(s => s.x === n.x && s.y === n.y) && // tail will move
+            !obstacles.some(o => o.x === n.x && o.y === n.y)
+        );
+    }
+
+    function reconstructPath(cameFrom, current) {
+        const totalPath = [current];
+        while (cameFrom.has(current.x + ',' + current.y)) {
+            current = cameFrom.get(current.x + ',' + current.y);
+            totalPath.unshift(current);
+        }
+        return totalPath.slice(1); // exclude the start
+    }
+
+    function findPath(start, goal) {
+        const openSet = [start];
+        const closedSet = new Set();
+        const cameFrom = new Map();
+        const gScore = new Map([[start.x + ',' + start.y, 0]]);
+        const fScore = new Map([[start.x + ',' + start.y, manhattanDistance(start, goal)]]);
+
+        while (openSet.length > 0) {
+            let lowestIndex = 0;
+            for (let i = 1; i < openSet.length; i++) {
+                const fi = fScore.get(openSet[i].x + ',' + openSet[i].y) ?? Infinity;
+                const fl = fScore.get(openSet[lowestIndex].x + ',' + openSet[lowestIndex].y) ?? Infinity;
+                if (fi < fl) lowestIndex = i;
             }
-            
-            function findPath(start, goal) {
-                // Simple A* implementation with proper node handling
-                const openSet = [];
-                const closedSet = new Set();
-                const cameFrom = new Map();
-                
-                const gScore = new Map();
-                gScore.set(`${start.x},${start.y}`, 0);
-                
-                const fScore = new Map();
-                fScore.set(`${start.x},${start.y}`, manhattanDistance(start, goal));
-                
-                // Add start node to open set
-                openSet.push(start);
-                
-                while (openSet.length > 0) {
-                    // Find the node with lowest fScore in openSet
-                    let lowestIndex = 0;
-                    for (let i = 0; i < openSet.length; i++) {
-                        const keyLow = `${openSet[lowestIndex].x},${openSet[lowestIndex].y}`;
-                        const keyI = `${openSet[i].x},${openSet[i].y}`;
-                        if ((fScore.get(keyI) || Infinity) < (fScore.get(keyLow) || Infinity)) {
-                            lowestIndex = i;
-                        }
-                    }
-                    
-                    const current = openSet[lowestIndex];
-                    const currentKey = `${current.x},${current.y}`;
-                    
-                    // If we reached the goal, reconstruct and return the path
-                    if (current.x === goal.x && current.y === goal.y) {
-                        return reconstructPath(cameFrom, current);
-                    }
-                    
-                    // Remove current from open set and add to closed set
-                    openSet.splice(lowestIndex, 1);
-                    closedSet.add(currentKey);
-                    
-                    // Check all neighbors
-                    const neighbors = getNeighbors(current);
-                    for (const neighbor of neighbors) {
-                        const neighborKey = `${neighbor.x},${neighbor.y}`;
-                        
-                        // Skip if already evaluated
-                        if (closedSet.has(neighborKey)) continue;
-                        
-                        // Calculate tentative gScore (distance from start)
-                        const tentativeGScore = (gScore.get(currentKey) || Infinity) + 1;
-                        
-                        // Check if we need to add to open set
-                        const neighborInOpenSet = openSet.some(n => 
-                            n.x === neighbor.x && n.y === neighbor.y);
-                        
-                        if (!neighborInOpenSet) {
-                            openSet.push(neighbor);
-                        } else if (tentativeGScore >= (gScore.get(neighborKey) || Infinity)) {
-                            // Not a better path
-                            continue;
-                        }
-                        
-                        // This is the best path so far, record it
-                            cameFrom.set(neighborKey, current);
-                            gScore.set(neighborKey, tentativeGScore);
-                            fScore.set(neighborKey, tentativeGScore + manhattanDistance(neighbor, goal));
-                    }
-                }
-                
-                // No path found
-                return [];
+            const current = openSet[lowestIndex];
+            const currentKey = current.x + ',' + current.y;
+
+            if (current.x === goal.x && current.y === goal.y) return reconstructPath(cameFrom, current);
+
+            openSet.splice(lowestIndex, 1);
+            closedSet.add(currentKey);
+
+            for (const neighbor of getNeighbors(current)) {
+                const neighborKey = neighbor.x + ',' + neighbor.y;
+                if (closedSet.has(neighborKey)) continue;
+                const tentativeG = (gScore.get(currentKey) ?? Infinity) + 1;
+                const inOpen = openSet.some(n => n.x === neighbor.x && n.y === neighbor.y);
+                if (!inOpen) openSet.push(neighbor);
+                else if (tentativeG >= (gScore.get(neighborKey) ?? Infinity)) continue;
+                cameFrom.set(neighborKey, current);
+                gScore.set(neighborKey, tentativeG);
+                fScore.set(neighborKey, tentativeG + manhattanDistance(neighbor, goal));
             }
-            
-            // Handle keyboard input
-            function handleKeyInput(e) {
-                if (aiMode) return;
-                
-                switch (e.key) {
-                    case 'ArrowUp':
-                    case 'w':
-                    case 'W':
-                        if (direction.y === 0) direction = { x: 0, y: -TILE_SIZE };
-                        break;
-                    case 'ArrowDown':
-                    case 's':
-                    case 'S':
-                        if (direction.y === 0) direction = { x: 0, y: TILE_SIZE };
-                        break;
-                    case 'ArrowLeft':
-                    case 'a':
-                    case 'A':
-                        if (direction.x === 0) direction = { x: -TILE_SIZE, y: 0 };
-                        break;
-                    case 'ArrowRight':
-                    case 'd':
-                    case 'D':
-                        if (direction.x === 0) direction = { x: TILE_SIZE, y: 0 };
-                        break;
-                }
-            }
-            
-            // AI movement
-            function updateAI() {
-                if (!aiMode || gameOver) return;
-                
-                // Only recalculate path when needed
-                if (path.length === 0) {
-                    // Clear any stale directions
-                    direction = { x: 0, y: 0 };
-                    
-                    // Find path to food
-                    path = findPath(snake[0], food);
-                    
-                    // Debug display
-                    console.log("Path found: ", path.length > 0 ? "yes" : "no");
-                    
-                    // If no path found, try to survive by finding the safest path
-                    if (path.length === 0) {
-                        // Find all possible safe moves
-                        const possibleMoves = getNeighbors(snake[0]);
-                        
-                        if (possibleMoves.length > 0) {
-                            // Just take the first available move
-                            path = [possibleMoves[0]];
-                            messageDisplay.textContent = "No path to food - taking safe move";
-                        } else {
-                            messageDisplay.textContent = "No safe moves available!";
-                        }
-                    } else {
-                        messageDisplay.textContent = "AI is following optimal path";
-                    }
-                }
-                
-                // Move based on path
-                if (path.length > 0) {
-                    const nextMove = path[0];
-                    
-                    // Validate that this move is actually adjacent to our current position
-                    const dx = nextMove.x - snake[0].x;
-                    const dy = nextMove.y - snake[0].y;
-                    
-                    // Check if this is a valid move (adjacent cell)
-                    const isValidMove = 
-                        (Math.abs(dx) === TILE_SIZE && dy === 0) || 
-                        (Math.abs(dy) === TILE_SIZE && dx === 0);
-                    
-                    if (isValidMove) {
-                        // Set direction based on next move
-                        direction = { x: dx, y: dy };
-                        
-                        // Remove this step from the path
-                        path.shift();
-                    } else {
-                        // Path is invalid - recalculate
-                        console.log("Invalid move detected, recalculating path");
-                        path = [];
-                        return updateAI();
-                    }
-                }
-            }
-            
-            // Move the snake
-            function moveSnake() {
-                if (gameOver) return;
-                
-                // If no direction, don't move
-                if (direction.x === 0 && direction.y === 0) return;
-                
-                // Create new head based on direction
-                const newHead = {
-                    x: snake[0].x + direction.x,
-                    y: snake[0].y + direction.y
-                };
-                
-                // Check for collision with walls
-                if (
-                    newHead.x < 0 || 
-                    newHead.x >= canvas.width || 
-                    newHead.y < 0 || 
-                    newHead.y >= canvas.height
-                ) {
-                    gameOver = true;
-                    messageDisplay.textContent = "Game Over! Hit a wall. Click AI/Player to restart.";
-                    return;
-                }
-                
-                // Check for collision with self (excluding tail which will move)
-                if (snake.slice(0, snake.length - 1).some(segment => segment.x === newHead.x && segment.y === newHead.y)) {
-                    gameOver = true;
-                    messageDisplay.textContent = "Game Over! Snake hit itself. Click AI/Player to restart.";
-                    return;
-                }
-                
-                // Check for collision with obstacles
-                if (obstacles.some(obstacle => obstacle.x === newHead.x && obstacle.y === newHead.y)) {
-                    gameOver = true;
-                    messageDisplay.textContent = "Game Over! Hit an obstacle. Click AI/Player to restart.";
-                    return;
-                }
-                
-                // Add new head
-                snake.unshift(newHead);
-                
-                // Check if food eaten
-                if (snake[0].x === food.x && snake[0].y === food.y) {
-                    // Increase score
-                    score += 10;
-                    scoreDisplay.textContent = `Score: ${score}`;
-                    
-                    // Place new food
-                    placeFood();
-                    
-                    // Force path recalculation since food location changed
-                    path = [];
-                    
-                    // Update message to show success
-                    messageDisplay.textContent = "Food eaten! Score: " + score;
+        }
+        return [];
+    }
+
+    // ---- Input ----
+    function steer(dir) {
+        if (aiMode || gameOver) return;
+        if (dir === 'up' && direction.y === 0) direction = { x: 0, y: -TILE_SIZE };
+        if (dir === 'down' && direction.y === 0) direction = { x: 0, y: TILE_SIZE };
+        if (dir === 'left' && direction.x === 0) direction = { x: -TILE_SIZE, y: 0 };
+        if (dir === 'right' && direction.x === 0) direction = { x: TILE_SIZE, y: 0 };
+    }
+
+    const keyMap = { ArrowUp: 'up', w: 'up', W: 'up', ArrowDown: 'down', s: 'down', S: 'down', ArrowLeft: 'left', a: 'left', A: 'left', ArrowRight: 'right', d: 'right', D: 'right' };
+    window.addEventListener('keydown', function (e) {
+        if (aiMode || !keyMap[e.key]) return;
+        if (e.key.startsWith('Arrow')) e.preventDefault(); // stop the page scrolling while playing
+        steer(keyMap[e.key]);
+    });
+
+    let touchStart = null;
+    canvas.addEventListener('touchstart', e => { touchStart = e.touches[0]; }, { passive: true });
+    canvas.addEventListener('touchend', e => {
+        if (!touchStart) return;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - touchStart.clientX;
+        const dy = t.clientY - touchStart.clientY;
+        touchStart = null;
+        if (Math.max(Math.abs(dx), Math.abs(dy)) < 20) return;
+        steer(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'));
+    });
+
+    // ---- AI ----
+    function updateAI(depth) {
+        depth = depth || 0;
+        if (!aiMode || gameOver || depth > 2) return;
+
+        if (path.length === 0) {
+            direction = { x: 0, y: 0 };
+            path = findPath(snake[0], food);
+            if (path.length === 0) {
+                const safe = getNeighbors(snake[0]);
+                if (safe.length > 0) {
+                    path = [safe[0]];
+                    messageDisplay.textContent = 'No path to food, taking a safe move';
                 } else {
-                    // Remove tail if no food eaten
-                    snake.pop();
+                    messageDisplay.textContent = 'No safe moves available!';
                 }
+            } else {
+                messageDisplay.textContent = 'AI is following the shortest path';
             }
-            
-            // Draw the game
-            function draw() {
-                // Clear canvas with a grid pattern background
-                ctx.fillStyle = '#000033';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                // Draw grid pattern for retro effect
-                ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
-                ctx.lineWidth = 1;
-                
-                // Draw vertical grid lines
-                for (let x = 0; x <= canvas.width; x += TILE_SIZE) {
-                    ctx.beginPath();
-                    ctx.moveTo(x, 0);
-                    ctx.lineTo(x, canvas.height);
-                    ctx.stroke();
-                }
-                
-                // Draw horizontal grid lines
-                for (let y = 0; y <= canvas.height; y += TILE_SIZE) {
-                    ctx.beginPath();
-                    ctx.moveTo(0, y);
-                    ctx.lineTo(canvas.width, y);
-                    ctx.stroke();
-                }
-                
-                // Draw snake with gradient colors and Y2K style
-                snake.forEach((segment, index) => {
-                    // Create gradient for snake segments
-                    let segmentGradient;
-                    if (index === 0) {
-                        // Head has special cyan gradient
-                        segmentGradient = ctx.createLinearGradient(
-                            segment.x, segment.y, 
-                            segment.x + TILE_SIZE, segment.y + TILE_SIZE
-                        );
-                        segmentGradient.addColorStop(0, '#00ffcc');
-                        segmentGradient.addColorStop(1, '#00ccff');
-                    } else {
-                        // Body has purple gradient
-                        segmentGradient = ctx.createLinearGradient(
-                            segment.x, segment.y, 
-                            segment.x + TILE_SIZE, segment.y + TILE_SIZE
-                        );
-                        segmentGradient.addColorStop(0, '#9933ff');
-                        segmentGradient.addColorStop(1, '#ff66ff');
-                    }
-                    
-                    // Fill segment with gradient
-                    ctx.fillStyle = segmentGradient;
-                    ctx.fillRect(segment.x, segment.y, TILE_SIZE, TILE_SIZE);
-                    
-                    // Add Y2K-style inner border
-                    ctx.strokeStyle = '#ffffff';
-                    ctx.lineWidth = 1;
-                    ctx.strokeRect(segment.x + 2, segment.y + 2, TILE_SIZE - 4, TILE_SIZE - 4);
-                    
-                    // Draw eyes on head
-                    if (index === 0) {
-                        ctx.fillStyle = '#ffffff';
-                        const eyeSize = TILE_SIZE / 4;
-                        const eyeOffset = TILE_SIZE / 3;
-                        
-                        // Left eye
-                        ctx.beginPath();
-                        ctx.arc(
-                            segment.x + eyeOffset, 
-                            segment.y + eyeOffset, 
-                            eyeSize / 2, 
-                            0, 
-                            Math.PI * 2
-                        );
-                        ctx.fill();
-                        
-                        // Right eye
-                        ctx.beginPath();
-                        ctx.arc(
-                            segment.x + TILE_SIZE - eyeOffset, 
-                            segment.y + eyeOffset, 
-                            eyeSize / 2, 
-                            0, 
-                            Math.PI * 2
-                        );
-                        ctx.fill();
-                        
-                        // Black pupils
-                        ctx.fillStyle = '#000000';
-                        
-                        // Left pupil
-                        ctx.beginPath();
-                        ctx.arc(
-                            segment.x + eyeOffset, 
-                            segment.y + eyeOffset, 
-                            eyeSize / 4, 
-                            0, 
-                            Math.PI * 2
-                        );
-                        ctx.fill();
-                        
-                        // Right pupil
-                        ctx.beginPath();
-                        ctx.arc(
-                            segment.x + TILE_SIZE - eyeOffset, 
-                            segment.y + eyeOffset, 
-                            eyeSize / 4, 
-                            0, 
-                            Math.PI * 2
-                        );
-                        ctx.fill();
-                    }
+        }
+
+        if (path.length > 0) {
+            const next = path[0];
+            const dx = next.x - snake[0].x;
+            const dy = next.y - snake[0].y;
+            const adjacent = (Math.abs(dx) === TILE_SIZE && dy === 0) || (Math.abs(dy) === TILE_SIZE && dx === 0);
+            if (adjacent) {
+                direction = { x: dx, y: dy };
+                path.shift();
+            } else {
+                path = [];
+                updateAI(depth + 1);
+            }
+        }
+    }
+
+    // ---- Game state ----
+    function endGame(reason) {
+        gameOver = true;
+        messageDisplay.textContent = 'Game over! ' + reason + ' Press AI mode or Player mode to restart.';
+    }
+
+    function moveSnake() {
+        if (gameOver || (direction.x === 0 && direction.y === 0)) return;
+        const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
+
+        if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) return endGame('Hit a wall.');
+        if (snake.slice(0, snake.length - 1).some(s => s.x === head.x && s.y === head.y)) return endGame('The snake hit itself.');
+        if (obstacles.some(o => o.x === head.x && o.y === head.y)) return endGame('Hit an obstacle.');
+
+        snake.unshift(head);
+        if (head.x === food.x && head.y === food.y) {
+            score += 10;
+            scoreDisplay.textContent = 'Score: ' + score;
+            placeFood();
+            path = [];
+            messageDisplay.textContent = 'Food eaten! Score: ' + score;
+        } else {
+            snake.pop();
+        }
+    }
+
+    // ---- Drawing ----
+    function draw() {
+        const T = TILE_SIZE;
+        ctx.fillStyle = '#000033';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i <= GRID; i++) {
+            ctx.beginPath(); ctx.moveTo(i * T, 0); ctx.lineTo(i * T, canvas.height); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(0, i * T); ctx.lineTo(canvas.width, i * T); ctx.stroke();
+        }
+
+        snake.forEach((seg, index) => {
+            const g = ctx.createLinearGradient(seg.x, seg.y, seg.x + T, seg.y + T);
+            if (index === 0) { g.addColorStop(0, '#00ffcc'); g.addColorStop(1, '#00ccff'); }
+            else { g.addColorStop(0, '#9933ff'); g.addColorStop(1, '#ff66ff'); }
+            ctx.fillStyle = g;
+            ctx.fillRect(seg.x, seg.y, T, T);
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(seg.x + 2, seg.y + 2, T - 4, T - 4);
+
+            if (index === 0) {
+                const eye = T / 4, off = T / 3;
+                [[seg.x + off, seg.y + off], [seg.x + T - off, seg.y + off]].forEach(([ex, ey]) => {
+                    ctx.fillStyle = '#ffffff';
+                    ctx.beginPath(); ctx.arc(ex, ey, eye / 2, 0, Math.PI * 2); ctx.fill();
+                    ctx.fillStyle = '#000000';
+                    ctx.beginPath(); ctx.arc(ex, ey, eye / 4, 0, Math.PI * 2); ctx.fill();
                 });
-                
-                // Draw food with neon glow
-                ctx.fillStyle = '#ff66ff';
-                ctx.beginPath();
-                ctx.arc(
-                    food.x + TILE_SIZE / 2, 
-                    food.y + TILE_SIZE / 2, 
-                    TILE_SIZE / 2 - 2, 
-                    0, 
-                    Math.PI * 2
-                );
-                ctx.fill();
-                
-                // Add glow effect
-                ctx.shadowColor = '#ff66ff';
-                ctx.shadowBlur = 10;
-                ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-                ctx.shadowBlur = 0;
-                
-                // Draw inner pattern on food
-                ctx.beginPath();
-                ctx.arc(
-                    food.x + TILE_SIZE / 2, 
-                    food.y + TILE_SIZE / 2, 
-                    TILE_SIZE / 4, 
-                    0, 
-                    Math.PI * 2
-                );
-                ctx.fillStyle = '#ffffff';
-                ctx.fill();
-                
-                // Draw obstacles with Y2K styling
-                obstacles.forEach(obstacle => {
-                    // Create gradient background
-                    const obstacleGradient = ctx.createLinearGradient(
-                        obstacle.x, obstacle.y, 
-                        obstacle.x + TILE_SIZE, obstacle.y + TILE_SIZE
-                    );
-                    obstacleGradient.addColorStop(0, '#ff3333');
-                    obstacleGradient.addColorStop(1, '#cc0000');
-                    
-                    ctx.fillStyle = obstacleGradient;
-                    ctx.fillRect(obstacle.x, obstacle.y, TILE_SIZE, TILE_SIZE);
-                    
-                    // Add Y2K-style inner border
-                    ctx.strokeStyle = '#ffffff';
-                    ctx.lineWidth = 1;
-                    ctx.strokeRect(obstacle.x + 2, obstacle.y + 2, TILE_SIZE - 4, TILE_SIZE - 4);
-                    
-                    // Draw X pattern
-                    ctx.strokeStyle = '#ffffff';
-                    ctx.lineWidth = 2;
-                    ctx.beginPath();
-                    ctx.moveTo(obstacle.x + 4, obstacle.y + 4);
-                    ctx.lineTo(obstacle.x + TILE_SIZE - 4, obstacle.y + TILE_SIZE - 4);
-                    ctx.moveTo(obstacle.x + TILE_SIZE - 4, obstacle.y + 4);
-                    ctx.lineTo(obstacle.x + 4, obstacle.y + TILE_SIZE - 4);
-                    ctx.stroke();
-                });
-                
-                // Draw path (only faintly visible when AI is active)
-                if (aiMode && path.length > 0) {
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-                    path.forEach(point => {
-                        ctx.beginPath();
-                        ctx.arc(
-                            point.x + TILE_SIZE / 2,
-                            point.y + TILE_SIZE / 2,
-                            TILE_SIZE / 6,
-                            0,
-                            Math.PI * 2
-                        );
-                        ctx.fill();
-                    });
-                }
-                
-                // Add Y2K-style screen effect overlay
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
-                for (let y = 0; y < canvas.height; y += 2) {
-                    ctx.fillRect(0, y, canvas.width, 1);
-                }
             }
-            
-            // Game loop
-            function gameLoop(currentTime) {
-                window.requestAnimationFrame(gameLoop);
-                
-                // Determine seconds since last render
-                const secondsSinceLastRender = (currentTime - lastRenderTime) / 1000;
-                if (secondsSinceLastRender < 1 / (speed / 60)) return;
-                
-                lastRenderTime = currentTime;
-                
-                // Update AI if in AI mode
-                if (aiMode && !gameOver) {
-                    // Only call updateAI when path is empty or almost empty
-                    if (path.length <= 1) {
-                    updateAI();
-                    }
-                }
-                
-                // Move snake
-                moveSnake();
-                
-                // Draw everything
-                draw();
-            }
-            
-            // Set up event listeners
-            aiModeBtn.addEventListener('click', function() {
-                aiMode = true;
-                initGame();
-            });
-            
-            playerModeBtn.addEventListener('click', function() {
-                aiMode = false;
-                initGame();
-            });
-            
-            window.addEventListener('keydown', handleKeyInput);
-            
-            // Start the game
-            initGame();
-            window.requestAnimationFrame(gameLoop);
         });
-    </script>
+
+        // Food
+        ctx.fillStyle = '#ff66ff';
+        ctx.beginPath(); ctx.arc(food.x + T / 2, food.y + T / 2, T / 2 - 2, 0, Math.PI * 2); ctx.fill();
+        ctx.shadowColor = '#ff66ff';
+        ctx.shadowBlur = 10;
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        ctx.beginPath(); ctx.arc(food.x + T / 2, food.y + T / 2, T / 4, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff'; ctx.fill();
+
+        // Obstacles
+        obstacles.forEach(o => {
+            const g = ctx.createLinearGradient(o.x, o.y, o.x + T, o.y + T);
+            g.addColorStop(0, '#ff3333'); g.addColorStop(1, '#cc0000');
+            ctx.fillStyle = g;
+            ctx.fillRect(o.x, o.y, T, T);
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(o.x + 2, o.y + 2, T - 4, T - 4);
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(o.x + 4, o.y + 4); ctx.lineTo(o.x + T - 4, o.y + T - 4);
+            ctx.moveTo(o.x + T - 4, o.y + 4); ctx.lineTo(o.x + 4, o.y + T - 4);
+            ctx.stroke();
+        });
+
+        // Planned path, faint
+        if (aiMode && path.length > 0) {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.18)';
+            path.forEach(p => { ctx.beginPath(); ctx.arc(p.x + T / 2, p.y + T / 2, T / 6, 0, Math.PI * 2); ctx.fill(); });
+        }
+
+        // Scanlines
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+        for (let y = 0; y < canvas.height; y += 2) ctx.fillRect(0, y, canvas.width, 1);
+    }
+
+    function gameLoop(now) {
+        window.requestAnimationFrame(gameLoop);
+        if ((now - lastRenderTime) / 1000 < 1 / (speed / 60)) return;
+        lastRenderTime = now;
+        if (aiMode && !gameOver && path.length <= 1) updateAI();
+        moveSnake();
+        draw();
+    }
+
+    aiModeBtn.addEventListener('click', () => { aiMode = true; initGame(); });
+    playerModeBtn.addEventListener('click', () => { aiMode = false; initGame(); });
+
+    initGame();
+    window.requestAnimationFrame(gameLoop);
+});
+</script>
 </body>
-</html> 
+</html>

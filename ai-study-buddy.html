@@ -3,781 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Study Buddy - Project Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="project-style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        /* Basic page setup for scrolling */
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            overflow-x: hidden; /* Prevent horizontal scrolling */
-            overflow-y: auto; /* Enable vertical scrolling */
-        }
-        
-        /* Project styles */
-        
-        .project-container {
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            overflow-y: auto; /* Ensure container itself is scrollable */
-        }
-        
-        .file-explorer {
-            display: flex;
-            min-height: 0; /* Allow content to determine height */
-            overflow: visible; /* Ensure overflow content is visible */
-            flex-direction: row; /* Force horizontal layout */
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
-        }
-        
-        .file-tree {
-            min-width: 150px;
-            padding-right: 20px;
-            position: sticky;
-            top: 20px; /* Stick to top with some padding */
-            max-height: calc(100vh - 40px); /* Allow scrolling for very long file trees */
-            overflow-y: auto;
-            align-self: flex-start; /* Align to top of container */
-        }
-        
-        .file-content {
-            flex: 1;
-            overflow-y: visible; /* Allow vertical scrolling */
-            padding: 20px;
-            min-width: 300px; /* Ensure content area has minimum width */
-        }
-        
-        /* Responsive handling */
-        @media (max-width: 768px) {
-            .file-explorer {
-                flex-direction: column;
-            }
-            
-            .file-tree {
-                width: 100%;
-                padding-right: 0;
-                margin-bottom: 20px;
-                position: relative;
-                max-height: none;
-                overflow-y: visible;
-            }
-            
-            .file-content {
-                width: 100%;
-                padding: 10px 0;
-            }
-        }
-        
-        /* Back to Portfolio Button */
-        .back-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background-color: rgba(26, 43, 60, 0.8);
-            border: 1px solid #00ffcc;
-            color: #00ffcc;
-            padding: 8px 15px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-family: 'Fira Code', monospace;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-            z-index: 100;
-        }
-        
-        .back-button:hover {
-            background-color: rgba(0, 255, 204, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .back-button::before {
-            content: "←";
-            font-size: 18px;
-        }
-        
-        /* Case Study Specific Styling */
-        .case-study-title {
-            color: #00ffcc;
-            font-size: 2rem;
-            text-align: center;
-            margin-bottom: 2rem;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-            letter-spacing: 1px;
-        }
-        
-        .case-study-section {
-            margin-bottom: 2.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px dashed rgba(153, 51, 255, 0.3);
-        }
-        
-        .section-title {
-            color: #9933ff;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            padding-left: 20px;
-            position: relative;
-        }
-        
-        .section-title::before {
-            content: ">";
-            position: absolute;
-            left: 0;
-            color: #ff66ff;
-        }
-        
-        .subsection-title {
-            color: #00ffcc;
-            font-size: 1.2rem;
-            margin: 1.2rem 0 0.8rem;
-            padding-left: 25px;
-        }
-        
-        .section-content {
-            padding-left: 25px;
-            line-height: 1.6;
-        }
-        
-        .section-content p {
-            margin-bottom: 1rem;
-        }
-        
-        .section-content ul, 
-        .section-content ol {
-            margin-bottom: 1rem;
-            padding-left: 20px;
-        }
-        
-        .section-content li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .goals-block, .tech-note {
-            background-color: rgba(26, 43, 60, 0.7);
-            border-left: 3px solid #9933ff;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 0 5px 5px 0;
-        }
-        
-        .challenge-item {
-            background-color: rgba(26, 43, 60, 0.7);
-            border-left: 3px solid #9933ff;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 0 5px 5px 0;
-        }
-
-        .challenge-title {
-            color: #FFD1DC;
-            font-weight: bold;
-            margin-bottom: 8px;
-            font-size: 1.1rem;
-        }
-
-        .tech-stack {
-            background-color: rgba(26, 43, 60, 0.7);
-            border: 1px solid #A2D2FF;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 2rem;
-            box-shadow: 0 0 15px rgba(162, 210, 255, 0.3);
-        }
-        
-        .tech-stack-title {
-            color: #ff66ff;
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .tech-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-        }
-        
-        .tech-item {
-            background-color: #9933ff;
-            color: white;
-            font-size: 14px;
-            padding: 5px 12px;
-            border-radius: 15px;
-            display: inline-block;
-        }
-
-        .divider {
-            text-align: center;
-            margin: 30px 0;
-            color: #9933ff;
-            font-size: 20px;
-        }
-        
-        .code-block {
-            background-color: rgba(26, 43, 60, 0.7);
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-            overflow-x: auto;
-        }
-
-        code {
-            font-family: 'Fira Code', monospace;
-            color: #E6C9A8;
-        }
-
-        /* Improve file tree items styling */
-        .file-tree-item {
-            padding: 8px 12px;
-            margin-bottom: 5px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background-color: rgba(26, 43, 60, 0.7);
-            border-left: 3px solid transparent;
-        }
-        
-        .file-tree-item:hover {
-            background-color: rgba(26, 43, 60, 0.9);
-            transform: translateX(5px);
-        }
-        
-        .file-tree-item.active {
-            border-left-color: #00ffcc;
-            background-color: rgba(51, 51, 102, 0.8);
-            color: #00ffcc;
-        }
-
-        /* Add background with transparency and styling to improve appearance */
-        body {
-            background: linear-gradient(45deg, #000033, #003366);
-            color: #ffffff;
-            font-family: 'Fira Code', monospace;
-            line-height: 1.6;
-        }
-
-        /* Project Header Styling */
-        .project-header {
-            margin-bottom: 30px;
-            padding: 20px;
-            background-color: rgba(26, 43, 60, 0.7);
-            border-radius: 8px;
-            border: 1px solid #00ffcc;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
-        }
-        
-        .project-title {
-            color: #ff66ff;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 2.5rem;
-            text-shadow: 0 0 10px rgba(255, 102, 255, 0.5);
-        }
-        
-        .project-overview {
-            background-color: #0a1929;
-            padding: 15px;
-            border-radius: 5px;
-            border-left: 3px solid #9933ff;
-        }
-        
-        .terminal-prompt {
-            color: #ff66ff;
-            margin-right: 8px;
-        }
-        
-        .terminal-command {
-            color: #00ffcc;
-        }
-        
-        .terminal-output {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: rgba(0, 0, 51, 0.5);
-            border-radius: 3px;
-            color: #ffffff;
-        }
-
-        /* New styles for improved readability */
-        .exec-summary {
-            background-color: rgba(26, 43, 60, 0.8);
-            border: 1px solid #9933ff;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0 30px;
-            box-shadow: 0 0 15px rgba(153, 51, 255, 0.3);
-        }
-
-        .exec-summary h3 {
-            color: #ff66ff;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .exec-summary-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .exec-summary-text {
-            flex: 1;
-            min-width: 280px;
-        }
-
-        .exec-summary-image {
-            flex: 1;
-            min-width: 280px;
-        }
-
-        .key-points {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .key-point {
-            background-color: rgba(0, 255, 204, 0.1);
-            border: 1px solid #00ffcc;
-            border-radius: 15px;
-            padding: 5px 12px;
-            font-size: 14px;
-        }
-
-        /* Collapsible section styling */
-        .collapsible {
-            background-color: rgba(26, 43, 60, 0.7);
-            color: #ffffff;
-            cursor: pointer;
-            padding: 10px 15px;
-            width: 100%;
-            border: none;
-            text-align: left;
-            outline: none;
-            font-size: 1rem;
-            border-radius: 5px;
-            margin: 10px 0;
-            transition: 0.3s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: 'Fira Code', monospace;
-        }
-
-        .collapsible:after {
-            content: '+';
-            font-size: 20px;
-            color: #9933ff;
-        }
-
-        .active-collapse:after {
-            content: '-';
-        }
-
-        .collapsible:hover {
-            background-color: rgba(51, 51, 102, 0.8);
-        }
-
-        .collapse-content {
-            padding: 0 18px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.2s ease-out;
-            background-color: rgba(10, 25, 41, 0.5);
-            border-radius: 0 0 5px 5px;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .feature-card {
-            background-color: rgba(26, 43, 60, 0.7);
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        }
-
-        .feature-card h4 {
-            color: #00ffcc;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid rgba(153, 51, 255, 0.3);
-            padding-bottom: 8px;
-        }
-    </style>
+    <title>AI Study Buddy · Fatima Ibrahim Maideribe</title>
+    <meta name="description" content="StudyBuddy: an adaptive educational robot built on an ESP32 with two OLED faces, servos, offline speech recognition and Bayesian skill tracking.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="case-study.css">
 </head>
-<body>
-    <a href="index.html" class="back-button">Back to Portfolio</a>
-    
-    <div class="project-container">
-        <div class="project-header">
-            <h1 class="project-title"><a href="index.html" style="text-decoration: none; color: inherit;">AI Study Buddy</a></h1>
-            <div class="project-overview">
-                <span class="terminal-prompt">$</span>
-                <span class="terminal-command">cat README.md</span>
-                <div class="terminal-output">
-                    An AI-powered study companion that helps students learn more effectively through personalized quizzes, flashcards, and study schedules. Features include real-time progress tracking and adaptive learning paths.
+<body style="--accent:#ff66ff">
+
+<header class="cs-bar">
+    <a class="cs-start" href="index.html#desktop">⊞ Desktop</a>
+    <span class="cs-crumb">C:\Projects\AIStudyBuddy\case-study.exe</span>
+    <nav class="cs-bar-nav" aria-label="Project navigation">
+        <a class="hide-sm" href="plant-buddy.html">← Prev</a>
+        <a href="snake-ai.html">Next →</a>
+    </nav>
+    <span class="cs-progress" aria-hidden="true"></span>
+</header>
+
+<main class="cs-wrap">
+
+    <section class="cs-hero">
+        <p class="cs-kicker">Physical AI · embedded hardware · educational robotics</p>
+        <h1 class="cs-title">AI Study Buddy</h1>
+        <p class="cs-lede">StudyBuddy is a small robot that helps children learn. It listens to spoken answers, adjusts the difficulty to how each child is doing, and responds with facial expressions on two OLED screens, sounds and servo movements.</p>
+        <div class="cs-actions">
+            <a class="cs-btn" href="#demo">▶ Watch the demo</a>
+            <a class="cs-btn ghost" href="#system">How it works</a>
+        </div>
+        <dl class="cs-meta">
+            <div><dt>Type</dt><dd>Adaptive educational robot</dd></div>
+            <div><dt>Audience</dt><dd>Children</dd></div>
+            <div><dt>Hardware</dt><dd>ESP32, two OLED displays, servos, speaker, 3D-printed body</dd></div>
+            <div><dt>Software</dt><dd>Python, Vosk, TinyLlama (Hugging Face), Wikipedia API</dd></div>
+        </dl>
+        <div class="cs-hero-media">
+            <img src="assets/StudyBuddy/studybuddyiconheroimage.jpg" alt="The white 3D-printed StudyBuddy robot with blue OLED eyes and a second OLED screen on its chest" width="1600" height="900">
+        </div>
+    </section>
+
+    <div class="cs-stats reveal">
+        <div class="cs-stat"><b>88%</b><span>speech recognition accuracy in quiet rooms</span></div>
+        <div class="cs-stat"><b>2</b><span>OLED displays: one for the face, one for text</span></div>
+        <div class="cs-stat"><b>4</b><span>learning activities: Q&amp;A, vocabulary, maths, science</span></div>
+        <div class="cs-stat"><b>Offline</b><span>speech-to-text with Vosk, no cloud needed</span></div>
+    </div>
+
+    <section class="cs-window reveal" id="problem">
+        <div class="cs-window-bar">🎯 01_goals.md <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">01</span>
+            <h2>Learning with a body, not just a screen</h2>
+            <div class="cs-split">
+                <div>
+                    <p>I wanted an AI study companion that helps students learn through personalised quizzes, flashcards and study schedules, with progress tracking and a learning path that adapts as they go. StudyBuddy is the physical version of that idea: ESP32 hardware, OLED displays and servos combined with AI software, giving children visual, audio and physical feedback in real time.</p>
+                    <h3>Goals</h3>
+                    <ul class="cs-list">
+                        <li>Design an interactive robot that uses AI to personalise lessons in real time.</li>
+                        <li>Make learning more engaging through speech recognition, movement and responsive feedback.</li>
+                        <li>Bridge the gap between digital and hands-on learning.</li>
+                    </ul>
                 </div>
+                <figure class="cs-fig dark">
+                    <img src="assets/StudyBuddy/studybuddy3.jpg" alt="Front view of the StudyBuddy prototype with OLED eyes and a speaker grille on its body" loading="lazy" width="1600" height="900">
+                    <figcaption>The finished prototype</figcaption>
+                </figure>
+            </div>
+            <div class="cs-cards">
+                <div class="cs-card"><span class="tag">LISTEN</span><h4>Speech recognition</h4><p>Understands spoken questions and commands, processed offline with Vosk.</p></div>
+                <div class="cs-card"><span class="tag">ADAPT</span><h4>Adaptive learning</h4><p>Personalises content based on each student's performance using Bayesian skill estimation.</p></div>
+                <div class="cs-card"><span class="tag">REACT</span><h4>Physical interaction</h4><p>Responds with facial expressions, sounds and servo-driven movements.</p></div>
+                <div class="cs-card"><span class="tag">KNOW</span><h4>Knowledge base</h4><p>Looks up facts and educational content through the Wikipedia API.</p></div>
             </div>
         </div>
+    </section>
 
-        <!-- Executive Summary - NEW -->
-        <div class="exec-summary">
-            <h3>Project at a Glance</h3>
-            <div class="exec-summary-content">
-                <div class="exec-summary-text">
-                    <p>StudyBuddy is an interactive educational robot that combines AI with physical hardware to create a more engaging learning experience for children. Using ESP32 microcontrollers, OLED displays, and machine learning, it provides personalized learning through speech recognition and adaptive feedback.</p>
-                    
-                    <div class="key-points">
-                        <span class="key-point">Adaptive Learning</span>
-                        <span class="key-point">Speech Recognition</span>
-                        <span class="key-point">Physical Interaction</span>
-                        <span class="key-point">Real-time Feedback</span>
-                        <span class="key-point">Multi-sensory Experience</span>
-                    </div>
+    <section class="cs-window reveal" id="system">
+        <div class="cs-window-bar">🧩 02_system_design/ <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">02</span>
+            <h2>Hardware and software</h2>
+            <div class="cs-split">
+                <div>
+                    <h3>Hardware</h3>
+                    <ul class="cs-list">
+                        <li><strong>ESP32:</strong> the core microcontroller that manages every interaction.</li>
+                        <li><strong>Two OLED displays:</strong> one for facial expressions, one for text.</li>
+                        <li><strong>Servo motors:</strong> physical movements and gestures, like nodding.</li>
+                        <li><strong>Speaker:</strong> audio feedback and spoken responses.</li>
+                    </ul>
+                    <h3>Software pipeline</h3>
+                    <ul class="cs-list">
+                        <li><strong>Speech recognition:</strong> Vosk for offline speech-to-text.</li>
+                        <li><strong>Language processing:</strong> TinyLlama through Hugging Face Transformers.</li>
+                        <li><strong>Knowledge base:</strong> Wikipedia API for factual answers.</li>
+                        <li><strong>Adaptive learning:</strong> a lightweight Bayesian skill estimation algorithm.</li>
+                    </ul>
                 </div>
-                <div class="exec-summary-image">
-                    <img src="assets/StudyBuddy/studybuddyiconheroimage.jpg" alt="StudyBuddy Prototype" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-                </div>
+                <figure class="cs-fig">
+                    <img src="assets/StudyBuddy/Studybuddyschmatic.png" alt="Wiring schematic: ESP32 connected to two OLED displays, two servo motors and a speaker" loading="lazy" width="1800" height="1355">
+                    <figcaption>Wiring: ESP32, two OLEDs, two servos and a speaker</figcaption>
+                </figure>
             </div>
+            <p>The Python code is split into two main classes: one that talks to the hardware and one that runs the learning experience.</p>
+<pre class="cs-code"><span class="k">class</span> ESP32Communicator:
+    <span class="c"># Handles communication with ESP32 hardware</span>
+    <span class="c"># Controls displays, servos, and audio</span>
+
+<span class="k">class</span> StudyBuddyAI:
+    <span class="c"># Main AI companion managing the learning experience</span>
+    <span class="c"># Handles speech recognition, response generation</span></pre>
         </div>
+    </section>
 
-        <div class="file-explorer">
-            <div class="file-tree">
-                <div class="file-tree-item active">README.md</div>
-                <div class="file-tree-item">source/</div>
-                <div class="file-tree-item">assets/</div>
-                <div class="file-tree-item">tests/</div>
-                <div class="file-tree-item">demo.mp4</div>
-            </div>
+    <section class="cs-window reveal" id="adaptive">
+        <div class="cs-window-bar">📈 03_adaptive_learning.py <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">03</span>
+            <h2>Tracking what each child knows</h2>
+            <p>StudyBuddy keeps a skill estimate between 0 and 1 for every subject and topic. After each answer it nudges that estimate up or down. A "surprise factor" makes the update bigger when the result is unexpected, such as a correct answer on a topic the child was struggling with.</p>
+<pre class="cs-code"><span class="c"># Key adaptive learning algorithm (simplified)</span>
+<span class="k">def</span> update_subject_skill(self, subject, topic, correct):
+    <span class="c"># Current estimates</span>
+    current_skill = self.profile[<span class="s">'skills'</span>][subject][topic]
 
-            <div class="file-content">
-                <!-- Project Case Study -->
-                <div class="project-case-study">
-                    <h2 class="case-study-title">StudyBuddy: An Adaptive Educational Robot</h2>
-                    
-                    <!-- Video Demo - Moved to top for immediate engagement -->
-                    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); margin: 30px 0;">
-                        <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed/JueuBKASrkE" title="StudyBuddy Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    <p style="text-align: center; font-size: 0.9rem; margin-bottom: 30px; color: #A2D2FF;"><em>Video demonstration showcasing the StudyBuddy's interactive capabilities</em></p>
-                    
-                    <!-- Core Features - NEW -->
-                    <div class="feature-grid">
-                        <div class="feature-card">
-                            <h4>Speech Recognition</h4>
-                            <p>Understands natural language questions and commands using Vosk for offline processing</p>
-                        </div>
-                        <div class="feature-card">
-                            <h4>Adaptive Learning</h4>
-                            <p>Personalizes content based on student performance using Bayesian skill estimation</p>
-                        </div>
-                        <div class="feature-card">
-                            <h4>Physical Interaction</h4>
-                            <p>Responds with facial expressions, sounds, and servo-driven movements</p>
-                        </div>
-                        <div class="feature-card">
-                            <h4>Knowledge Base</h4>
-                            <p>Accesses facts and educational content through Wikipedia API integration</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Abstract Section - Condensed -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">Project Overview</h3>
-                        <div class="section-content">
-                            <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center;">
-                                <div style="flex: 1; min-width: 280px;">
-                                    <p>
-                                        StudyBuddy uses AI and hardware (ESP32, OLED displays, servos) to create an adaptive educational robot that supports interactive learning for children. It provides real-time feedback through a combination of visual, auditory, and physical responses.
-                                    </p>
-                                </div>
-                                <div style="flex: 1; min-width: 280px;">
-                                    <img src="assets/StudyBuddy/studybuddy3.jpg" alt="StudyBuddy Prototype Side View" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-                                </div>
-                            </div>
-                            
-                            <div class="goals-block">
-                                <h4>Project Goals:</h4>
-                                <ul>
-                                    <li>Design an interactive robot that uses AI to personalize lessons in real-time</li>
-                                    <li>Enhance engagement through speech recognition, motion, and dynamic feedback</li>
-                                    <li>Bridge the gap between digital and hands-on learning experiences</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- System Design Section - With Collapsible Details -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">System Design</h3>
-                        
-                        <div class="section-content">
-                            <p>StudyBuddy combines hardware components with AI software to create an interactive learning companion:</p>
-                            
-                            <!-- Hardware - Condensed with image -->
-                            <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
-                                <div style="flex: 1; min-width: 280px;">
-                                    <h4 class="subsection-title">Hardware Components</h4>
-                                    <ul>
-                                        <li><strong>ESP32:</strong> Core microcontroller managing interactions</li>
-                                        <li><strong>Dual OLED Displays:</strong> For facial expressions and text content</li>
-                                        <li><strong>Servo Motors:</strong> Enable physical movements and gestures</li>
-                                        <li><strong>Speaker:</strong> Provides audio feedback and responses</li>
-                                    </ul>
-                                </div>
-                                <div style="flex: 1; min-width: 280px;">
-                                    <img src="assets/StudyBuddy/Studybuddyschmatic.png" alt="StudyBuddy Internal Components" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-                                </div>
-                            </div>
-                            
-                            <!-- Software - Collapsible -->
-                            <button class="collapsible">Software Architecture & AI Integration</button>
-                            <div class="collapse-content">
-                                <div style="padding: 15px 0;">
-                                    <p>The software pipeline consists of several key components:</p>
-                                    <ul>
-                                        <li><strong>Speech Recognition:</strong> Vosk for offline speech-to-text processing</li>
-                                        <li><strong>Natural Language Processing:</strong> TinyLlama from Hugging Face Transformers</li>
-                                        <li><strong>Knowledge Base:</strong> Wikipedia API integration for factual information</li>
-                                        <li><strong>Adaptive Learning:</strong> Lightweight Bayesian skill estimation algorithm</li>
-                                    </ul>
-                                    
-                                    <div class="code-block">
-                                        <h4>Key System Classes:</h4>
-<pre><code>class ESP32Communicator:
-    # Handles communication with ESP32 hardware
-    # Controls displays, servos, and audio
+    <span class="c"># Bayesian update weights</span>
+    surprise_factor = 1.5 <span class="k">if</span> (correct <span class="k">and</span> current_skill &lt; 0.5) <span class="k">or</span> \
+                          (<span class="k">not</span> correct <span class="k">and</span> current_skill &gt; 0.5) <span class="k">else</span> 1.0
 
-class StudyBuddyAI:
-    # Main AI companion managing the learning experience
-    # Handles speech recognition, response generation</code></pre>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Adaptive Learning - Collapsible -->
-                            <button class="collapsible">Adaptive Learning System</button>
-                            <div class="collapse-content">
-                                <div style="padding: 15px 0;">
-                                    <p>
-                                        The system tracks student performance and adjusts its approach using a lightweight Bayesian skill estimation method.
-                                    </p>
-                                    
-                                    <div class="code-block">
-<pre><code># Key adaptive learning algorithm (simplified)
-def update_subject_skill(self, subject, topic, correct):
-    # Current estimates
-    current_skill = self.profile['skills'][subject][topic]
-    
-    # Bayesian update weights
-    surprise_factor = 1.5 if (correct and current_skill < 0.5) or \
-                              (not correct and current_skill > 0.5) else 1.0
-        
-    # Update skill estimate
-    if correct:
+    <span class="c"># Update skill estimate</span>
+    <span class="k">if</span> correct:
         new_skill = current_skill + (1 - current_skill) * 0.2 * surprise_factor
-    else:
+    <span class="k">else</span>:
         new_skill = current_skill * (1 - 0.2 * surprise_factor)
-        
-    # Store updated skill
-    self.profile['skills'][subject][topic] = new_skill</code></pre>
-                                    </div>
-                                    
-                                    <p>This approach enables:</p>
-                                    <ul>
-                                        <li>Personalized difficulty scaling based on demonstrated skills</li>
-                                        <li>Targeted practice recommendations focusing on weak areas</li>
-                                        <li>Learning style adaptation (visual, auditory, kinesthetic)</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- User Interaction Section - Visual Focus -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">User Experience</h3>
-                        
-                        <div class="section-content">
-                            <!-- How it works - With images -->
-                            <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
-                                <div style="flex: 1; min-width: 280px;">
-                                    <h4 class="subsection-title">Interaction Flow</h4>
-                                    <ol>
-                                        <li><strong>Startup:</strong> Friendly greeting with animation and sound</li>
-                                        <li><strong>Main Menu:</strong> Voice command access to learning modes</li>
-                                        <li><strong>Learning Activities:</strong> Q&A, vocabulary, math, science</li>
-                                        <li><strong>Feedback:</strong> Multi-sensory responses with expressions, sound, and movement</li>
-                                    </ol>
-                                </div>
-                                <div style="flex: 1; min-width: 280px;">
-                                    <img src="assets/StudyBuddy/studybuddybuilding.jpg" alt="StudyBuddy Display Interaction" style="width: 100%; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-                                </div>
-                            </div>
-                            
-                            <!-- Learning Examples - Collapsible -->
-                            <button class="collapsible">Learning Activity Examples</button>
-                            <div class="collapse-content">
-                                <div style="padding: 15px 0;">
-                                    <div style="margin-bottom: 20px;">
-                                        <strong>Science Quiz Example:</strong>
-                                        <div class="code-block">
-<pre>StudyBuddy: "Let's learn about photosynthesis! This is the process plants use 
+
+    <span class="c"># Store updated skill</span>
+    self.profile[<span class="s">'skills'</span>][subject][topic] = new_skill</pre>
+            <p>This lets the robot:</p>
+            <ul class="cs-list">
+                <li>Scale difficulty to the skills a child has shown.</li>
+                <li>Recommend practice that targets weak areas.</li>
+                <li>Adapt to different learning styles (visual, auditory, kinesthetic).</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="experience">
+        <div class="cs-window-bar">🗣️ 04_interaction.log <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">04</span>
+            <h2>What a session looks like</h2>
+            <div class="cs-split">
+                <div>
+                    <h3>Interaction flow</h3>
+                    <ul class="cs-list">
+                        <li><strong>Startup:</strong> a friendly greeting with animation and sound.</li>
+                        <li><strong>Main menu:</strong> learning modes are chosen by voice.</li>
+                        <li><strong>Learning activities:</strong> Q&amp;A, vocabulary, maths and science.</li>
+                        <li><strong>Feedback:</strong> expressions, sound and movement together.</li>
+                    </ul>
+                </div>
+                <figure class="cs-fig dark">
+                    <img src="assets/StudyBuddy/studybuddybuilding.jpg" alt="StudyBuddy on a desk during development, with text showing on both OLED screens and wires running to a laptop" loading="lazy" width="1105" height="1600">
+                    <figcaption>Testing the displays during the build</figcaption>
+                </figure>
+            </div>
+
+            <h3>Example: science quiz</h3>
+<pre class="cs-code"><span class="s">StudyBuddy:</span> "Let's learn about photosynthesis! This is the process plants use
 to make food using sunlight. Would you like to take a mini-quiz?"
 
-User: "Yes"
+<span class="k">User:</span> "Yes"
 
-StudyBuddy: [Displays a thinking expression]
-"Great! Here's your first question: What do plants need for photosynthesis? 
+<span class="s">StudyBuddy:</span> <span class="c">[Displays a thinking expression]</span>
+"Great! Here's your first question: What do plants need for photosynthesis?
 Is it: A) Just water, B) Sunlight, water, and carbon dioxide, or C) Soil only?"
 
-User: "B"
+<span class="k">User:</span> "B"
 
-StudyBuddy: [Displays happy expression, servo nods] 
-"Correct! Plants need sunlight, water, and carbon dioxide to make their own food 
+<span class="s">StudyBuddy:</span> <span class="c">[Displays happy expression, servo nods]</span>
+"Correct! Plants need sunlight, water, and carbon dioxide to make their own food
 through photosynthesis. They release oxygen as a byproduct, which we breathe."</pre>
-                                        </div>
-                                    </div>
-                                    
-                                    <div>
-                                        <strong>Adaptive Math Example:</strong>
-                                        <div class="code-block">
-<pre>StudyBuddy: "Based on your previous answers, I'll give you a slightly more 
+
+            <h3>Example: adaptive maths</h3>
+<pre class="cs-code"><span class="s">StudyBuddy:</span> "Based on your previous answers, I'll give you a slightly more
 challenging subtraction problem. What is 43 - 18?"
 
-User: "25"
+<span class="k">User:</span> "25"
 
-StudyBuddy: [Displays thinking face]
+<span class="s">StudyBuddy:</span> <span class="c">[Displays thinking face]</span>
 "Let's check that... I got a different answer. Let me help you work through this.
 First, we can subtract 3 - 8, but since 8 is larger than 3, we need to borrow.
 40 + 3 becomes 30 + 13. Now 13 - 8 = 5, and 30 - 10 = 20.
 So 43 - 18 = 25. You were right! Great job!"
 
-[System updates user's math subtraction skill from 0.65 to 0.71]</pre>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- User Testing -->
-                            <div style="margin-top: 20px;">
-                                <h4 class="subsection-title">User Testing</h4>
-                                <p>Testing revealed several key insights:</p>
-                                <ul>
-                                    <li><strong>Performance:</strong> 88% speech recognition accuracy in quiet environments</li>
-                                    <li><strong>Engagement:</strong> Physical interaction significantly increased student engagement</li>
-                                    <li><strong>User Feedback:</strong> Students requested clearer instructions and more mechanical movements</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Results & Future Work - Condensed -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">Outcomes & Future Direction</h3>
-                        
-                        <div class="section-content">
-                            <div class="goals-block">
-                                <h4>Key Findings:</h4>
-                                <ul>
-                                    <li>AI-driven personalization significantly enhances student engagement</li>
-                                    <li>Physical interaction through gestures and expressions improves focus</li>
-                                    <li>Multimodal feedback makes learning more inclusive and accessible</li>
-                                </ul>
-                            </div>
-                            
-                            <!-- Future Work - Collapsible -->
-                            <button class="collapsible">Future Improvements</button>
-                            <div class="collapse-content">
-                                <div style="padding: 15px 0;">
-                                    <ol>
-                                        <li><strong>Hardware Upgrades:</strong>
-                                            <ul>
-                                                <li>Integration of Raspberry Pi 5 for improved local processing</li>
-                                                <li>More mechanical body design with expanded movement capabilities</li>
-                                                <li>ESP32 camera module for visual recognition and interaction</li>
-                                            </ul>
-                                        </li>
-                                        <li><strong>Software Enhancements:</strong>
-                                            <ul>
-                                                <li>Emotion recognition through facial and tonal analysis</li>
-                                                <li>More diverse lesson plans and adaptive content delivery</li>
-                                                <li>Cloud-AI hybrid approach for balancing performance and privacy</li>
-                                            </ul>
-                                        </li>
-                                        <li><strong>Expanded Capabilities:</strong>
-                                            <ul>
-                                                <li>Multi-language support for diverse educational settings</li>
-                                                <li>Interactive games and narrative-based learning activities</li>
-                                                <li>Field testing in classroom environments with diverse learners</li>
-                                            </ul>
-                                        </li>
-                                    </ol>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Technology Stack -->
-                    <div class="tech-stack">
-                        <h2 class="tech-stack-title">Technology Stack</h2>
-                        <div class="tech-list">
-                            <span class="tech-item">ESP32</span>
-                            <span class="tech-item">OLED Displays</span>
-                            <span class="tech-item">Servo Motors</span>
-                            <span class="tech-item">Python</span>
-                            <span class="tech-item">Vosk</span>
-                            <span class="tech-item">TinyLlama</span>
-                            <span class="tech-item">Hugging Face</span>
-                            <span class="tech-item">Wikipedia API</span>
-                            <span class="tech-item">Bayesian Learning</span>
-                            <span class="tech-item">3D Printing</span>
-                        </div>
-                    </div>
-                </div>
+<span class="c">[System updates user's math subtraction skill from 0.65 to 0.71]</span></pre>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="testing">
+        <div class="cs-window-bar">✅ 05_user_testing.csv <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">05</span>
+            <h2>Testing and findings</h2>
+            <div class="cs-cards">
+                <div class="cs-card"><span class="tag">PERFORMANCE</span><h4>88% recognition</h4><p>Speech recognition was 88% accurate in quiet environments.</p></div>
+                <div class="cs-card"><span class="tag">ENGAGEMENT</span><h4>Movement matters</h4><p>Physical interaction noticeably increased how engaged students were.</p></div>
+                <div class="cs-card"><span class="tag">FEEDBACK</span><h4>What students asked for</h4><p>Clearer instructions and more mechanical movement.</p></div>
+            </div>
+            <h3>Key findings</h3>
+            <ul class="cs-list">
+                <li>AI-driven personalisation made students more engaged.</li>
+                <li>Physical interaction through gestures and expressions helped them focus.</li>
+                <li>Combining visual, audio and physical feedback makes learning more inclusive and accessible.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="next">
+        <div class="cs-window-bar">🔭 06_future_work.md <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">06</span>
+            <h2>What I'd build next</h2>
+            <div class="cs-cards">
+                <div class="cs-card"><span class="tag">HARDWARE</span><h4>More capable body</h4><p>A Raspberry Pi 5 for better local processing, a more mechanical body with more movement, and an ESP32 camera module for visual recognition.</p></div>
+                <div class="cs-card"><span class="tag">SOFTWARE</span><h4>Smarter responses</h4><p>Emotion recognition from facial and tonal analysis, more varied lesson plans, and a cloud-AI hybrid that balances performance and privacy.</p></div>
+                <div class="cs-card"><span class="tag">REACH</span><h4>More learners</h4><p>Multi-language support, interactive games and story-based activities, and field testing in classrooms with diverse learners.</p></div>
+            </div>
+            <h3>Stack</h3>
+            <div class="cs-chips">
+                <span class="cs-chip">ESP32</span><span class="cs-chip">OLED displays</span><span class="cs-chip">Servo motors</span><span class="cs-chip">Python</span><span class="cs-chip">Vosk</span><span class="cs-chip">TinyLlama</span><span class="cs-chip">Hugging Face</span><span class="cs-chip">Wikipedia API</span><span class="cs-chip">Bayesian learning</span><span class="cs-chip">3D printing</span>
             </div>
         </div>
-    </div>
+    </section>
 
-    <script>
-        // Add JavaScript for collapsible sections
-        document.addEventListener('DOMContentLoaded', function() {
-            var coll = document.getElementsByClassName("collapsible");
-            for (var i = 0; i < coll.length; i++) {
-                coll[i].addEventListener("click", function() {
-                    this.classList.toggle("active-collapse");
-                    var content = this.nextElementSibling;
-                    if (content.style.maxHeight) {
-                        content.style.maxHeight = null;
-                    } else {
-                        content.style.maxHeight = content.scrollHeight + "px";
-                    }
-                });
-            }
-        });
-    </script>
+    <section class="cs-window reveal" id="demo">
+        <div class="cs-window-bar">▶ demo.mp4 <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <h2>See it running</h2>
+            <div class="cs-embed">
+                <iframe loading="lazy" title="StudyBuddy demo video" src="https://www.youtube-nocookie.com/embed/JueuBKASrkE" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <p>A walkthrough of StudyBuddy's voice interaction, expressions and movement.</p>
+        </div>
+    </section>
 
-    <script src="script.js"></script>
+    <nav class="cs-next" aria-label="More projects">
+        <a href="plant-buddy.html"><small>← Previous</small><span>Smart Plant Buddy</span></a>
+        <a href="snake-ai.html"><small>Next →</small><span>A* Pathfinding Snake</span></a>
+    </nav>
+
+    <footer class="cs-footer">
+        <span>© Fatima Ibrahim Maideribe</span>
+        <a href="index.html#desktop">Back to desktop</a>
+    </footer>
+</main>
+
+<script src="case-study.js"></script>
 </body>
-</html> 
+</html>

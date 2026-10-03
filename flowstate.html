@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowState · Fatima Ibrahim Maideribe</title>
+    <meta name="description" content="FlowState: a mobile app that unlocks distracting apps only once you've verified a task is done. UX research, prototyping and testing case study.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="case-study.css">
+</head>
+<body style="--accent:#ff8a6b">
+
+<header class="cs-bar">
+    <a class="cs-start" href="index.html#desktop">⊞ Desktop</a>
+    <span class="cs-crumb">C:\Projects\FlowState\case-study.exe</span>
+    <nav class="cs-bar-nav" aria-label="Project navigation">
+        <a class="hide-sm" href="bakery.html">← Prev</a>
+        <a href="plant-buddy.html">Next →</a>
+    </nav>
+    <span class="cs-progress" aria-hidden="true"></span>
+</header>
+
+<main class="cs-wrap">
+
+    <!-- Hero -->
+    <section class="cs-hero">
+        <p class="cs-kicker">UX / UI design · MSc Design Engineering, Imperial College London</p>
+        <h1 class="cs-title">FlowState</h1>
+        <p class="cs-lede">A phone app that pauses Instagram and TikTok until you've <em>finished</em> the task you're avoiding. You earn your break with proof of work, not by waiting out a timer.</p>
+        <div class="cs-actions">
+            <a class="cs-btn" href="#prototype">▶ Try the prototype</a>
+            <a class="cs-btn ghost" href="https://www.figma.com/proto/2U0b0FgaCdE1Bk8c9JDid1/User-interface-Report?node-id=146-1393&p=f&t=tOyddXpoQ9uAt1J3-0&scaling=scale-down&content-scaling=fixed&starting-point-node-id=269%3A11242" target="_blank" rel="noopener">Open in Figma ↗</a>
+        </div>
+        <dl class="cs-meta">
+            <div><dt>Role</dt><dd>Solo designer: research, UX, UI, testing</dd></div>
+            <div><dt>Module</dt><dd>User Interfaces, Dyson School of Design Engineering</dd></div>
+            <div><dt>Date</dt><dd>March 2026</dd></div>
+            <div><dt>Tools</dt><dd>Figma, paper prototyping, think-aloud testing</dd></div>
+        </dl>
+        <div class="cs-hero-media">
+            <img src="assets/thumbs/flowstate.webp" alt="Three FlowState screens: task breakdown, the Instagram-is-paused intervention, and the break-earned celebration" width="800" height="500">
+        </div>
+    </section>
+
+    <div class="cs-stats reveal">
+        <div class="cs-stat"><b>~80%</b><span>of university students regularly procrastinate</span></div>
+        <div class="cs-stat"><b>4</b><span>semi-structured interviews with grad students</span></div>
+        <div class="cs-stat"><b>6</b><span>think-aloud usability tests on the hi-fi prototype</span></div>
+        <div class="cs-stat"><b>60–90s</b><span>from "Instagram is paused" to earned break</span></div>
+    </div>
+
+    <!-- 01 Problem -->
+    <section class="cs-window reveal" id="problem">
+        <div class="cs-window-bar">📄 01_problem.txt <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">01</span>
+            <h2>Blocked time isn't productive time</h2>
+            <div class="cs-split">
+                <div>
+                    <p>"Just five more minutes" turns into hours. Social apps are built for dopamine-driven scrolling, and for students the cost is missed deadlines, anxiety, guilt and bad sleep.</p>
+                    <p>The existing tools come in two separate camps:</p>
+                    <ul class="cs-list">
+                        <li><strong>Phone-reduction apps</strong> (Jomo, Opal, Forest) block apps for a set time. The timer runs out whether or not you did any work.</li>
+                        <li><strong>Task tools</strong> (Notion, Pomodoro timers) organise the work but do nothing when you reach for your phone, and they rely on the honour system to tick tasks off.</li>
+                    </ul>
+                    <p><strong>The gap:</strong> no existing tool checks that a task is actually done before giving phone access back. They all use time-based restrictions. None use completion-based accountability.</p>
+                </div>
+                <figure class="cs-fig">
+                    <img src="assets/FlowState/competitor-table.webp" alt="Comparison table of Jomo, Opal, Forest, Notion and Pomodoro across intervention, key limitation, sensing and verification method" loading="lazy">
+                    <figcaption>Competitive analysis: none of the five verify task completion</figcaption>
+                </figure>
+            </div>
+            <div class="cs-gallery crop" style="--cols:3">
+                <figure class="cs-fig"><img src="assets/FlowState/opal.webp" alt="Opal app screens" loading="lazy" style="object-position:top"><figcaption>Opal: streaks and gamified blocking</figcaption></figure>
+                <figure class="cs-fig"><img src="assets/FlowState/jomo.webp" alt="Jomo app screens" loading="lazy" style="object-position:top"><figcaption>Jomo: strict, customisable rules</figcaption></figure>
+                <figure class="cs-fig"><img src="assets/FlowState/pomofocus.webp" alt="Pomofocus timer" loading="lazy"><figcaption>Pomodoro: keeps ticking while you scroll</figcaption></figure>
+            </div>
+        </div>
+    </section>
+
+    <!-- 02 Research -->
+    <section class="cs-window reveal" id="research">
+        <div class="cs-window-bar">🔍 02_research.log <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">02</span>
+            <h2>What students told me</h2>
+            <p>I ran semi-structured interviews with four participants (two master's students, one PhD student and one graduate) about how they procrastinate, when they reach for their phone and what they've already tried. Six themes came out of it:</p>
+
+            <div class="cs-cards">
+                <div class="cs-card"><span class="tag">THEME 1</span><h4>Starting is the hard part</h4><p>Long to-do lists trigger avoidance. People need help to <em>start</em> a task, and organising it isn't enough.</p></div>
+                <div class="cs-card"><span class="tag">THEME 2</span><h4>Phones as a pacifier</h4><p>People pick up the phone automatically at friction points. Knowing they do it doesn't stop them.</p></div>
+                <div class="cs-card"><span class="tag">THEME 3</span><h4>Timers don't verify</h4><p>Everyone who'd tried Forest or Pomodoro said the same thing: the time passes whether you work or not.</p></div>
+                <div class="cs-card"><span class="tag">THEME 4</span><h4>Data breeds guilt</h4><p>Screen-time stats make people feel bad but don't tell them what to do next.</p></div>
+                <div class="cs-card"><span class="tag">THEME 5</span><h4>Support in the moment</h4><p>They wanted an intervention at the moment they give in, and they wanted it to feel supportive rather than controlling.</p></div>
+                <div class="cs-card"><span class="tag">THEME 6</span><h4>Earn it by finishing</h4><p>Unlocking apps by completing tasks was seen as motivating, as long as it suggests a next step.</p></div>
+            </div>
+
+            <div class="cs-quote"><p>"My problem mainly is starting. It takes me ages to get started, but once I do, I'm good to go. But by then, usually most of the day has gone."</p><cite>— Participant 3</cite></div>
+            <div class="cs-quote"><p>"As soon as I reach a friction point… it's like a pacifying almost. I pick up my phone instead of doing what I want to do."</p><cite>— Participant 2</cite></div>
+
+            <div class="cs-gallery" style="--cols:2">
+                <figure class="cs-fig"><img src="assets/FlowState/persona.webp" alt="Persona: Marcus, a master's student who picks up his phone at friction points" loading="lazy"><figcaption>Persona: Marcus, built from the interview themes</figcaption></figure>
+                <figure class="cs-fig"><img src="assets/FlowState/painpoints.webp" alt="Table mapping pain points to current experience and the FlowState solution" loading="lazy"><figcaption>Pain points → what FlowState does differently</figcaption></figure>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03 Aims -->
+    <section class="cs-window reveal" id="aims">
+        <div class="cs-window-bar">🎯 03_design_aims.md <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">03</span>
+            <h2>Design aims</h2>
+            <ul class="cs-list">
+                <li><strong>Help people start, not just plan.</strong> Break big tasks into small, timed steps.</li>
+                <li><strong>Intervene at the moment of procrastination</strong>, so reaching for the phone becomes a choice.</li>
+                <li><strong>Tie phone access to completion, not elapsed time</strong>, verified with photo proof or a friend's code.</li>
+                <li><strong>Show progress and next steps</strong> instead of guilt-inducing statistics.</li>
+            </ul>
+            <h3>Usability goals</h3>
+            <div class="cs-chips">
+                <span class="cs-chip">Effective: tasks actually get done</span>
+                <span class="cs-chip">Supportive: no guilt, no punishment</span>
+                <span class="cs-chip">Memorable: works during autopilot moments</span>
+                <span class="cs-chip">Efficient: the productive path is the easy path</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04 Process -->
+    <section class="cs-window reveal" id="process">
+        <div class="cs-window-bar">✏️ 04_process/ <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">04</span>
+            <h2>From flows to paper to pixels</h2>
+
+            <h3>Information architecture</h3>
+            <p>The whole system is built around one moment: when someone tries to open a blocked app. Instead of a dead-end "blocked" screen, the flow runs forward through <strong>intervention → action → verification → reward</strong>, with an escape hatch back at every step.</p>
+            <div class="cs-gallery" style="--cols:2">
+                <figure class="cs-fig"><img src="assets/FlowState/flow-v1.webp" alt="First hand-drawn user flow" loading="lazy"><figcaption>First user-flow iteration</figcaption></figure>
+                <figure class="cs-fig"><img src="assets/FlowState/flow-final.webp" alt="Final hand-drawn user flow" loading="lazy"><figcaption>Final user flow</figcaption></figure>
+            </div>
+
+            <h3>Paper prototyping</h3>
+            <p>Sticky-note prototypes let me test the flow before worrying about any visual design. Two changes came straight out of these sessions:</p>
+            <ul class="cs-list">
+                <li><strong>Three buttons became two.</strong> "Task complete" and the override key were merged, leaving <em>I've completed my task</em> and <em>Break it down for me</em>. One tester felt it was "a lot for the one page".</li>
+                <li><strong>The current task got its own card</strong>, with a bordered, colour-accented card at the top, so the user's commitment is the first thing they see.</li>
+            </ul>
+            <div class="cs-gallery crop" style="--cols:4">
+                <figure class="cs-fig"><img src="assets/FlowState/paper-1.webp" alt="Paper prototype user test" loading="lazy"><figcaption>Testing the paper prototype</figcaption></figure>
+                <figure class="cs-fig"><img src="assets/FlowState/paper-2.webp" alt="Paper prototype with sticky notes" loading="lazy"><figcaption>First iteration</figcaption></figure>
+                <figure class="cs-fig"><img src="assets/FlowState/paper-3.webp" alt="Tester interacting with paper prototype" loading="lazy"><figcaption>Final paper iteration</figcaption></figure>
+                <figure class="cs-fig"><img src="assets/FlowState/paper-notes.webp" alt="All paper prototype screens laid out" loading="lazy"><figcaption>Full paper flow</figcaption></figure>
+            </div>
+
+            <h3>Lo-fi wireframes</h3>
+            <p>Greyscale wireframes pinned down the hierarchy, spacing and structure before any colour went in.</p>
+            <div class="cs-shots">
+                <figure><img src="assets/FlowState/lofi-1.webp" alt="Lo-fi intervention screen" loading="lazy"><figcaption>Intervention</figcaption></figure>
+                <figure><img src="assets/FlowState/lofi-2.webp" alt="Lo-fi task breakdown" loading="lazy"><figcaption>Breakdown</figcaption></figure>
+                <figure><img src="assets/FlowState/lofi-3.webp" alt="Lo-fi focus timer" loading="lazy"><figcaption>Focus timer</figcaption></figure>
+                <figure><img src="assets/FlowState/lofi-4.webp" alt="Lo-fi verification choice" loading="lazy"><figcaption>Verify</figcaption></figure>
+                <figure><img src="assets/FlowState/lofi-5.webp" alt="Lo-fi upload screen" loading="lazy"><figcaption>Upload</figcaption></figure>
+                <figure><img src="assets/FlowState/lofi-6.webp" alt="Lo-fi success screen" loading="lazy"><figcaption>Success</figcaption></figure>
+            </div>
+            <figure class="cs-fig"><img src="assets/FlowState/lofi-decisions.webp" alt="Table of wireframe refinements: radio buttons, icons with labels, large centred timer, lock badges" loading="lazy"><figcaption>Wireframe refinements: initial approach vs. final decision</figcaption></figure>
+        </div>
+    </section>
+
+    <!-- 05 Visual identity -->
+    <section class="cs-window reveal" id="identity">
+        <div class="cs-window-bar">🎨 05_visual_identity.fig <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">05</span>
+            <h2>Colour with a job to do</h2>
+            <p>Each colour has one meaning across the whole app, which makes the flow easy to read at a glance. The palette also avoids relying on red/green, so it still works for colour-blind users.</p>
+            <div class="cs-swatches">
+                <div class="cs-swatch"><div class="chip" style="background:linear-gradient(135deg,#ff7a59,#ff9f6b)"></div><div><b>Coral = action</b><span>Energising and optimistic. Used for the intervention screen, headers and primary CTAs.</span></div></div>
+                <div class="cs-swatch"><div class="chip" style="background:linear-gradient(135deg,#7c5cf5,#a78bfa)"></div><div><b>Purple = focus</b><span>Linked to calm and creativity. Used for task breakdown and selection.</span></div></div>
+                <div class="cs-swatch"><div class="chip" style="background:linear-gradient(135deg,#10b981,#34d399)"></div><div><b>Teal = success</b><span>Growth and achievement. Used for verification and the break-earned state.</span></div></div>
+            </div>
+            <p><strong>Type &amp; components:</strong> Inter, on an iOS HIG-style scale (28 / 17 / 13 px). Buttons use a 16 px radius with gradient fills and cards use 18 px. All interactive elements meet WCAG 2.1 AA contrast.</p>
+        </div>
+    </section>
+
+    <!-- 06 Final design -->
+    <section class="cs-window reveal" id="final">
+        <div class="cs-window-bar">📱 06_final_design.fig <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">06</span>
+            <h2>The happy path</h2>
+            <p>Marcus has a report due and opens Instagram out of habit. FlowState steps in, helps him pick one small piece of the report, checks he's done it, and gives him 15 minutes of guilt-free scrolling.</p>
+            <div class="cs-shots">
+                <figure><img src="assets/FlowState/trigger.webp" alt="Phone home screen with an Instagram notification" loading="lazy"><figcaption><b>1 · Temptation</b>A notification or an app tap both trigger it</figcaption></figure>
+                <figure><img src="assets/FlowState/intervention.webp" alt="Intervention screen: Instagram is paused, progress ring and two choices" loading="lazy"><figcaption><b>2 · Intervention</b>"Instagram is paused", not "blocked"</figcaption></figure>
+                <figure><img src="assets/FlowState/breakdown.webp" alt="Task breakdown screen with subtasks and time estimates" loading="lazy"><figcaption><b>3 · Break it down</b>Small subtasks with time estimates</figcaption></figure>
+                <figure><img src="assets/FlowState/focus-timer.webp" alt="Focus timer with blocked app icons" loading="lazy"><figcaption><b>4 · Focus</b>The timer is information, not a lock</figcaption></figure>
+                <figure><img src="assets/FlowState/verify.webp" alt="Verification method choice" loading="lazy"><figcaption><b>5 · Verify</b>Upload proof or a friend's social key</figcaption></figure>
+                <figure><img src="assets/FlowState/upload.webp" alt="Upload proof screen" loading="lazy"><figcaption><b>6 · Proof</b>Photo of the work, checked by AI</figcaption></figure>
+                <figure><img src="assets/FlowState/success.webp" alt="Break earned celebration with 15 minute timer" loading="lazy"><figcaption><b>7 · Reward</b>15:00 of full access, or keep going</figcaption></figure>
+            </div>
+            <div class="cs-gallery" style="--cols:2">
+                <figure class="cs-fig dark"><img src="assets/FlowState/social-key.webp" alt="Social key screen with 4-digit code entry" loading="lazy" style="max-width:260px;margin:auto;border-radius:22px"><figcaption>Social key: a friend confirms and sends a 4-digit code</figcaption></figure>
+                <figure class="cs-fig dark"><img src="assets/FlowState/home.webp" alt="FlowState home dashboard with weekly stats" loading="lazy" style="max-width:260px;margin:auto;border-radius:22px"><figcaption>Home: progress shown as wins, not guilt</figcaption></figure>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prototype embed -->
+    <section class="cs-window reveal" id="prototype">
+        <div class="cs-window-bar">▶ prototype.fig <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <h2>Click through it yourself</h2>
+            <p>This is the high-fidelity Figma prototype of the happy path. Tap the Instagram notification to start.</p>
+            <div class="cs-embed tall">
+                <iframe loading="lazy" title="FlowState Figma prototype" allowfullscreen
+                    src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2F2U0b0FgaCdE1Bk8c9JDid1%2FUser-interface-Report%3Fnode-id%3D146-1393%26p%3Df%26scaling%3Dscale-down%26content-scaling%3Dfixed%26starting-point-node-id%3D269%253A11242"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- 07 Testing -->
+    <section class="cs-window reveal" id="testing">
+        <div class="cs-window-bar">🧪 07_testing.log <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">07</span>
+            <h2>Testing &amp; iteration</h2>
+            <div class="cs-split">
+                <div>
+                    <p>Six participants worked through four core tasks on the hi-fi prototype while thinking aloud. The core idea held up:</p>
+                    <div class="cs-quote"><p>"Oh, that's so nice. Now I can know what I need to do next. That makes it far easier to tackle the task."</p><cite>— on "Break it down"</cite></div>
+                    <div class="cs-quote"><p>"I felt good not opening Instagram because it reminded me not to."</p><cite>— on the intervention screen</cite></div>
+                    <p>Several participants said they'd genuinely use it. One pushed back ("locking out is good enough… I'm just being lazy"), which suggests the breakdown feature helps most with <strong>starting</strong> tasks, less with simple restriction.</p>
+                </div>
+                <figure class="cs-fig"><img src="assets/FlowState/testing.webp" alt="Participant testing the hi-fi prototype on a phone next to a laptop" loading="lazy"><figcaption>Think-aloud testing on the hi-fi prototype</figcaption></figure>
+            </div>
+            <h3>What changed</h3>
+            <div class="cs-table-wrap">
+                <table class="cs-table">
+                    <thead><tr><th>Issue observed</th><th>Design change</th><th>Why</th></tr></thead>
+                    <tbody>
+                        <tr><td>Testers tapped the notification, not the app icon</td><td>Both entry points trigger the intervention</td><td>Users reach apps through many routes</td></tr>
+                        <tr><td>Testers tapped the upload preview, not the button</td><td>The whole preview area is now tappable</td><td>Match the mental model; bigger target (Fitts)</td></tr>
+                        <tr><td>"Photo" and "File upload" felt identical</td><td>Merged into one <em>Upload proof</em> option</td><td>Less cognitive load (Hick's law)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- 08 Next -->
+    <section class="cs-window reveal" id="reflection">
+        <div class="cs-window-bar">💭 08_reflection.txt <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">08</span>
+            <h2>Where it could go</h2>
+            <div class="cs-cards">
+                <div class="cs-card"><span class="tag">PRIORITY 1</span><h4>Generative AI</h4><p>Breakdowns that learn from past completion rates, a way to type "I'm stuck on the methodology" and get targeted help, and checking whether an upload shows real progress.</p></div>
+                <div class="cs-card"><span class="tag">PRIORITY 2</span><h4>Wearables &amp; smart home</h4><p>A watch complication and gentle haptics so you don't have to look at your phone to avoid your phone. Lights could shift colour during focus sessions.</p></div>
+                <div class="cs-card"><span class="tag">LATER</span><h4>AR / VR</h4><p>Project the current task onto your desk. Any VR focus room has to lead back to the real work, not become another way to escape it.</p></div>
+            </div>
+            <h3>Looking back</h3>
+            <p>I'm proudest that the research backed up the core idea: participants recognised the problem in their own lives and asked to use the product. Next time I'd widen the participant pool beyond postgrads, since procrastination also covers chores and working life, and I'd design the onboarding flow, calendar integration and adjustable strictness levels.</p>
+        </div>
+    </section>
+
+    <nav class="cs-next" aria-label="More projects">
+        <a href="bakery.html"><small>← Previous</small><span>Bakery Website</span></a>
+        <a href="plant-buddy.html"><small>Next →</small><span>Smart Plant Buddy</span></a>
+    </nav>
+
+    <footer class="cs-footer">
+        <span>© Fatima Ibrahim Maideribe</span>
+        <a href="index.html#desktop">Back to desktop</a>
+    </footer>
+</main>
+
+<script src="case-study.js"></script>
+</body>
+</html>

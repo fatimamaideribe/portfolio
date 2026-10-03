@@ -1,0 +1,4 @@
+.DS_Store
+# Full-size originals; the site uses the optimised copies in assets/
+Assests/
+optimized.

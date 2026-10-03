@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Journal · Fatima Ibrahim Maideribe</title>
+    <meta name="description" content="Fatima Ibrahim Maideribe's design journal: a scrapbook of projects and the journey behind them, including FlowState and Smart Plant Buddy.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Special+Elite&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --mat: #1f4a3d;
+            --mat-line: rgba(255, 255, 255, 0.07);
+            --mat-line-2: rgba(255, 255, 255, 0.14);
+            --paper: #fbf7ee;
+            --paper-2: #f4eddc;
+            --kraft: #c9a878;
+            --ink: #2a2622;
+            --ink-2: #5a524a;
+            --pencil: #8a8177;
+            --rule: rgba(80, 120, 180, 0.18);
+            --margin: rgba(214, 90, 90, 0.35);
+            --grid: rgba(60, 120, 110, 0.14);
+            --hl-yellow: rgba(255, 226, 90, 0.75);
+            --hl-pink: rgba(255, 160, 190, 0.7);
+            --hl-green: rgba(150, 230, 170, 0.75);
+            --tape-pink: rgba(255, 170, 190, 0.78);
+            --tape-mint: rgba(160, 225, 200, 0.8);
+            --tape-yellow: rgba(255, 220, 120, 0.8);
+            --tape-blue: rgba(160, 200, 255, 0.78);
+            --sticky: #ffe98a;
+            --sticky-pink: #ffc8d8;
+            --sticky-blue: #cde6ff;
+            --coral: #ff7a59;
+            --cover: #7a3b53;
+            --hand: 'Caveat', cursive;
+            --type: 'Special Elite', 'Courier New', monospace;
+            --serif: 'Newsreader', Georgia, serif;
+            --page-w: 560px;
+            --page-h: 760px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body { height: 100%; }
+
+        body {
+            font-family: var(--serif);
+            color: var(--ink);
+            background-color: var(--mat);
+            background-image:
+                linear-gradient(var(--mat-line-2) 1px, transparent 1px),
+                linear-gradient(90deg, var(--mat-line-2) 1px, transparent 1px),
+                linear-gradient(var(--mat-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--mat-line) 1px, transparent 1px);
+            background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: inherit; }
+        img { display: block; max-width: 100%; }
+        :focus-visible { outline: 2px dashed var(--coral); outline-offset: 3px; }
+
+        /* ---------- Stage / book ---------- */
+
+        .stage {
+            position: fixed;
+            inset: 0 0 64px 0;
+            display: grid;
+            place-items: center;
+        }
+
+        .scaler {
+            width: calc(var(--page-w) * 2 + 60px);
+            height: var(--page-h);
+            transform: scale(var(--s, 1));
+            transform-origin: center center;
+            flex-shrink: 0;
+        }
+
+        .book {
+            position: relative;
+            width: calc(var(--page-w) * 2);
+            height: var(--page-h);
+            perspective: 2600px;
+            transition: transform 0.9s cubic-bezier(0.6, 0.05, 0.3, 1);
+        }
+        .book.closed { transform: translateX(calc(var(--page-w) / -2)); }
+        .book.ended { transform: translateX(calc(var(--page-w) / 2)); }
+
+        .leaf {
+            position: absolute;
+            top: 0;
+            left: var(--page-w);
+            width: var(--page-w);
+            height: var(--page-h);
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            transition: transform 0.9s cubic-bezier(0.6, 0.05, 0.3, 1);
+        }
+        .leaf.flipped { transform: rotateY(-180deg); }
+
+        .face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            overflow: hidden;
+        }
+        .face.back { transform: rotateY(180deg); }
+
+        /* ---------- Paper ---------- */
+
+        .page {
+            background-color: var(--paper);
+            padding: 46px 50px 40px;
+            box-shadow: inset 0 0 60px rgba(120, 90, 40, 0.08);
+        }
+        .face.front.page { border-radius: 0 6px 6px 0; box-shadow: inset 24px 0 30px -18px rgba(60, 40, 10, 0.35), inset 0 0 60px rgba(120, 90, 40, 0.08), 4px 4px 0 -1px #efe7d4, 6px 6px 0 -1px #e6dcc4; }
+        .face.back.page { border-radius: 6px 0 0 6px; box-shadow: inset -24px 0 30px -18px rgba(60, 40, 10, 0.35), inset 0 0 60px rgba(120, 90, 40, 0.08); }
+
+        .ruled {
+            background-image:
+                linear-gradient(90deg, transparent 38px, var(--margin) 38px, var(--margin) 40px, transparent 40px),
+                repeating-linear-gradient(transparent 0 31px, var(--rule) 31px 32px);
+            background-position: 0 0, 0 22px;
+        }
+        .dots { background-image: radial-gradient(rgba(90, 80, 70, 0.28) 1.2px, transparent 1.4px); background-size: 22px 22px; }
+        .gridpaper {
+            background-image:
+                linear-gradient(var(--grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .kraft {
+            background-color: var(--kraft);
+            background-image: radial-gradient(rgba(90, 60, 20, 0.12) 1px, transparent 1.5px), radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1.5px);
+            background-size: 7px 7px, 11px 11px;
+        }
+
+        .pageno {
+            position: absolute;
+            bottom: 16px;
+            font-family: var(--hand);
+            font-size: 22px;
+            color: var(--pencil);
+        }
+        .front .pageno { right: 26px; }
+        .back .pageno { left: 26px; }
+
+        /* ---------- Scrapbook pieces ---------- */
+
+        .label {
+            display: inline-block;
+            font-family: var(--type);
+            font-size: 13px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #fff;
+            background: #1d1d1f;
+            padding: 5px 10px 4px;
+            border-radius: 2px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            transform: rotate(-1.5deg);
+        }
+
+        .title {
+            font-family: var(--hand);
+            font-weight: 700;
+            font-size: 76px;
+            line-height: 0.9;
+            margin: 14px 0 8px;
+        }
+        .h2 {
+            font-family: var(--hand);
+            font-weight: 700;
+            font-size: 50px;
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+        .hl { background: linear-gradient(104deg, transparent 2%, var(--hl-yellow) 4%, var(--hl-yellow) 94%, transparent 97%); background-size: 100% 42%; background-repeat: no-repeat; background-position: 0 88%; padding: 0 4px; }
+        .hl.pink { background-image: linear-gradient(104deg, transparent 2%, var(--hl-pink) 4%, var(--hl-pink) 94%, transparent 97%); }
+        .hl.green { background-image: linear-gradient(104deg, transparent 2%, var(--hl-green) 4%, var(--hl-green) 94%, transparent 97%); }
+
+        .hand { font-family: var(--hand); font-size: 25px; line-height: 1.15; color: var(--ink); }
+        .hand.small { font-size: 21px; }
+        .pencil { color: var(--pencil); }
+        .type { font-family: var(--type); font-size: 13.5px; line-height: 1.55; color: var(--ink-2); }
+
+        p.body { font-size: 16.5px; line-height: 1.55; color: var(--ink); margin-bottom: 10px; }
+
+        .polaroid {
+            position: absolute;
+            background: #fff;
+            padding: 10px 10px 40px;
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.12), 0 10px 22px rgba(0, 0, 0, 0.14);
+        }
+        .polaroid img { width: 100%; height: auto; }
+        .polaroid .cap {
+            position: absolute;
+            left: 10px; right: 10px; bottom: 8px;
+            font-family: var(--hand);
+            font-size: 20px;
+            line-height: 1;
+            text-align: center;
+            color: var(--ink-2);
+        }
+        .snap {
+            position: absolute;
+            background: #fff;
+            padding: 6px;
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.12), 0 8px 18px rgba(0, 0, 0, 0.14);
+        }
+
+        .tape {
+            position: absolute;
+            width: 110px;
+            height: 30px;
+            background: var(--tape-pink);
+            clip-path: polygon(0 8%, 4% 0, 9% 10%, 14% 0, 20% 8%, 100% 0, 96% 50%, 100% 100%, 90% 92%, 84% 100%, 78% 90%, 0 100%, 3% 50%);
+            z-index: 3;
+            mix-blend-mode: multiply;
+        }
+        .tape.mint { background: var(--tape-mint); }
+        .tape.yellow { background: var(--tape-yellow); }
+        .tape.blue { background: var(--tape-blue); }
+        .tape.stripe { background: repeating-linear-gradient(45deg, var(--tape-pink) 0 8px, rgba(255, 255, 255, 0.6) 8px 16px); }
+
+        .sticky {
+            position: absolute;
+            background: var(--sticky);
+            padding: 16px 16px 18px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08), 0 12px 18px -8px rgba(0, 0, 0, 0.3);
+            font-family: var(--hand);
+            font-size: 22px;
+            line-height: 1.12;
+        }
+        .sticky.pink { background: var(--sticky-pink); }
+        .sticky.blue { background: var(--sticky-blue); }
+        .sticky b { font-size: 38px; display: block; line-height: 1; }
+
+        .card {
+            position: absolute;
+            background: #fff;
+            background-image: linear-gradient(transparent 34px, rgba(214, 90, 90, 0.45) 34px, rgba(214, 90, 90, 0.45) 35px, transparent 35px), repeating-linear-gradient(transparent 0 23px, rgba(80, 120, 180, 0.2) 23px 24px);
+            background-position: 0 0, 0 35px;
+            padding: 8px 16px 12px;
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+        .card h4 { font-family: var(--type); font-weight: 400; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; height: 27px; line-height: 27px; }
+        .card dl { display: grid; grid-template-columns: auto 1fr; gap: 0 12px; margin-top: 6px; }
+        .card dt { font-family: var(--type); font-size: 12px; color: var(--pencil); line-height: 24px; }
+        .card dd { font-family: var(--hand); font-size: 21px; line-height: 24px; }
+
+        .doodle { position: absolute; pointer-events: none; }
+        .doodle path, .doodle circle { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+        .btn-hand {
+            display: inline-block;
+            font-family: var(--hand);
+            font-size: 26px;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--ink);
+            padding: 4px 16px 6px;
+            border: 2.5px solid var(--ink);
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            background: #fff;
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+        .btn-hand:hover { transform: rotate(-2deg) scale(1.04); background: var(--hl-yellow); }
+        .btn-hand.coral { background: var(--coral); color: #fff; border-color: #c24e32; }
+        .btn-hand.coral:hover { background: #ff9075; }
+
+        .steps { list-style: none; position: relative; }
+        .steps::before { content: ''; position: absolute; left: 15px; top: 10px; bottom: 16px; border-left: 2.5px dashed var(--pencil); }
+        .steps li { position: relative; padding-left: 48px; margin-bottom: 14px; }
+        .steps .n {
+            position: absolute; left: 0; top: 0;
+            width: 32px; height: 32px;
+            display: grid; place-items: center;
+            font-family: var(--hand); font-weight: 700; font-size: 22px;
+            background: var(--paper);
+            border: 2.5px solid var(--ink);
+            border-radius: 50% 45% 55% 48%;
+        }
+        .steps b { font-family: var(--hand); font-size: 27px; font-weight: 700; line-height: 1; display: block; }
+        .steps span { font-size: 15.5px; line-height: 1.45; color: var(--ink-2); display: block; }
+
+        .strike { text-decoration: line-through; text-decoration-color: var(--coral); text-decoration-thickness: 3px; color: var(--pencil); }
+
+        /* ---------- Covers ---------- */
+
+        .cover {
+            background-color: var(--cover);
+            background-image:
+                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 5px),
+                repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.05) 0 2px, transparent 2px 5px);
+            color: #fff;
+            border-radius: 4px 12px 12px 4px;
+            box-shadow: inset 18px 0 20px -10px rgba(0, 0, 0, 0.45), inset 0 0 0 2px rgba(0, 0, 0, 0.1), 6px 8px 24px rgba(0, 0, 0, 0.45);
+        }
+        .cover .strap { position: absolute; top: 0; bottom: 0; right: 64px; width: 20px; background: linear-gradient(90deg, #2b1a20, #4a2a36 40%, #2b1a20); box-shadow: 0 0 6px rgba(0, 0, 0, 0.5); }
+        .cover .plate {
+            position: absolute;
+            left: 70px; right: 120px; top: 170px;
+            background: var(--paper);
+            color: var(--ink);
+            padding: 26px 26px 22px;
+            border-radius: 6px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35), inset 0 0 0 2px #fff, inset 0 0 0 4px var(--ink);
+            text-align: center;
+            transform: rotate(-1.5deg);
+        }
+        .cover .plate .type { font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; }
+        .cover .plate .title { font-size: 66px; margin: 10px 0 4px; }
+        .sticker {
+            position: absolute;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            font-family: var(--hand);
+            font-weight: 700;
+            border-radius: 50%;
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12), 0 6px 14px rgba(0, 0, 0, 0.3);
+            border: 4px solid #fff;
+        }
+        .hint {
+            position: absolute;
+            bottom: 38px; left: 0; right: 84px;
+            text-align: center;
+            font-family: var(--hand);
+            font-size: 26px;
+            color: rgba(255, 255, 255, 0.85);
+            animation: nudge 1.8s ease-in-out infinite;
+        }
+        @keyframes nudge { 50% { transform: translateX(8px); } }
+
+        .inside-cover { background-color: #e9dcc0; }
+
+        /* ---------- Contents ---------- */
+
+        .toc { list-style: none; margin-top: 18px; }
+        .toc li { margin-bottom: 20px; }
+        .toc button {
+            all: unset;
+            cursor: pointer;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            width: 100%;
+            font-family: var(--hand);
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .toc button::after { content: ''; order: 2; flex: 1; border-bottom: 3px dotted var(--pencil); transform: translateY(-6px); }
+        .toc .num { order: 3; font-size: 30px; color: var(--pencil); }
+        .toc small { display: block; font-family: var(--serif); font-size: 15px; color: var(--ink-2); margin: 2px 0 0; }
+        .toc button:hover .t, .toc button:focus-visible .t { background: var(--hl-yellow); }
+
+        /* ---------- Tabs ---------- */
+
+        .tabs {
+            position: absolute;
+            top: 60px;
+            left: calc(var(--page-w) * 2);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: transform 0.9s cubic-bezier(0.6, 0.05, 0.3, 1), opacity 0.4s ease;
+            z-index: 1;
+        }
+        .book.closed .tabs, .book.ended .tabs { opacity: 0; pointer-events: none; }
+        .tab {
+            all: unset;
+            cursor: pointer;
+            width: 44px;
+            padding: 16px 0;
+            writing-mode: vertical-rl;
+            text-align: center;
+            font-family: var(--hand);
+            font-weight: 700;
+            font-size: 21px;
+            color: var(--ink);
+            border-radius: 0 10px 10px 0;
+            box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.25);
+            transition: transform 0.15s ease;
+        }
+        .tab:hover, .tab:focus-visible { transform: translateX(5px); }
+        .tab.active { transform: translateX(8px); box-shadow: 5px 3px 8px rgba(0, 0, 0, 0.35); }
+
+        /* ---------- Controls ---------- */
+
+        .controls {
+            position: fixed;
+            left: 0; right: 0; bottom: 0;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            font-family: var(--hand);
+            font-size: 24px;
+            color: #fff;
+        }
+        .controls button {
+            all: unset;
+            cursor: pointer;
+            font-family: var(--hand);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--ink);
+            background: var(--paper);
+            padding: 2px 16px 4px;
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            box-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
+        }
+        .controls button:disabled { opacity: 0.35; cursor: default; }
+        .controls button:not(:disabled):hover { background: var(--hl-yellow); }
+        .controls .where { min-width: 150px; text-align: center; opacity: 0.9; }
+        .controls .fatos { position: absolute; right: 18px; font-size: 20px; color: rgba(255, 255, 255, 0.75); text-decoration: none; }
+        .controls .fatos:hover { color: #fff; text-decoration: underline; }
+
+        .corner {
+            position: absolute;
+            bottom: 0;
+            width: 64px;
+            height: 64px;
+            z-index: 5;
+            cursor: pointer;
+            border: 0;
+            background: transparent;
+        }
+        .front .corner { right: 0; background: linear-gradient(315deg, transparent 50%, rgba(0, 0, 0, 0) 50%); }
+        .back .corner { left: 0; }
+        .front .corner:hover { background: linear-gradient(315deg, var(--mat) 0 30%, #e8dfca 30% 34%, #f6f0e2 34% 50%, transparent 50%); }
+        .back .corner:hover { background: linear-gradient(45deg, var(--mat) 0 30%, #e8dfca 30% 34%, #f6f0e2 34% 50%, transparent 50%); }
+
+        /* ---------- Phone: a scrolling stack of pages ---------- */
+
+        @media (max-width: 860px), (max-height: 520px) {
+            body { overflow: auto; }
+            .stage { position: static; display: block; padding: 70px 0 30px; }
+            .scaler { width: auto; height: auto; transform: none; }
+            .book, .book.closed, .book.ended { width: auto; height: auto; transform: none; perspective: none; }
+            .leaf { position: static; width: auto; height: auto; transform: none !important; transition: none; }
+            .face {
+                position: relative;
+                width: var(--page-w);
+                height: var(--page-h);
+                transform: none !important;
+                zoom: var(--m, 0.6);
+                margin: 0 auto 28px;
+                border-radius: 6px !important;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
+            }
+            .corner, .controls .where, .controls > button, .hint { display: none; }
+            .tabs {
+                position: fixed;
+                top: 0; left: 0; right: 0;
+                flex-direction: row;
+                overflow-x: auto;
+                gap: 6px;
+                padding: 10px 12px 12px;
+                background: rgba(20, 50, 40, 0.94);
+                backdrop-filter: blur(6px);
+                opacity: 1 !important;
+                pointer-events: auto !important;
+                z-index: 20;
+            }
+            .tab { writing-mode: horizontal-tb; width: auto; padding: 4px 14px 6px; border-radius: 10px; white-space: nowrap; }
+            .tab.active { transform: none; }
+            .controls { position: static; height: auto; padding: 0 0 30px; }
+            .controls .fatos { position: static; }
+        }
+
+        .only-phone { display: none; }
+        @media (max-width: 860px), (max-height: 520px) {
+            .only-book { display: none; }
+            .only-phone { display: inline; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .leaf, .book, .tabs { transition: none; }
+            .hint { animation: none; }
+        }
+    </style>
+</head>
+<body>
+
+<main class="stage" aria-label="Design journal">
+    <div class="scaler">
+        <div class="book closed" id="book">
+
+            <nav class="tabs" aria-label="Sections">
+                <button class="tab" data-go="2" style="background:#fff3b0">contents</button>
+                <button class="tab" data-go="3" style="background:#ffc2ad">FlowState</button>
+                <button class="tab" data-go="7" style="background:#bfe9cc">Plant Buddy</button>
+                <button class="tab" data-go="11" style="background:#cde0ff">earlier work</button>
+                <button class="tab" data-go="13" style="background:#f3c9e4">say hi</button>
+            </nav>
+
+            <!-- ============ LEAF 0: cover / inside cover ============ -->
+            <div class="leaf">
+                <section class="face front cover" aria-label="Cover">
+                    <div class="strap"></div>
+                    <div class="sticker" style="top:62px;left:60px;width:110px;height:110px;background:#ffd166;color:#5a3a00;font-size:24px;transform:rotate(-12deg);line-height:1">design<br>eng.</div>
+                    <div class="sticker" style="top:520px;left:300px;width:92px;height:92px;background:#8ee3c8;color:#10433a;font-size:40px;transform:rotate(10deg)">✿</div>
+                    <div class="plate">
+                        <p class="type">the design journal of</p>
+                        <h1 class="title">Fatima Ibrahim Maideribe</h1>
+                        <p class="hand small pencil">projects, sketches &amp; the messy bits in between</p>
+                    </div>
+                    <p class="hint">open me →</p>
+                    <button class="corner" data-dir="next" aria-label="Open the journal"></button>
+                </section>
+
+                <section class="face back page inside-cover" aria-label="About me">
+                    <span class="label">this journal belongs to</span>
+                    <h2 class="title" style="font-size:68px">Fatima <span class="hl pink">✿</span></h2>
+                    <p class="hand" style="margin-bottom:18px">design engineer &amp; creative technologist</p>
+                    <p class="body">I like building things that sit between people and technology: apps that nudge better habits, devices that make data feel human, and interfaces that are playful without getting in the way.</p>
+                    <p class="body">After a BSc in Creative Computing I moved into Design Engineering at Imperial College London. This journal is where I keep the projects, and the journey behind each one.</p>
+                    <p class="body">Off the clock: the outdoors, new recipes and fantasy novels.</p>
+
+                    <div class="card" style="left:50px;right:70px;bottom:62px;transform:rotate(1.2deg)">
+                        <h4>if found, please return to</h4>
+                        <dl>
+                            <dt>email</dt><dd><a href="mailto:fatimamaideribe@gmail.com">fatimamaideribe@gmail.com</a></dd>
+                            <dt>linkedin</dt><dd><a href="https://www.linkedin.com/in/fatima-ibrahim-maideribe" target="_blank" rel="noopener">Fatima Ibrahim Maideribe</a></dd>
+                        </dl>
+                    </div>
+                    <span class="tape yellow" style="bottom:190px;left:230px;transform:rotate(-4deg)"></span>
+                    <span class="pageno">i</span>
+                    <button class="corner" data-dir="prev" aria-label="Previous page"></button>
+                </section>
+            </div>
+
+            <!-- ============ LEAF 1: contents / FlowState project ============ -->
+            <div class="leaf">
+                <section class="face front page ruled" aria-label="Contents">
+                    <h2 class="h2" style="font-size:64px;margin-left:10px">contents</h2>
+                    <ol class="toc" style="margin-left:10px">
+                        <li><button data-go="3"><span class="t">FlowState <span class="hand small" style="color:var(--coral)">new!</span></span><span class="num">3</span></button><small>a focus app you unlock by finishing the task</small></li>
+                        <li><button data-go="7"><span class="t">Smart Plant Buddy <span class="hand small" style="color:var(--coral)">new!</span></span><span class="num">7</span></button><small>an ESP32 plant that tells you how it feels</small></li>
+                        <li><button data-go="11"><span class="t">earlier work</span><span class="num">11</span></button><small>study robot, A* snake, Wildwise, fan, bakery</small></li>
+                        <li><button data-go="13"><span class="t">say hi</span><span class="num">13</span></button><small>email, LinkedIn</small></li>
+                    </ol>
+                    <div class="sticky" style="width:210px;right:44px;bottom:64px;transform:rotate(3deg)">
+                        how to read this:<br><span class="only-book">flip with the corners, the arrow keys, or jump with the tabs →</span><span class="only-phone">scroll down, or jump with the tabs up top ↑</span>
+                    </div>
+                    <svg class="doodle" style="left:60px;bottom:70px" width="150" height="110" viewBox="0 0 150 110" aria-hidden="true">
+                        <path d="M20 90 C 40 40, 90 30, 110 60 S 135 95, 120 70"/>
+                        <path d="M28 28 l6 14 l14 2 l-10 10 l3 14 l-13 -7 l-13 7 l3 -14 l-10 -10 l14 -2 z"/>
+                    </svg>
+                    <span class="pageno">2</span>
+                    <button class="corner" data-dir="next" aria-label="Next page"></button>
+                </section>
+
+                <section class="face back page dots" aria-label="FlowState: the project">
+                    <span class="label">project 01 · UX / UI</span>
+                    <h2 class="title"><span class="hl">FlowState</span></h2>
+                    <p class="hand">you earn your break by finishing the task, not by waiting out a timer.</p>
+
+                    <div class="polaroid" style="left:46px;top:240px;width:300px;transform:rotate(-3deg)">
+                        <img src="assets/thumbs/flowstate.webp" alt="FlowState screens: task breakdown, intervention and break earned" width="800" height="500">
+                        <span class="cap">the final design ✦</span>
+                    </div>
+                    <span class="tape" style="left:140px;top:228px;transform:rotate(-6deg)"></span>
+
+                    <div class="sticky pink" style="left:370px;top:250px;width:140px;transform:rotate(4deg)"><b>~80%</b>of students procrastinate regularly</div>
+
+                    <p class="body" style="position:absolute;left:50px;right:50px;top:494px">Phone blockers run on a timer that ends whether or not you worked, and to-do apps do nothing when you reach for your phone. Nothing checked that the task was <em>done</em>.</p>
+
+                    <div class="card" style="left:50px;right:60px;bottom:56px;transform:rotate(-0.8deg)">
+                        <h4>the brief</h4>
+                        <dl>
+                            <dt>role</dt><dd>solo: research, UX, UI, testing</dd>
+                            <dt>module</dt><dd>User Interfaces, Imperial · March 2026</dd>
+                            <dt>tools</dt><dd>Figma, paper prototypes, think-aloud tests</dd>
+                        </dl>
+                    </div>
+                    <span class="pageno">3</span>
+                    <button class="corner" data-dir="prev" aria-label="Previous page"></button>
+                </section>
+            </div>
+
+            <!-- ============ LEAF 2: FlowState journey / final design ============ -->
+            <div class="leaf">
+                <section class="face front page ruled" aria-label="FlowState: the journey">
+                    <h2 class="h2" style="margin-left:10px">the journey</h2>
+                    <ol class="steps" style="margin-left:6px;width:280px">
+                        <li><span class="n">1</span><b>talk to people</b><span>4 interviews with grad students: <em>starting</em> is the hard part</span></li>
+                        <li><span class="n">2</span><b>map the moment</b><span>one flow: tempted → paused → break it down → prove it → reward</span></li>
+                        <li><span class="n">3</span><b>sticky-note it</b><span>paper prototypes; 3 buttons became 2</span></li>
+                        <li><span class="n">4</span><b>wireframe</b><span>greyscale lo-fi to lock the hierarchy</span></li>
+                        <li><span class="n">5</span><b>make it real</b><span>hi-fi in Figma: coral = action, purple = focus, teal = success</span></li>
+                        <li><span class="n">6</span><b>test it</b><span>6 think-aloud sessions, then iterate</span></li>
+                    </ol>
+
+                    <div class="snap" style="right:38px;top:70px;width:170px;transform:rotate(4deg)">
+                        <img src="assets/FlowState/paper-1.webp" alt="Testing the sticky-note paper prototype" loading="lazy" style="aspect-ratio:3/4;object-fit:cover">
+                    </div>
+                    <span class="tape mint" style="right:70px;top:60px;width:90px;transform:rotate(8deg)"></span>
+
+                    <div class="snap" style="right:52px;top:330px;width:150px;transform:rotate(-5deg)">
+                        <img src="assets/FlowState/flow-v1.webp" alt="First hand-drawn user flow" loading="lazy" style="aspect-ratio:3/4;object-fit:cover">
+                    </div>
+                    <span class="tape stripe" style="right:82px;top:320px;width:84px;transform:rotate(-10deg)"></span>
+
+                    <div class="sticky" style="right:40px;bottom:58px;width:200px;transform:rotate(-3deg);font-size:21px">
+                        "my problem mainly is starting…"<br><span class="pencil" style="font-size:18px">— participant 3</span>
+                    </div>
+                    <span class="pageno">4</span>
+                    <button class="corner" data-dir="next" aria-label="Next page"></button>
+                </section>
+
+                <section class="face back page dots" aria-label="FlowState: the happy path">
+                    <h2 class="h2">the happy path</h2>
+                    <p class="body" style="margin-bottom:0">Marcus opens Instagram out of habit. FlowState steps in:</p>
+
+                    <div class="snap" style="left:40px;top:150px;width:112px;transform:rotate(-4deg);border-radius:14px"><img src="assets/FlowState/intervention.webp" alt="Instagram is paused screen" loading="lazy" style="border-radius:10px"></div>
+                    <div class="snap" style="left:162px;top:180px;width:112px;transform:rotate(2deg);border-radius:14px"><img src="assets/FlowState/breakdown.webp" alt="Task breakdown screen" loading="lazy" style="border-radius:10px"></div>
+                    <div class="snap" style="left:284px;top:150px;width:112px;transform:rotate(-2deg);border-radius:14px"><img src="assets/FlowState/verify.webp" alt="Verification choice screen" loading="lazy" style="border-radius:10px"></div>
+                    <div class="snap" style="left:406px;top:180px;width:112px;transform:rotate(4deg);border-radius:14px"><img src="assets/FlowState/success.webp" alt="Break earned screen" loading="lazy" style="border-radius:10px"></div>
+                    <span class="tape yellow" style="left:60px;top:140px;width:70px;transform:rotate(-8deg)"></span>
+                    <span class="tape blue" style="left:430px;top:170px;width:70px;transform:rotate(6deg)"></span>
+
+                    <p class="hand small" style="position:absolute;left:44px;right:30px;top:452px;display:grid;grid-template-columns:repeat(4,1fr);text-align:center;gap:10px">
+                        <span>"Instagram is paused", not blocked</span><span>break it down into 15-min bites</span><span>prove it: photo or friend's code</span><span>15:00 of guilt-free scrolling!</span>
+                    </p>
+                    <svg class="doodle" style="left:140px;top:420px" width="300" height="30" viewBox="0 0 300 30" aria-hidden="true">
+                        <path d="M5 15 Q 40 2 75 15 M68 9 l8 6 l-9 5"/><path d="M125 15 Q 160 28 195 15 M188 9 l8 6 l-9 5"/><path d="M225 15 Q 255 2 290 15 M283 9 l8 6 l-9 5"/>
+                    </svg>
+
+                    <div class="sticky blue" style="left:50px;bottom:60px;width:215px;transform:rotate(-2deg);font-size:21px">"Now I can know what I need to do next. That makes it far easier."</div>
+                    <div class="sticky pink" style="right:44px;bottom:74px;width:200px;transform:rotate(3deg);font-size:21px">"I felt good not opening Instagram because it reminded me not to."</div>
+                    <span class="pageno">5</span>
+                    <button class="corner" data-dir="prev" aria-label="Previous page"></button>
+                </section>
+            </div>
+
+            <!-- ============ LEAF 3: FlowState learnings / Plant Buddy project ============ -->
+            <div class="leaf">
+                <section class="face front page ruled" aria-label="FlowState: what testing changed">
+                    <h2 class="h2" style="margin-left:10px">what testing changed</h2>
+                    <ul style="list-style:none;margin-left:10px" class="hand">
+                        <li style="margin-bottom:14px"><span class="strike">only the app icon triggers it</span> → the notification does too <span class="pencil small">(people tapped that first!)</span></li>
+                        <li style="margin-bottom:14px"><span class="strike">tap the tiny upload button</span> → the whole preview is tappable</li>
+                        <li style="margin-bottom:14px"><span class="strike">"photo" + "file upload"</span> → one <span class="hl green">upload proof</span> option</li>
+                    </ul>
+
+                    <h3 class="h2" style="font-size:40px;margin:26px 0 8px 10px">what I'd do next time</h3>
+                    <p class="body" style="margin-left:10px;max-width:440px">Test with people beyond postgrads, since procrastination covers chores and working life too, and design the missing flows: onboarding, calendar sync and how strict the app should be.</p>
+
+                    <div style="position:absolute;left:60px;bottom:74px;display:flex;flex-wrap:wrap;gap:14px">
+                        <a class="btn-hand coral" href="flowstate.html#prototype">▶ try the prototype</a>
+                        <a class="btn-hand" href="flowstate.html">full case study →</a>
+                    </div>
+                    <svg class="doodle" style="right:70px;top:460px;transform:rotate(12deg)" width="80" height="80" viewBox="0 0 80 80" aria-hidden="true"><path d="M40 8 L46 32 L72 34 L50 48 L58 72 L40 58 L22 72 L30 48 L8 34 L34 32 Z"/></svg>
+                    <span class="pageno">6</span>
+                    <button class="corner" data-dir="next" aria-label="Next page"></button>
+                </section>
+
+                <section class="face back page gridpaper" aria-label="Smart Plant Buddy: the project">
+                    <span class="label">project 02 · IoT</span>
+                    <h2 class="title" style="font-size:68px"><span class="hl green">Smart Plant Buddy</span></h2>
+                    <p class="hand">"is my green thumb not so green?"</p>
+
+                    <div class="polaroid" style="left:44px;top:236px;width:250px;transform:rotate(-2.5deg)">
+                        <img src="assets/PlantBuddy/setup.webp" alt="ESP32 wired to sensors in a potted plant" loading="lazy" style="aspect-ratio:1;object-fit:cover">
+                        <span class="cap">meet my Polyscias 🌱</span>
+                    </div>
+                    <span class="tape mint" style="left:120px;top:224px;transform:rotate(-4deg)"></span>
+
+                    <div class="sticky" style="left:320px;top:250px;width:180px;transform:rotate(3deg)"><b>£19</b>of parts, vs £129 for a smart pot</div>
+                    <div class="sticky blue" style="left:334px;top:410px;width:170px;transform:rotate(-3deg)"><b>693</b>readings in a week, 100% uploaded</div>
+
+                    <div class="card" style="left:50px;right:60px;bottom:56px;transform:rotate(0.8deg)">
+                        <h4>the brief</h4>
+                        <dl>
+                            <dt>role</dt><dd>solo: hardware, firmware, cloud, analysis</dd>
+                            <dt>module</dt><dd>Sensing &amp; IoT, Imperial · Dec 2025</dd>
+                            <dt>stack</dt><dd>ESP32, Firebase, Chart.js, Python</dd>
+                        </dl>
+                    </div>
+                    <span class="pageno">7</span>
+                    <button class="corner" data-dir="prev" aria-label="Previous page"></button>
+                </section>
+            </div>
+
+            <!-- ============ LEAF 4: Plant journey / numbers ============ -->
+            <div class="leaf">
+                <section class="face front page gridpaper" aria-label="Smart Plant Buddy: the journey">
+                    <h2 class="h2">the journey</h2>
+                    <ol class="steps" style="width:262px">
+                        <li><span class="n">1</span><b>calibrate</b><span>soil: dry air vs. submerged. &lt;1500 = thirsty</span></li>
+                        <li><span class="n">2</span><b>wire it up</b><span>ESP32 + soil, light, temp &amp; humidity sensors</span></li>
+                        <li><span class="n">3</span><b>send it to the cloud</b><span>Firebase every 15 min, live via WebSockets</span></li>
+                        <li><span class="n">4</span><b>give it a face</b><span>a rule-based mood shown on a tiny OLED</span></li>
+                        <li><span class="n">5</span><b>live with it</b><span>a week of data, a dashboard, a pilot with family</span></li>
+                    </ol>
+
+                    <div class="snap" style="right:34px;top:64px;width:176px;transform:rotate(3deg)">
+                        <img src="assets/PlantBuddy/circuit.webp" alt="Circuit schematic" loading="lazy">
+                    </div>
+                    <span class="tape blue" style="right:80px;top:54px;width:90px;transform:rotate(6deg)"></span>
+
+                    <div class="polaroid" style="right:38px;top:320px;width:172px;transform:rotate(-4deg)">
+                        <img src="assets/PlantBuddy/oled.webp" alt="OLED screen showing the happy face" loading="lazy" style="aspect-ratio:1;object-fit:cover">
+                        <span class="cap">it's happy! (^ ^)</span>
+                    </div>
+                    <span class="tape" style="right:80px;top:318px;width:90px;transform:rotate(-5deg)"></span>
+
+                    <p class="hand small" style="position:absolute;left:52px;right:40px;bottom:58px;transform:rotate(-1deg)">
+                        moods: <span style="white-space:nowrap">happy (^ ^)</span> · <span style="white-space:nowrap">thirsty (O O)</span> · <span style="white-space:nowrap">hot (&gt; &lt;)</span> · <span style="white-space:nowrap">drowning (@ @)</span> · <span style="white-space:nowrap">ok (:—)</span>
+                    </p>
+                    <span class="pageno">8</span>
+                    <button class="corner" data-dir="next" aria-label="Next page"></button>
+                </section>
+
+                <section class="face back page gridpaper" aria-label="Smart Plant Buddy: the numbers">
+                    <h2 class="h2">what the data said</h2>
+                    <div class="snap" style="left:44px;top:110px;width:330px;transform:rotate(-1.5deg)">
+                        <img src="assets/PlantBuddy/time-series.webp" alt="Seven days of soil, light, temperature and humidity readings" loading="lazy">
+                    </div>
+                    <span class="tape yellow" style="left:150px;top:100px;transform:rotate(3deg)"></span>
+                    <div class="snap" style="right:40px;top:150px;width:160px;transform:rotate(4deg)">
+                        <img src="assets/PlantBuddy/correlation.webp" alt="Sensor correlation heatmap" loading="lazy">
+                    </div>
+                    <div class="sticky pink" style="right:46px;top:340px;width:160px;transform:rotate(-3deg);font-size:21px">soil ↔ temp <b style="font-size:32px">r = 0.74</b>warm days dry it faster</div>
+
+                    <ul class="hand" style="position:absolute;left:50px;top:460px;width:290px;list-style:none;font-size:23px">
+                        <li>✓ 237 ms uploads <span class="pencil">(goal &lt;500)</span></li>
+                        <li>✓ 95% mood accuracy</li>
+                        <li>✓ 99.7% uptime</li>
+                        <li>✓ caught all 7 waterings, 0 false alarms</li>
+                        <li>✓ 80% of testers checked the face over the numbers</li>
+                    </ul>
+                    <span class="pageno">9</span>
+                    <button class="corner" data-dir="prev" aria-label="Previous page"></button>
+                </section>
+            </div>
+
+            <!-- ============ LEAF 5: Plant reflection / earlier work 1 ============ -->
+            <div class="leaf">
+                <section class="face front page ruled" aria-label="Smart Plant Buddy: lessons">
+                    <h2 class="h2" style="margin-left:10px">things that went wrong</h2>
+                    <ul class="hand" style="list-style:none;margin-left:10px">
+                        <li style="margin-bottom:12px"><b>jittery soil readings</b> <span class="pencil">(WiFi interference)</span> → average 10 samples</li>
+                        <li style="margin-bottom:12px"><b>green gunk on the probe</b> <span class="pencil">(copper oxide!)</span> → clean it or swap in a spare</li>
+                        <li style="margin-bottom:12px"><b>laggy charts</b> → downsample 700 points to 200</li>
+                    </ul>
+                    <h3 class="h2" style="font-size:40px;margin:22px 0 8px 10px">next time</h3>
+                    <p class="body" style="margin-left:10px;max-width:440px">Automatic watering, a camera to check leaf health, more species profiles, and proper security: auth rules, no hard-coded WiFi and certificate pinning.</p>
+                    <div style="position:absolute;left:60px;bottom:74px;display:flex;flex-wrap:wrap;gap:14px">
+                        <a class="btn-hand coral" style="background:#3aa865;border-color:#23733f" href="plant-buddy.html#video">▶ watch it run</a>
+                        <a class="btn-hand" href="plant-buddy.html">full case study →</a>
+                        <a class="btn-hand" href="https://github.com/fatimamaideribe/Smart-Plant-Buddy-Code" target="_blank" rel="noopener">code ↗</a>
+                    </div>
+                    <span class="pageno">10</span>
+                    <button class="corner" data-dir="next" aria-label="Next page"></button>
+                </section>
+
+                <section class="face back page kraft" aria-label="Earlier work">
+                    <span class="label">earlier work</span>
+                    <h2 class="h2" style="margin-top:12px">before the MSc…</h2>
+                    <a class="polaroid" href="ai-study-buddy.html" style="left:46px;top:160px;width:220px;transform:rotate(-4deg)"><img src="assets/thumbs/study-buddy.webp" alt="AI Study Buddy robot" loading="lazy"><span class="cap">AI Study Buddy</span></a>
+                    <span class="tape" style="left:110px;top:150px;width:90px;transform:rotate(-6deg)"></span>
+                    <a class="polaroid" href="snake-ai.html" style="left:290px;top:210px;width:220px;transform:rotate(3deg)"><img src="assets/thumbs/snake.webp" alt="A* snake search grid" loading="lazy"><span class="cap">A* Snake</span></a>
+                    <span class="tape mint" style="left:360px;top:198px;width:90px;transform:rotate(5deg)"></span>
+                    <a class="polaroid" href="wildwise.html" style="left:120px;top:430px;width:240px;transform:rotate(-1deg)"><img src="assets/thumbs/wildwise.webp" alt="Wildwise campaign posters" loading="lazy"><span class="cap">Wildwise</span></a>
+                    <span class="tape yellow" style="left:190px;top:418px;width:90px;transform:rotate(-3deg)"></span>
+                    <p class="hand small" style="position:absolute;right:40px;bottom:70px;width:140px;text-align:right;transform:rotate(-3deg)">tap a photo to read about it ↗</p>
+                    <span class="pageno">11</span>
+                    <button class="corner" data-dir="prev" aria-label="Previous page"></button>
+                </section>
+            </div>
+
+            <!-- ============ LEAF 6: earlier work 2 / say hi ============ -->
+            <div class="leaf">
+                <section class="face front page kraft" aria-label="Earlier work, continued">
+                    <a class="polaroid" href="arduino-fan.html" style="left:52px;top:80px;width:230px;transform:rotate(3deg)"><img src="assets/thumbs/fan.webp" alt="Arduino exhaust fan circuit" loading="lazy"><span class="cap">Exhaust Fan</span></a>
+                    <span class="tape blue" style="left:120px;top:68px;width:90px;transform:rotate(4deg)"></span>
+                    <a class="polaroid" href="bakery.html" style="left:260px;top:300px;width:240px;transform:rotate(-3deg)"><img src="assets/thumbs/bakery.webp" alt="Cake Swirl bakery website" loading="lazy"><span class="cap">Bakery Website</span></a>
+                    <span class="tape stripe" style="left:330px;top:288px;width:90px;transform:rotate(-5deg)"></span>
+                    <div class="sticky" style="left:60px;bottom:90px;width:200px;transform:rotate(-4deg)">more pages coming soon… ✎</div>
+                    <span class="pageno">12</span>
+                    <button class="corner" data-dir="next" aria-label="Next page"></button>
+                </section>
+
+                <section class="face back page ruled" aria-label="Say hi">
+                    <h2 class="title" style="margin-left:10px">say hi! ✉</h2>
+                    <p class="body" style="margin-left:10px;max-width:420px">I'm always happy to chat about UX, IoT, creative tech, or a project you're working on.</p>
+                    <div class="card" style="left:56px;right:60px;top:250px;transform:rotate(-1deg)">
+                        <h4>find me</h4>
+                        <dl>
+                            <dt>email</dt><dd><a href="mailto:fatimamaideribe@gmail.com">fatimamaideribe@gmail.com</a></dd>
+                            <dt>linkedin</dt><dd><a href="https://www.linkedin.com/in/fatima-ibrahim-maideribe" target="_blank" rel="noopener">Fatima Ibrahim Maideribe</a></dd>
+                        </dl>
+                    </div>
+                    <svg class="doodle" style="left:190px;top:440px" width="180" height="120" viewBox="0 0 180 120" aria-hidden="true">
+                        <path d="M10 20 h160 v90 h-160 z"/><path d="M10 20 l80 55 l80 -55"/><path d="M130 88 c 6 -10 20 -4 12 6 l-12 12 l-12 -12 c -8 -10 6 -16 12 -6"/>
+                    </svg>
+                    <span class="pageno">13</span>
+                    <button class="corner" data-dir="prev" aria-label="Previous page"></button>
+                </section>
+            </div>
+
+            <!-- ============ LEAF 7: desktop / back cover ============ -->
+            <div class="leaf">
+                <section class="face front page dots" aria-label="Desktop version">
+                    <h2 class="h2">psst…</h2>
+                    <p class="hand">prefer something a little more Y2K?</p>
+                    <a href="index.html#desktop" class="snap" style="left:70px;top:190px;width:410px;transform:rotate(-2deg);text-decoration:none">
+                        <span style="display:block;background:linear-gradient(#1084d0,#0c5a91);color:#fff;font-family:var(--type);font-size:13px;padding:6px 10px">⊞ The desktop version of this site</span>
+                        <span style="display:block;height:220px;background:linear-gradient(#6fb3f0 0 55%,#5aa33a 55%);position:relative">
+                            <span style="position:absolute;left:18px;top:14px;font-size:30px;line-height:1.6">🗂️<br>📱<br>🪴</span>
+                            <span style="position:absolute;left:120px;top:40px;width:120px;height:90px;background:#ffff99;transform:rotate(3deg);font-family:var(--hand);font-size:18px;padding:8px;color:var(--ink)">welcome! type 'help' 🚀</span>
+                        </span>
+                    </a>
+                    <span class="tape" style="left:230px;top:176px;transform:rotate(-3deg)"></span>
+                    <p class="hand" style="position:absolute;left:80px;top:500px">↑ click to boot it up</p>
+                    <span class="pageno">14</span>
+                    <button class="corner" data-dir="next" aria-label="Close the journal"></button>
+                </section>
+
+                <section class="face back cover" aria-label="Back cover" style="border-radius:12px 4px 4px 12px;box-shadow:inset -18px 0 20px -10px rgba(0,0,0,0.45),6px 8px 24px rgba(0,0,0,0.45)">
+                    <div class="sticker" style="top:300px;left:200px;width:150px;height:150px;background:#ffc8d8;color:#6a2340;font-size:30px;transform:rotate(-8deg);line-height:1">thanks for<br>reading ♡</div>
+                    <button class="corner" data-dir="prev" aria-label="Back into the journal" style="left:0"></button>
+                </section>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<nav class="controls" aria-label="Page controls">
+    <button type="button" id="prev" aria-label="Previous page">← back</button>
+    <span class="where" id="where" aria-live="polite">cover</span>
+    <button type="button" id="next" aria-label="Next page">next →</button>
+    <a class="fatos" href="index.html#desktop">desktop version ⊞</a>
+</nav>
+
+<script>
+(function () {
+    const book = document.getElementById('book');
+    const leaves = [...book.querySelectorAll('.leaf')];
+    const N = leaves.length;
+    const where = document.getElementById('where');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    const tabs = [...document.querySelectorAll('.tab')];
+    const phone = () => window.matchMedia('(max-width: 860px), (max-height: 520px)').matches;
+    let flipped = 0;          // number of leaves turned
+    let busy = false;
+
+    function stackOrder() {
+        leaves.forEach((leaf, i) => {
+            leaf.style.zIndex = i < flipped ? i + 1 : N - i + 1;
+        });
+    }
+
+    function render() {
+        leaves.forEach((leaf, i) => leaf.classList.toggle('flipped', i < flipped));
+        book.classList.toggle('closed', flipped === 0);
+        book.classList.toggle('ended', flipped === N);
+
+        // Only the two visible pages are reachable by keyboard / screen readers
+        leaves.forEach((leaf, i) => {
+            const [front, back] = leaf.querySelectorAll('.face');
+            front.inert = !phone() && i !== flipped;
+            back.inert = !phone() && i !== flipped - 1;
+        });
+
+        const left = flipped * 2 - 1, right = flipped * 2;
+        where.textContent = flipped === 0 ? 'cover' : flipped === N ? 'back cover' :
+            (left === 1 ? 'inside cover' : 'pages ' + left + '–' + right);
+        prevBtn.disabled = flipped === 0;
+        nextBtn.disabled = flipped === N;
+
+        let active = null;
+        tabs.forEach(t => { if (+t.dataset.go <= right) active = t; });
+        tabs.forEach(t => t.classList.toggle('active', t === active && flipped > 0 && flipped < N));
+    }
+
+    function turnTo(target) {
+        target = Math.max(0, Math.min(N, target));
+        if (target === flipped || busy) return;
+        busy = true;
+        const dir = target > flipped ? 1 : -1;
+        const steps = Math.abs(target - flipped);
+        const gap = steps > 1 ? 140 : 0;
+        for (let k = 0; k < steps; k++) {
+            setTimeout(() => {
+                const idx = dir > 0 ? flipped : flipped - 1;
+                leaves[idx].style.zIndex = N + 10;
+                flipped += dir;
+                render();
+                setTimeout(stackOrder, 900);
+                if (k === steps - 1) setTimeout(() => { busy = false; }, 200);
+            }, k * gap);
+        }
+    }
+
+    // page number -> number of leaves flipped so it's visible
+    const leavesForPage = (p) => Math.ceil(p / 2);
+
+    function goToPage(p) {
+        if (phone()) {
+            const face = book.querySelectorAll('.face')[p];
+            face && face.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+        }
+        turnTo(leavesForPage(p));
+    }
+
+    prevBtn.addEventListener('click', () => turnTo(flipped - 1));
+    nextBtn.addEventListener('click', () => turnTo(flipped + 1));
+    book.querySelectorAll('.corner').forEach(c => c.addEventListener('click', () => turnTo(flipped + (c.dataset.dir === 'next' ? 1 : -1))));
+    document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => goToPage(+b.dataset.go)));
+    document.addEventListener('keydown', (e) => {
+        if (phone()) return;
+        if (e.key === 'ArrowRight') turnTo(flipped + 1);
+        if (e.key === 'ArrowLeft') turnTo(flipped - 1);
+    });
+
+    // Swipe on touch laptops / tablets in book mode
+    let sx = null;
+    book.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+    book.addEventListener('touchend', e => {
+        if (sx === null || phone()) return;
+        const dx = e.changedTouches[0].clientX - sx;
+        if (Math.abs(dx) > 50) turnTo(flipped + (dx < 0 ? 1 : -1));
+        sx = null;
+    });
+
+    function fit() {
+        const root = document.documentElement.style;
+        const pw = 560, ph = 760;
+        if (phone()) {
+            root.setProperty('--m', Math.min(1, (window.innerWidth - 24) / pw));
+        } else {
+            const s = Math.min((window.innerWidth - 40) / (pw * 2 + 60), (window.innerHeight - 64 - 30) / ph);
+            root.setProperty('--s', Math.min(s, 1.15));
+        }
+        render();
+    }
+    window.addEventListener('resize', fit);
+    stackOrder();
+    fit();
+})();
+</script>
+</body>
+</html>

@@ -3,782 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WildWise - Project Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="project-style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        /* Basic page setup for scrolling */
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            overflow-x: hidden;
-            overflow-y: auto;
-            background: linear-gradient(45deg, #000033, #003366);
-            color: #ffffff;
-            font-family: 'Fira Code', monospace;
-            line-height: 1.6;
-        }
-        
-        .project-container {
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            overflow-y: auto;
-        }
-        
-        .file-explorer {
-            display: flex;
-            min-height: 0;
-            overflow: visible;
-            flex-direction: row;
-            flex-wrap: wrap;
-        }
-        
-        .file-tree {
-            min-width: 150px;
-            padding-right: 20px;
-            position: sticky;
-            top: 20px;
-            max-height: calc(100vh - 40px);
-            overflow-y: auto;
-            align-self: flex-start;
-        }
-        
-        .file-content {
-            flex: 1;
-            overflow-y: visible;
-            padding: 20px;
-            min-width: 300px;
-        }
-        
-        /* Responsive handling */
-        @media (max-width: 768px) {
-            .file-explorer {
-                flex-direction: column;
-            }
-            
-            .file-tree {
-                width: 100%;
-                padding-right: 0;
-                margin-bottom: 20px;
-                position: relative;
-                max-height: none;
-                overflow-y: visible;
-            }
-            
-            .file-content {
-                width: 100%;
-                padding: 10px 0;
-            }
-        }
-        
-        /* Case Study Specific Styling */
-        .case-study-title {
-            color: #00ffcc;
-            font-size: 2rem;
-            text-align: center;
-            margin-bottom: 2rem;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-            letter-spacing: 1px;
-        }
-        
-        .case-study-section {
-            margin-bottom: 2.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px dashed rgba(153, 51, 255, 0.3);
-        }
-        
-        .section-title {
-            color: #9933ff;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            padding-left: 20px;
-            position: relative;
-        }
-        
-        .section-title::before {
-            content: ">";
-            position: absolute;
-            left: 0;
-            color: #ff66ff;
-        }
-        
-        .subsection-title {
-            color: #00ffcc;
-            font-size: 1.2rem;
-            margin: 1.2rem 0 0.8rem;
-            padding-left: 25px;
-        }
-        
-        .section-content {
-            padding-left: 25px;
-            line-height: 1.6;
-        }
-        
-        .section-content p {
-            margin-bottom: 1rem;
-        }
-        
-        .section-content ul, 
-        .section-content ol {
-            margin-bottom: 1rem;
-            padding-left: 20px;
-        }
-        
-        .section-content li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .goals-block, .tech-note, .skills-demonstrated, .project-artifacts {
-            background-color: rgba(26, 43, 60, 0.7);
-            border-left: 3px solid #9933ff;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 0 5px 5px 0;
-        }
-        
-        .code-block {
-            background-color: #0a1929;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 15px 0;
-            overflow-x: auto;
-        }
-        
-        .code-block pre {
-            margin: 0;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.9rem;
-        }
-        
-        .code-block code {
-            color: #ffffff;
-        }
-        
-        /* Back to Portfolio Button */
-        .back-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background-color: rgba(26, 43, 60, 0.8);
-            border: 1px solid #00ffcc;
-            color: #00ffcc;
-            padding: 8px 15px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-family: 'Fira Code', monospace;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-            z-index: 100;
-        }
-        
-        .back-button:hover {
-            background-color: rgba(0, 255, 204, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .back-button::before {
-            content: "←";
-            font-size: 18px;
-        }
-        
-        /* Project Header Styling */
-        .project-header {
-            margin-bottom: 30px;
-            padding: 20px;
-            background-color: rgba(26, 43, 60, 0.7);
-            border-radius: 8px;
-            border: 1px solid #00ffcc;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
-        }
-        
-        .project-title {
-            color: #ff66ff;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 2.5rem;
-            text-shadow: 0 0 10px rgba(255, 102, 255, 0.5);
-        }
-        
-        .project-overview {
-            background-color: #0a1929;
-            padding: 15px;
-            border-radius: 5px;
-            border-left: 3px solid #9933ff;
-        }
-        
-        .terminal-prompt {
-            color: #ff66ff;
-            margin-right: 8px;
-        }
-        
-        .terminal-command {
-            color: #00ffcc;
-        }
-        
-        .terminal-output {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: rgba(0, 0, 51, 0.5);
-            border-radius: 3px;
-            color: #ffffff;
-        }
-        
-        /* Improve file tree items styling */
-        .file-tree-item {
-            padding: 8px 12px;
-            margin-bottom: 5px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background-color: rgba(26, 43, 60, 0.7);
-            border-left: 3px solid transparent;
-        }
-        
-        .file-tree-item:hover {
-            background-color: rgba(26, 43, 60, 0.9);
-            transform: translateX(5px);
-        }
-        
-        .file-tree-item.active {
-            border-left-color: #00ffcc;
-            background-color: rgba(51, 51, 102, 0.8);
-            color: #00ffcc;
-        }
-
-        /* Case Study Specific Styling */
-        .case-study-title {
-            color: #FFD1DC;
-            font-size: 2rem;
-            text-align: center;
-            margin-bottom: 2rem;
-            text-shadow: 0 0 10px rgba(255, 209, 220, 0.5);
-            letter-spacing: 1px;
-        }
-        
-        .case-study-section {
-            margin-bottom: 2.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px dashed rgba(153, 51, 255, 0.3);
-        }
-        
-        .section-title {
-            color: #9933ff;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            padding-left: 20px;
-            position: relative;
-        }
-        
-        .section-title::before {
-            content: ">";
-            position: absolute;
-            left: 0;
-            color: #ff66ff;
-        }
-        
-        .subsection-title {
-            color: #A2D2FF;
-            font-size: 1.2rem;
-            margin: 1.2rem 0 0.8rem;
-            padding-left: 25px;
-        }
-        
-        .section-content {
-            padding-left: 25px;
-            line-height: 1.6;
-        }
-        
-        .section-content p {
-            margin-bottom: 1rem;
-        }
-        
-        .section-content ul, 
-        .section-content ol {
-            margin-bottom: 1rem;
-            padding-left: 20px;
-        }
-        
-        .section-content li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .goals-block, .tech-note {
-            background-color: rgba(26, 43, 60, 0.7);
-            border-left: 3px solid #9933ff;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 0 5px 5px 0;
-        }
-        
-        .challenge-item {
-            background-color: rgba(26, 43, 60, 0.7);
-            border-left: 3px solid #9933ff;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 0 5px 5px 0;
-        }
-
-        .challenge-title {
-            color: #FFD1DC;
-            font-weight: bold;
-            margin-bottom: 8px;
-            font-size: 1.1rem;
-        }
-
-        .tech-stack {
-            background-color: rgba(26, 43, 60, 0.7);
-            border: 1px solid #A2D2FF;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 2rem;
-            box-shadow: 0 0 15px rgba(162, 210, 255, 0.3);
-        }
-        
-        .tech-stack-title {
-            color: #ff66ff;
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .tech-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-        }
-        
-        .tech-item {
-            background-color: #9933ff;
-            color: white;
-            font-size: 14px;
-            padding: 5px 12px;
-            border-radius: 15px;
-            display: inline-block;
-        }
-
-        .feature-list {
-            list-style-type: none;
-            padding-left: 30px;
-            margin-bottom: 20px;
-        }
-
-        .feature-list li {
-            margin-bottom: 8px;
-            position: relative;
-        }
-
-        .feature-list li::before {
-            content: "✔";
-            position: absolute;
-            left: -25px;
-            color: #00ffcc;
-        }
-
-        .code-block {
-            background-color: rgba(26, 43, 60, 0.7);
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-            overflow-x: auto;
-        }
-
-        code {
-            font-family: 'Fira Code', monospace;
-            color: #E6C9A8;
-        }
-
-        .divider {
-            text-align: center;
-            margin: 30px 0;
-            color: #9933ff;
-            font-size: 20px;
-        }
-        
-        .color-swatch {
-            display: inline-block;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            margin-right: 8px;
-            vertical-align: middle;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        
-        .ocean-blue {
-            background-color: #2877B7;
-        }
-        
-        .forest-green {
-            background-color: #77732F;
-        }
-        
-        .honey {
-            background-color: #EDA945;
-        }
-        
-        .burnt-orange {
-            background-color: #D45837;
-        }
-        
-        .peach {
-            background-color: #FAC2AE;
-        }
-        
-        .example-post {
-            background-color: rgba(26, 43, 60, 0.5);
-            border: 1px solid #EDA945;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-        }
-        
-        .post-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .post-emoji {
-            font-size: 24px;
-            margin-right: 10px;
-        }
-        
-        /* Additional image styling for better quality */
-        .image-container {
-            width: 100%;
-            max-width: 900px; /* Increased from typical 800px */
-            margin: 25px auto;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .image-container img {
-            width: 100%;
-            display: block;
-            transition: transform 0.3s ease;
-            image-rendering: -webkit-optimize-contrast; /* Improves image sharpness in Webkit browsers */
-            image-rendering: crisp-edges; /* Improves image sharpness in Firefox */
-        }
-        
-        .image-container:hover img {
-            transform: scale(1.02); /* Slight zoom on hover */
-        }
-        
-        .image-caption {
-            text-align: center;
-            font-size: 0.9rem;
-            color: #A2D2FF;
-            margin-top: 10px;
-            padding: 0 15px;
-            font-style: italic;
-        }
-    </style>
+    <title>Wildwise · Fatima Ibrahim Maideribe</title>
+    <meta name="description" content="WildWise: a youth brand that teaches 13–16-year-olds about animal conservation through a brand identity, social media ads and posters, and a tap-to-rescue game concept.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="case-study.css">
 </head>
-<body>
-    <a href="index.html" class="back-button">Back to Portfolio</a>
-    
-    <div class="project-container">
-        <div class="project-header">
-            <h1 class="project-title"><a href="index.html" style="text-decoration: none; color: inherit;">WildWise</a></h1>
-            <div class="project-overview">
-                <span class="terminal-prompt">$</span>
-                <span class="terminal-command">cat README.md</span>
-                <div class="terminal-output">
-                    A comprehensive wildlife conservation campaign targeting teens through social media, interactive website, and Roblox game. The project combines education with entertainment to raise awareness about endangered species.
-                </div>
-            </div>
-        </div>
+<body style="--accent:#f5a623">
 
-        <div class="file-explorer">
-            <div class="file-tree">
-                <div class="file-tree-item active">README.md</div>
-                <div class="file-tree-item">source/</div>
-                <div class="file-tree-item">assets/</div>
-                <div class="file-tree-item">tests/</div>
-                <div class="file-tree-item">demo.mp4</div>
-            </div>
+<header class="cs-bar">
+    <a class="cs-start" href="index.html#desktop">⊞ Desktop</a>
+    <span class="cs-crumb">C:\Projects\WildWise\case-study.exe</span>
+    <nav class="cs-bar-nav" aria-label="Project navigation">
+        <a class="hide-sm" href="snake-ai.html">← Prev</a>
+        <a href="arduino-fan.html">Next →</a>
+    </nav>
+    <span class="cs-progress" aria-hidden="true"></span>
+</header>
 
-            <div class="file-content">
-                <!-- Project Case Study -->
-                <div class="project-case-study">
-                    <!-- Overview Section -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">Project Overview</h3>
-                        <div class="section-content">
-                            <p><strong>WildWise</strong> is a youth-focused brand designed to educate 13–16-year-olds about <strong>animal conservation</strong> through engaging digital content. The project addressed a key gap: while teens are motivated to make a difference, they lack accessible, engaging resources on the topic.</p>
-                            
-                            <h4 class="subsection-title">Key Deliverables:</h4>
-                            <ul>
-                                <li><strong>Brand Identity:</strong> Name, logo, color palette, and typography.</li>
-                                <li><strong>Social Media Strategy:</strong> Ads, posters, and educational content.</li>
-                                <li><strong>Game Concept:</strong> A mobile game to teach conservation interactively.</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="divider">---</div>
-                    
-                    <!-- Research Section -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">Research & Problem Identification</h3>
-                        <div class="section-content">
-                            <h4 class="subsection-title">Key Insight:</h4>
-                            <p>Recent studies show that <strong>13–16-year-olds want to help with conservation</strong> but don't learn about it in school, leaving them unsure how to contribute.</p>
-                            
-                            <h4 class="subsection-title">Our Solution:</h4>
-                            <p>WildWise makes conservation <strong>fun and accessible</strong> by:</p>
-                            <ul class="feature-list">
-                                <li><strong>Educating</strong> through bite-sized social media content.</li>
-                                <li><strong>Engaging</strong> with interactive games.</li>
-                                <li><strong>Empowering</strong> teens to take small, actionable steps.</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="divider">---</div>
-                    
-                    <!-- Contributions Section -->
-                    <h2 class="case-study-title">My Contributions</h2>
-                    
-                    <!-- Research & Mood Board -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">1. Research & Mood Board Development</h3>
-                        <div class="section-content">
-                            <ul>
-                                <li>Conducted surveys and competitor analysis to understand what resonates with teens.</li>
-                                <li>Found that <strong>minimalist, mascot-driven ads</strong> performed best (e.g., WWF's Panda).</li>
-                                <li>Created a <strong>mood board</strong> inspired by:
-                                    <ul>
-                                        <li>Nature documentaries (<em>Our Planet</em>).</li>
-                                        <li>Youth-focused apps (TikTok, Duolingo).</li>
-                                        <li>Successful conservation campaigns (WWF, Nat Geo).</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                            <div class="moodboard-container" style="margin: 25px 0;">
-                                <h4 class="subsection-title">Brand Moodboard</h4>
-                                <div class="image-container">
-                                    <img src="assets/Wildwise/brandboard.webp" alt="WildWise Brand Moodboard">
-                                    <p class="image-caption">Brand moodboard showcasing nature-inspired colors, organic textures, and youth-friendly design elements</p>
-                                </div>
-                            </div>
-                            
-                            <div class="moodboard-container" style="margin: 25px 0;">
-                                <h4 class="subsection-title">Game Concept Moodboard</h4>
-                                <div class="image-container">
-                                    <img src="assets/Wildwise/gamemoodboard.webp" alt="WildWise Game Concept Moodboard">
-                                    <p class="image-caption">Inspirational visuals for the interactive game featuring environmental challenges and conservation mechanics</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Brand Identity Design -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">2. Brand Identity Design</h3>
-                        
-                        <h4 class="subsection-title">Logo & Name</h4>
-                        <div class="section-content">
-                            <ul>
-                                <li><strong>WildWise</strong> was chosen for its <strong>memorable, educational tone</strong>.</li>
-                                <li>Kept the logo <strong>simple (text-only)</strong> to ensure versatility across platforms.</li>
-                            </ul>
-                        </div>
-                        
-                        <h4 class="subsection-title">Typography</h4>
-                        <div class="section-content">
-                            <ul>
-                                <li><strong>Calistoga (Headings)</strong> – Organic, natural feel.</li>
-                                <li><strong>Source Sans Pro (Body Text)</strong> – Highly readable for content-heavy posts.</li>
-                            </ul>
-                        </div>
-                        
-                        <h4 class="subsection-title">Color Palette</h4>
-                        <div class="section-content">
-                            <p>Selected <strong>5 complementary colors</strong> representing different ecosystems:</p>
-                            <ul>
-                                <li><span class="color-swatch ocean-blue"></span> <strong>Ocean Blue (#2877B7)</strong> – Water conservation.</li>
-                                <li><span class="color-swatch forest-green"></span> <strong>Forest Green (#77732F)</strong> – Forests/wildlife.</li>
-                                <li><span class="color-swatch honey"></span> <strong>Honey (#EDA945)</strong> – Endangered species (bees).</li>
-                                <li><span class="color-swatch burnt-orange"></span> <strong>Burnt Orange (#D45837)</strong> – Urgency (climate crisis).</li>
-                                <li><span class="color-swatch peach"></span> <strong>Peach (#FAC2AE)</strong> – Soft contrast for backgrounds.</li>
-                            </ul>
-                            
-                            <h4 class="subsection-title">Why These Colors?</h4>
-                            <ul>
-                                <li>Balanced <strong>visual appeal</strong> and <strong>symbolism</strong>.</li>
-                                <li>Avoided overusing blues/greens to represent diverse habitats.</li>
-                            </ul>
-                            
-                            <div style="margin-top: 30px;">
-                                <h4 class="subsection-title">Brand Board</h4>
-                                <div class="image-container">
-                                    <img src="assets/Wildwise/brandboard.webp" alt="WildWise Brand Board">
-                                    <p class="image-caption">Comprehensive brand board showcasing logo, typography, color palette, and application examples</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="divider">---</div>
-                    
-                    <!-- Social Media & Advertising -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">3. Social Media & Advertising Design</h3>
-                        
-                        <h4 class="subsection-title">Ad/Poster Strategy</h4>
-                        <div class="section-content">
-                            <ul>
-                                <li><strong>Minimal text</strong> – Focused on <strong>one key fact per post</strong>.</li>
-                                <li><strong>Eye-catching mascots</strong> – Used animal illustrations as the focal point.</li>
-                                <li><strong>Taglines</strong> – Short, impactful phrases (e.g., <em>"Save the Bees, Save the Future"</em>).</li>
-                            </ul>
-                            
-                            
-                            
-                            <h4 class="subsection-title">Example Post:</h4>
-                            <div class="example-post">
-                                <div class="post-header">
-                                    <div class="post-emoji">🐝</div>
-                                    <div class="post-title"><strong>Save the Bees</strong></div>
-                                </div>
-                                <p><strong>Visual:</strong> A cartoon bee with a gradient honeycomb background.</p>
-                                <p><strong>Text:</strong> <em>"Did you know? 1 in 3 bites of food depends on bees. #WildWise"</em></p>
-                            </div>
-                            
-                            <div style="margin: 25px 0;">
-                                <h4 class="subsection-title">Campaign Posters</h4>
-                                <div class="image-container">
-                                    <img src="assets/Wildwise/posterswildwise.webp" alt="WildWise Campaign Posters">
-                                    <p class="image-caption">Series of educational posters designed for social media and school displays</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Game Concept -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">4. Game Concept (Storyboarding)</h3>
-                        <div class="section-content">
-                            <ul>
-                                <li>Proposed a <strong>tap-to-rescue mobile game</strong> where players:
-                                    <ul>
-                                        <li>Complete challenges (e.g., replant trees, clean oceans).</li>
-                                        <li>Unlock real-world conservation facts.</li>
-                                    </ul>
-                                </li>
-                                <li>Designed <strong>storyboard wireframes</strong> for gameplay flow.</li>
-                            </ul>
-                            
-                            <div style="margin: 25px 0;">
-                                <h4 class="subsection-title">Game Storyboard</h4>
-                                <div class="image-container">
-                                    <img src="assets/Wildwise/storyboard.webp" alt="WildWise Game Storyboard">
-                                    <p class="image-caption">Detailed storyboard showing the game flow and user journey through conservation challenges</p>
-                                </div>
-                            </div>
-                            
-                       
-                            
-                            <div style="margin-top: 30px;">
-                                <h4 class="subsection-title">Digital Ad Campaign</h4>
-                                <div style="display: flex; flex-wrap: wrap; gap: 20px; margin: 20px 0; justify-content: center;">
-                                    <div style="flex: 1; min-width: 240px; max-width: 320px;">
-                                        <div class="image-container" style="margin: 0;">
-                                            <img src="assets/Wildwise/Group 126 2.webp" alt="WildWise App Screen Mockup">
-                                        </div>
-                                    </div>
-                                    <div style="flex: 1; min-width: 240px; max-width: 320px;">
-                                        <div class="image-container" style="margin: 0;">
-                                            <img src="assets/Wildwise/Group 131 1.webp" alt="WildWise App Screen Mockup">
-                                        </div>
-                                    </div>
-                                    <div style="flex: 1; min-width: 240px; max-width: 320px;">
-                                        <div class="image-container" style="margin: 0;">
-                                            <img src="assets/Wildwise/Group 130 1.webp" alt="WildWise App Screen Mockup">
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="image-caption">Final app Digital Ad Campaign</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="divider">---</div>
-                    
-                    <!-- Design Challenges -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">Design Challenges & Solutions</h3>
-                        <div class="section-content">
-                            <div class="challenge-item">
-                                <div class="challenge-title">Problem: Making conservation "cool" for teens.</div>
-                                <div class="solution">
-                                    <strong>Solution:</strong>
-                                    <ul>
-                                        <li>Used <strong>vibrant colors</strong> and <strong>playful mascots</strong> (avoiding a "textbook" feel).</li>
-                                        <li>Incorporated <strong>gamification</strong> (badges, shareable achievements).</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                            <div class="challenge-item">
-                                <div class="challenge-title">Problem: Information overload in ads.</div>
-                                <div class="solution">
-                                    <strong>Solution:</strong>
-                                    <ul>
-                                        <li><strong>One key stat per post</strong> + a clear CTA (<em>"Learn more at <a href="http://wildwise.org/">WildWise.org</a>"</em>).</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="divider">---</div>
-                    
-                    <!-- Outcome Section -->
-                    <div class="case-study-section">
-                        <h3 class="section-title">Outcome & Future Vision</h3>
-                        <div class="section-content">
-                            <ul>
-                                <li><strong>Final Feedback:</strong> Frog Design praised the <strong>consistent branding</strong> and <strong>youth-friendly approach</strong>.</li>
-                                <li><strong>Next Steps:</strong>
-                                    <ul>
-                                        <li>Develop the game prototype (Unity/Unreal Engine).</li>
-                                        <li>Expand social media campaigns with influencer collaborations.</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <!-- Tech Stack -->
-                    <div class="tech-stack">
-                        <h2 class="tech-stack-title">Skills Demonstrated</h2>
-                        <div class="tech-list">
-                            <span class="tech-item">Brand Design</span>
-                            <span class="tech-item">UX Research</span>
-                            <span class="tech-item">Typography</span>
-                            <span class="tech-item">Color Theory</span>
-                            <span class="tech-item">Collaborative Ideation</span>
-                            <span class="tech-item">Photoshop</span>
-                            <span class="tech-item">Illustrator</span>
-                            <span class="tech-item">Figma</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<main class="cs-wrap">
+
+    <section class="cs-hero">
+        <p class="cs-kicker">Brand identity · social campaign · game concept</p>
+        <h1 class="cs-title">WildWise</h1>
+        <p class="cs-lede">A youth brand that teaches 13–16-year-olds about animal conservation. Teenagers want to help but rarely learn about it at school, so WildWise uses short social posts, posters and a game concept to make it approachable.</p>
+        <div class="cs-actions">
+            <a class="cs-btn" href="#campaign">See the campaign</a>
+            <a class="cs-btn ghost" href="#brand">Brand identity</a>
         </div>
+        <dl class="cs-meta">
+            <div><dt>Audience</dt><dd>13–16-year-olds</dd></div>
+            <div><dt>My part</dt><dd>Research, mood boards, brand identity, ads and posters, game storyboard</dd></div>
+            <div><dt>Deliverables</dt><dd>Brand identity, social media strategy, mobile game concept</dd></div>
+            <div><dt>Tools</dt><dd>Photoshop, Illustrator, Figma</dd></div>
+        </dl>
+        <div class="cs-hero-media">
+            <img src="assets/thumbs/wildwise.webp" alt="WildWise campaign posters featuring a frog, polar bears, a vaquita, a sea turtle and a tiger" width="800" height="500">
+        </div>
+    </section>
+
+    <div class="cs-stats reveal">
+        <div class="cs-stat"><b>13–16</b><span>target age group</span></div>
+        <div class="cs-stat"><b>5</b><span>brand colours, one for each cause</span></div>
+        <div class="cs-stat"><b>1</b><span>key fact per post, plus a clear call to action</span></div>
     </div>
 
-    <script src="script.js"></script>
+    <section class="cs-window reveal" id="problem">
+        <div class="cs-window-bar">🌍 01_problem.txt <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">01</span>
+            <h2>Teens want to help but don't know how</h2>
+            <p>Recent studies show that <strong>13–16-year-olds want to help with conservation</strong> but don't learn about it in school, so they're unsure how to contribute. There's a gap: the motivation is there, but accessible, engaging resources aren't.</p>
+            <p>WildWise aims to make conservation fun and accessible by:</p>
+            <div class="cs-cards">
+                <div class="cs-card"><span class="tag">EDUCATE</span><h4>Bite-sized content</h4><p>Short social media posts that teach one thing at a time.</p></div>
+                <div class="cs-card"><span class="tag">ENGAGE</span><h4>Interactive games</h4><p>A game that teaches conservation through play.</p></div>
+                <div class="cs-card"><span class="tag">EMPOWER</span><h4>Small actions</h4><p>Clear, small steps teens can actually take.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="research">
+        <div class="cs-window-bar">🔍 02_research.log <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">02</span>
+            <h2>Research and mood boards</h2>
+            <p>I ran surveys and a competitor analysis to understand what resonates with teenagers. <strong>Minimalist, mascot-driven ads</strong> performed best, such as WWF's panda. I then built mood boards drawing on:</p>
+            <ul class="cs-list">
+                <li>Nature documentaries (<em>Our Planet</em>).</li>
+                <li>Youth-focused apps (TikTok, Duolingo).</li>
+                <li>Successful conservation campaigns (WWF, Nat Geo).</li>
+            </ul>
+            <figure class="cs-fig dark">
+                <img src="assets/Wildwise/brandmoodboard.webp" alt="Brand mood board: illustrated animals, conservation posters and colour swatches in oranges, greens and blues" loading="lazy" width="1600" height="636">
+                <figcaption>Brand mood board: nature-inspired colours, organic textures and youth-friendly design</figcaption>
+            </figure>
+            <figure class="cs-fig dark">
+                <img src="assets/Wildwise/gamemoodboard.webp" alt="Game mood board: Planet Zoo, an illustrated field journal, underwater and forest game scenes" loading="lazy" width="1600" height="636">
+                <figcaption>Game mood board: environmental challenges and conservation mechanics</figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="brand">
+        <div class="cs-window-bar">🎨 03_brand_identity.ai <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">03</span>
+            <h2>Brand identity</h2>
+            <div class="cs-split">
+                <div>
+                    <h3>Name and logo</h3>
+                    <p>I chose <strong>WildWise</strong> because it's memorable and sounds educational. The logo is text-only so it works on every platform.</p>
+                    <h3>Typography</h3>
+                    <ul class="cs-list">
+                        <li><strong>Calistoga</strong> for headings: organic and natural.</li>
+                        <li><strong>Source Sans Pro</strong> for body text: easy to read in content-heavy posts.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Why these colours?</h3>
+                    <p>Each colour stands for a different ecosystem or cause. I wanted them to look good together and carry meaning, and I avoided relying only on blues and greens so the palette covers more habitats.</p>
+                </div>
+            </div>
+            <div class="cs-swatches">
+                <div class="cs-swatch"><div class="chip" style="background:#2877B7"></div><div><b>Ocean Blue #2877B7</b><span>Water conservation</span></div></div>
+                <div class="cs-swatch"><div class="chip" style="background:#77732F"></div><div><b>Forest Green #77732F</b><span>Forests and wildlife</span></div></div>
+                <div class="cs-swatch"><div class="chip" style="background:#EDA945"></div><div><b>Honey #EDA945</b><span>Endangered species (bees)</span></div></div>
+                <div class="cs-swatch"><div class="chip" style="background:#D45837"></div><div><b>Burnt Orange #D45837</b><span>Urgency (climate crisis)</span></div></div>
+                <div class="cs-swatch"><div class="chip" style="background:#FAC2AE"></div><div><b>Peach #FAC2AE</b><span>Soft contrast for backgrounds</span></div></div>
+            </div>
+            <figure class="cs-fig">
+                <img src="assets/Wildwise/brandboard.webp" alt="WildWise brand board with the logo, Calistoga and Source Sans Pro type specimens, colour swatches and illustrated animal elements" loading="lazy" width="1600" height="900">
+                <figcaption>Brand board: logo, typography, colour palette and design elements</figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="campaign">
+        <div class="cs-window-bar">📱 04_social_campaign/ <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">04</span>
+            <h2>Social media and posters</h2>
+            <div class="cs-split">
+                <div>
+                    <h3>Ad and poster strategy</h3>
+                    <ul class="cs-list">
+                        <li><strong>Minimal text:</strong> one key fact per post.</li>
+                        <li><strong>Mascots:</strong> an animal illustration is always the focal point.</li>
+                        <li><strong>Taglines:</strong> short phrases such as <em>"Save the Bees, Save the Future"</em>.</li>
+                    </ul>
+                </div>
+                <div class="cs-card">
+                    <span class="tag">EXAMPLE POST</span>
+                    <h4>🐝 Save the Bees</h4>
+                    <p><strong>Visual:</strong> a cartoon bee on a gradient honeycomb background.</p>
+                    <p><strong>Text:</strong> <em>"Did you know? 1 in 3 bites of food depends on bees. #WildWise"</em></p>
+                </div>
+            </div>
+            <figure class="cs-fig dark">
+                <img src="assets/Wildwise/posterswildwise.webp" alt="Row of five WildWise posters: frog, polar bears, vaquita, sea turtle and tiger, under a 'Unite for Wildlife' banner" loading="lazy" width="1600" height="914">
+                <figcaption>Educational poster series for social media and school displays</figcaption>
+            </figure>
+            <h3>Digital ad campaign</h3>
+            <div class="cs-gallery" style="--cols:3">
+                <figure class="cs-fig dark"><img src="assets/Wildwise/Group%20124%202.webp" alt="Sponsored Instagram post: polar bears on ice with the headline 'Chill with a cause'" loading="lazy"><figcaption>Polar bears and ice caps</figcaption></figure>
+                <figure class="cs-fig dark"><img src="assets/Wildwise/Group%20125%201.webp" alt="Sponsored Instagram post: a tiger with the headline 'Tread lightly, roar loudly'" loading="lazy"><figcaption>Tiger conservation</figcaption></figure>
+                <figure class="cs-fig dark"><img src="assets/Wildwise/Group%20126%202.webp" alt="Sponsored Instagram post: a vaquita with the headline 'Lagoon protectors'" loading="lazy"><figcaption>Vaquitas and coastal habitats</figcaption></figure>
+                <figure class="cs-fig dark"><img src="assets/Wildwise/Group%20127%201.webp" alt="Sponsored Instagram post: a sea turtle with the headline 'Shell-ter our sea turtles'" loading="lazy"><figcaption>Sea turtles and plastic waste</figcaption></figure>
+                <figure class="cs-fig dark"><img src="assets/Wildwise/Group%20130%201.webp" alt="Instagram post with an illustrated bedroom scene and tips on ways you can help wildlife at home" loading="lazy"><figcaption>Ways to help: close curtains, turn off lights</figcaption></figure>
+                <figure class="cs-fig dark"><img src="assets/Wildwise/Group%20131%201.webp" alt="Instagram post with an illustrated shop scene encouraging reusable bags" loading="lazy"><figcaption>Ways to help: use reusable bags</figcaption></figure>
+            </div>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="game">
+        <div class="cs-window-bar">🎮 05_game_concept.storyboard <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">05</span>
+            <h2>A tap-to-rescue game</h2>
+            <p>I proposed a <strong>tap-to-rescue mobile game</strong> where players complete challenges, like replanting trees or cleaning oceans, and unlock real-world conservation facts. I designed storyboard wireframes to plan the gameplay flow.</p>
+            <figure class="cs-fig dark">
+                <img src="assets/Wildwise/storyboard.webp" alt="Ten-panel storyboard of a character moving through burning forest, beach and ice scenes, completing conservation tasks" loading="lazy" width="1600" height="639">
+                <figcaption>Storyboard of the game flow and the player's journey through conservation challenges</figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="challenges">
+        <div class="cs-window-bar">🧩 06_challenges.md <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">06</span>
+            <h2>Design challenges</h2>
+            <div class="cs-cards">
+                <div class="cs-card"><span class="tag">PROBLEM</span><h4>Making conservation "cool"</h4><p>I used vibrant colours and playful mascots to avoid a textbook feel, and added gamification like badges and shareable achievements.</p></div>
+                <div class="cs-card"><span class="tag">PROBLEM</span><h4>Information overload in ads</h4><p>Each post carries one key stat and a clear call to action: <em>"Learn more at <a href="http://wildwise.org/" target="_blank" rel="noopener">WildWise.org</a>"</em>.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cs-window reveal" id="outcome">
+        <div class="cs-window-bar">✅ 07_outcome.md <span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="cs-window-body">
+            <span class="cs-num">07</span>
+            <h2>Outcome and next steps</h2>
+            <p><strong>Final feedback:</strong> Frog Design praised the consistent branding and the youth-friendly approach.</p>
+            <h3>Next steps</h3>
+            <ul class="cs-list">
+                <li>Build a prototype of the game in Unity or Unreal Engine.</li>
+                <li>Expand the social campaigns through collaborations with influencers.</li>
+            </ul>
+            <h3>Skills</h3>
+            <div class="cs-chips">
+                <span class="cs-chip">Brand design</span><span class="cs-chip">UX research</span><span class="cs-chip">Typography</span><span class="cs-chip">Colour theory</span><span class="cs-chip">Collaborative ideation</span><span class="cs-chip">Photoshop</span><span class="cs-chip">Illustrator</span><span class="cs-chip">Figma</span>
+            </div>
+        </div>
+    </section>
+
+    <nav class="cs-next" aria-label="More projects">
+        <a href="snake-ai.html"><small>← Previous</small><span>A* Pathfinding Snake</span></a>
+        <a href="arduino-fan.html"><small>Next →</small><span>Automated Exhaust Fan</span></a>
+    </nav>
+
+    <footer class="cs-footer">
+        <span>© Fatima Ibrahim Maideribe</span>
+        <a href="index.html#desktop">Back to desktop</a>
+    </footer>
+</main>
+
+<script src="case-study.js"></script>
 </body>
-</html> 
+</html>
