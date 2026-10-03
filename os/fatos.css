@@ -1030,6 +1030,8 @@ input, textarea, [contenteditable="true"] { user-select: text; -webkit-user-sele
 .power small { display: block; margin-top: 16px; font-size: 20px; color: #888; animation: blink 1.2s step-end infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 .power .boot { color: #fff; }
+.power .boot .kicker { display: block; font-size: 30px; letter-spacing: 0.08em; text-transform: uppercase; background: linear-gradient(90deg, var(--accent), var(--pink)); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 14px; }
+.power .boot .fact { font-size: 44px; line-height: 1.1; color: #fff; max-width: 720px; margin: 0 auto; padding: 0 24px; text-wrap: balance; }
 .power .boot h1 { font-weight: 400; font-size: 84px; line-height: 1; background: linear-gradient(90deg, var(--accent), var(--pink)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .power .boot .bar { width: 220px; height: 14px; margin: 26px auto 0; border: 2px solid #555; border-radius: 4px; padding: 2px; overflow: hidden; }
 .power .boot .bar i { display: block; width: 40px; height: 100%; background: repeating-linear-gradient(90deg, #2f6fe0 0 10px, transparent 10px 13px); animation: load 1.2s linear infinite; }

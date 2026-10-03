@@ -288,6 +288,8 @@ async function init() {
     const sc = mkCanvas(scW, scH);
     const scCtx = sc.getContext('2d');
     const scTex = tex(sc);
+    const pickFact = () => (window.FatFacts ? window.FatFacts.next() : ['Did you know?', 'The first computer mouse was carved from wood, in 1964.']);
+    let bootFact = pickFact();
     const drawScreen = (mode, t = 0) => {
         const c = scCtx;
         c.save();
@@ -297,13 +299,29 @@ async function init() {
             c.fillStyle = g; c.fillRect(0, 0, scW, scH);
         } else if (mode === 'boot') {
             c.fillStyle = '#000'; c.fillRect(0, 0, scW, scH);
-            const g = c.createLinearGradient(300, 0, 980, 0); g.addColorStop(0, '#00ffcc'); g.addColorStop(1, '#ff66ff');
-            c.fillStyle = g; c.font = '130px VT323'; c.textAlign = 'center'; c.textBaseline = 'middle';
-            c.fillText("Fatima's Laptop", scW / 2, scH / 2 - 20);
-            c.strokeStyle = '#555'; c.lineWidth = 4; rr(c, scW / 2 - 200, scH / 2 + 90, 400, 34, 6); c.stroke();
-            c.save(); rr(c, scW / 2 - 196, scH / 2 + 94, 392, 26, 4); c.clip();
+            // a random fact or tip instead of a logo
+            const [kicker, fact] = bootFact;
+            c.textAlign = 'center'; c.textBaseline = 'middle';
+            c.font = '84px VT323';
+            const words = fact.split(' ');
+            const lines = [];
+            let line = '';
+            words.forEach((w) => {
+                const test = line ? line + ' ' + w : w;
+                if (c.measureText(test).width > 1040 && line) { lines.push(line); line = w; } else line = test;
+            });
+            lines.push(line);
+            const lh = 88, top = scH / 2 - ((lines.length - 1) * lh) / 2 - 10;
+            const g = c.createLinearGradient(440, 0, 840, 0); g.addColorStop(0, '#00ffcc'); g.addColorStop(1, '#ff66ff');
+            c.fillStyle = g; c.font = '56px VT323';
+            c.fillText(kicker.toUpperCase(), scW / 2, top - 100);
+            c.fillStyle = '#fff'; c.font = '84px VT323';
+            lines.forEach((l, k) => c.fillText(l, scW / 2, top + k * lh));
+            const by = top + (lines.length - 1) * lh + 110;
+            c.strokeStyle = '#555'; c.lineWidth = 4; rr(c, scW / 2 - 200, by, 400, 34, 6); c.stroke();
+            c.save(); rr(c, scW / 2 - 196, by + 4, 392, 26, 4); c.clip();
             const off = ((t * 360) % 480) - 90;
-            for (let i = 0; i < 4; i++) { c.fillStyle = '#2f6fe0'; c.fillRect(scW / 2 - 196 + off + i * 26, scH / 2 + 96, 20, 22); }
+            for (let i = 0; i < 4; i++) { c.fillStyle = '#2f6fe0'; c.fillRect(scW / 2 - 196 + off + i * 26, by + 6, 20, 22); }
             c.restore();
         } else {
             // mini desktop, so the zoom lands on something that matches the real one
@@ -529,7 +547,7 @@ async function init() {
             if (Math.abs(S.openTarget - S.open) < 0.002) {
                 S.open = S.openTarget;
                 if (S.openTarget === 0) { S.stage = 'closed'; S.openTarget = null; hint.classList.remove('faded'); }
-                else if (S.stage === 'opening') { S.stage = 'booting'; S.bootT = 0; }
+                else if (S.stage === 'opening') { S.stage = 'booting'; S.bootT = 0; S.deskDrawn = false; bootFact = pickFact(); }
             }
         }
         // a little overshoot as it settles open
@@ -540,9 +558,9 @@ async function init() {
         if (S.stage === 'booting') {
             S.bootT += dt;
             S.power = Math.min(1, S.power + dt * 1.6);
-            if (S.bootT < 1.5) drawScreen('boot', S.bootT);
-            else if (S.bootT < 1.55) drawScreen('desktop');
-            if (S.bootT > 2.2) {
+            if (S.bootT < 3.0) drawScreen('boot', S.bootT);
+            else if (!S.deskDrawn) { drawScreen('desktop'); S.deskDrawn = true; }
+            if (S.bootT > 3.6) {
                 S.stage = 'zooming';
                 S.zoom = 0;
                 zoomFrom = { pos: camera.position.clone(), look: look.clone(), up: camera.up.clone() };

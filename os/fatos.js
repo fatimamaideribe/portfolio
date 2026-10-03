@@ -80,6 +80,40 @@ const ALBUMS = [
         ['studybuddyiconheroimage.jpg', 'Study Buddy'], ['studybuddybuilding.jpg', 'Building it'], ['studybuddy3.jpg', 'Study Buddy'], ['Studybuddyschmatic.png', 'Schematic']]) }
 ];
 
+/* ------------------------------------------------- loading-screen facts */
+
+// Attention-grabbing facts for the boot screens (3D laptop intro + restart).
+// Keep each one short (it's on screen ~3s) and only add ones you can back up.
+const FACTS = [
+    // psychology & habits (FlowState)
+    ['Did you know?', 'About 80% of university students procrastinate regularly.'],
+    // plants (Smart Plant Buddy)
+    ['Did you know?', 'Overwatering is the most common way to kill a houseplant.'],
+    ['Did you know?', 'Some plants boost their defences when they hear caterpillars chewing.'],
+    // snakes, algorithms & robots (A* Snake, Study Buddy)
+    ['Did you know?', 'The A* search algorithm was created in 1968 to guide a robot named Shakey.'],
+    ['Did you know?', 'Snake arrived on Nokia phones in 1997 and ended up on hundreds of millions of them.'],
+    ['Did you know?', 'The word "robot" comes from a Czech play written in 1920.'],
+    // design & computing history
+    ['Did you know?', 'The first computer mouse was carved from wood, in 1964.'],
+    ['Did you know?', 'In 1947, engineers found a real moth inside a computer and taped it into the logbook.'],
+    ['Did you know?', 'The Windows XP hill wallpaper is a real photo, taken in California in 1996.'],
+    ['Did you know?', "The world's first webcam was built to watch a coffee pot at Cambridge."],
+    ['Did you know?', 'The Post-it note came from a glue that was too weak to be useful.'],
+    ['Did you know?', 'The computer that landed Apollo 11 on the Moon had about 4 KB of RAM.'],
+    ['Did you know?', 'QWERTY was designed for typewriters in the 1870s. We never changed it.']
+];
+let lastFact = -1;
+window.FatFacts = {
+    list: FACTS,
+    next() {
+        let i;
+        do { i = Math.floor(Math.random() * FACTS.length); } while (i === lastFact && FACTS.length > 1);
+        lastFact = i;
+        return FACTS[i];
+    }
+};
+
 /* ------------------------------------------------------------------ sound */
 
 const Sound = {
@@ -1999,14 +2033,15 @@ const Power = {
         }, 250);
     },
     boot() {
-        this.el.innerHTML = '<div class="boot"><h1>Fatima&rsquo;s Laptop</h1><div class="bar"><i></i></div></div>';
+        const [kicker, fact] = window.FatFacts.next();
+        this.el.innerHTML = `<div class="boot"><span class="kicker">${esc(kicker)}</span><p class="fact">${esc(fact)}</p><div class="bar"><i></i></div></div>`;
         setTimeout(() => {
             this.el.classList.remove('on');
             this.el.innerHTML = '';
             Sound.play('startup');
             Icons.el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500 });
             toast({ icon: '✿', title: 'Welcome back', text: 'Restarted successfully. Everything is where you left it.' });
-        }, 1800);
+        }, 3200);
     }
 };
 
