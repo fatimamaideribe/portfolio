@@ -4,6 +4,9 @@ My portfolio site: a Y2K-style laptop in the browser. It opens with a 3D laptop 
 
 [View Live Portfolio](https://fatimamaideribe.github.io/portfolio/)
 
+## Awards
+- **Award for Excellence in Computing**, Ravensbourne University London, Student Showcase Awards 2025 ([announcement](https://www.ravensbourne.ac.uk/people-and-stories/news/awards-success/ravensbourne-university-london-celebrates-success-student))
+
 ## Projects
 
 ### MSc Design Engineering, Imperial College London

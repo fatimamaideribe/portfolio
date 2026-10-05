@@ -1368,7 +1368,7 @@ const FS = {
     '~/photos': ALBUMS.map((a) => a.id + '/')
 };
 const FILES = {
-    'about.txt': () => "Fatima Ibrahim Maideribe · design engineer & creative technologist\nBSc Creative Computing, Ravensbourne → MSc Design Engineering, Imperial College London.\nI build things between people and technology: habit-nudging apps,\ndevices that make data feel human, playful interfaces.\nOff the clock: the outdoors, new recipes, fantasy novels.",
+    'about.txt': () => "Fatima Ibrahim Maideribe · design engineer & creative technologist\nBSc (Hons) Creative Computing, Ravensbourne → MSc Design Engineering, Imperial College London.\n🏆 Award for Excellence in Computing, Ravensbourne Student Showcase Awards 2025.\nI build things between people and technology: habit-nudging apps,\ndevices that make data feel human, playful interfaces.\nOff the clock: the outdoors, new recipes, fantasy novels.",
     'skills.txt': () => 'UX research & design · user interviews, think-aloud testing, prototyping, Figma\nCode · JavaScript, Python, C++, PHP, HTML/CSS, Node.js, Chart.js\nData · pandas, matplotlib, seaborn, time-series & correlation analysis\nHardware · Arduino, ESP32/ESP8266, sensors & calibration, Firebase',
     'contact.txt': () => 'email     fatimamaideribe@gmail.com\nlinkedin  linkedin.com/in/fatima-ibrahim-maideribe\n(or type "contact" to open the Contact app)',
     'secrets.txt': () => "1. The plant is still alive.\n2. I did not procrastinate on FlowState. Much.\n3. There is no coffee machine."
@@ -1455,9 +1455,10 @@ Type <span class="ok">flowstate</span> or <span class="ok">plant</span> to open 
                 `<span class="ok">Resolution</span>: ${window.innerWidth}x${window.innerHeight}`,
                 `<span class="ok">Theme</span>: ${Settings.wpName()} · accent ${esc(Settings.accentName())}`,
                 `<span class="ok">CPU</span>: Curiosity @ 100%`,
-                `<span class="ok">Memory</span>: 1 plant (alive, thanks to sensors)`
+                `<span class="ok">Memory</span>: 1 plant (alive, thanks to sensors)`,
+                `<span class="ok">Awards</span>: Excellence in Computing, Ravensbourne 2025`
             ];
-            print(logo.map((l, i) => `<span class="ascii">${esc(l)}</span>  ${info[i] || ''}`).join('\n') +
+            print(info.map((line, i) => `<span class="ascii">${esc(logo[i] || ' '.repeat(15))}</span>  ${line}`).join('\n') +
                 '\n               ' + ['#000033', '#ff66ff', '#9933ff', '#00ffcc', '#66ffff', '#ffd166', '#ffffff'].map((c) => `<span style="color:${c}">███</span>`).join(''));
         },
         date: () => p(new Date().toString()),
@@ -2065,9 +2066,6 @@ function boot() {
 
 function startSession() {
     Sound.play('startup');
-    // The "ME RN LOL" clip loads only now, so it never competes with the intro (and never on phones, where it's hidden)
-    const clip = $('#g-gif video');
-    if (clip && !isPhone() && !clip.src) { clip.src = clip.dataset.src; clip.play().catch(() => {}); }
     // Deep links: index.html#flowstate, #photos, #terminal …
     const hash = decodeURIComponent(location.hash.slice(1));
     if (hash && projectById(hash)) openProject(hash);
