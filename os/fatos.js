@@ -76,6 +76,8 @@ const ALBUMS = [
     { id: 'fan', name: 'Exhaust Fan', icon: '🌀', project: 'arduino-fan', photos: A('fan', [
         ['final1.webp', 'Final build'], ['final2.webp', 'Final build'], ['final3.webp', 'Final build'], ['final4.webp', 'Final build'],
         ['finalscematic.webp', 'Schematic'], ['test1.webp', 'Testing'], ['test2.webp', 'Testing']]) },
+    { id: 'magazine', name: 'Showcase Mag', icon: '📰', app: 'magazine', photos: A('Magazine', [
+        ['cover.webp', 'Graduate showcase magazine 2025: cover'], ['feature.webp', 'Pages 14–15: my feature'], ['credits.webp', 'Back cover: credits']]) },
     { id: 'study', name: 'Study Buddy', icon: '🤖', project: 'ai-study-buddy', photos: A('StudyBuddy', [
         ['studybuddyiconheroimage.jpg', 'Study Buddy'], ['studybuddybuilding.jpg', 'Building it'], ['studybuddy3.jpg', 'Study Buddy'], ['Studybuddyschmatic.png', 'Schematic']]) }
 ];
@@ -477,6 +479,7 @@ const ICONS = [
     { id: 'snake', label: 'Snake Game', glyph: '🐍' },
     { id: 'photos', label: 'Photos', glyph: '🖼️' },
     { id: 'terminal', label: 'Terminal', glyph: '💻' },
+    { id: 'magazine', label: 'Showcase Mag', glyph: '📰' },
     { id: 'bin', label: 'Recycle Bin', glyph: '🗑️' }
 ];
 const CELL_W = 96, CELL_H = 100, PAD = 10;
@@ -981,7 +984,7 @@ const StartMenu = {
         ];
         const col2 = [
             app('explorer', 'projects files folder'), app('about', 'me bio education'), app('skills'), app('contact', 'email linkedin hire'),
-            app('photos', 'gallery images pictures'), app('terminal', 'command shell cli'), app('notepad', 'text notes'), app('snake', 'game play a star'),
+            app('photos', 'gallery images pictures'), app('magazine', 'showcase magazine mag zine ravensbourne graduate 2025 print'), app('terminal', 'command shell cli'), app('notepad', 'text notes'), app('snake', 'game play a star'),
             app('taskmgr', 'processes cpu'), app('settings', 'wallpaper theme sound accent personalise'),
             { icon: '💼', label: 'LinkedIn ↗', keys: 'linkedin social', fn: () => window.open('https://www.linkedin.com/in/fatima-ibrahim-maideribe', '_blank', 'noopener') }
         ];
@@ -1348,7 +1351,7 @@ function renderPhotos(w, opts) {
     $('.prev', viewer).addEventListener('click', () => view(st.i - 1));
     $('.next', viewer).addEventListener('click', () => view(st.i + 1));
     $('[data-p="close"]', viewer).addEventListener('click', () => viewer.classList.remove('on'));
-    $('[data-p="project"]', viewer).addEventListener('click', () => openProject(album().project));
+    $('[data-p="project"]', viewer).addEventListener('click', () => { const a = album(); if (a.project) openProject(a.project); else if (a.app) WM.open(a.app); });
     w.onKey = (e) => {
         if (!viewer.classList.contains('on')) return false;
         if (e.key === 'ArrowRight') { view(st.i + 1); return true; }
@@ -1909,6 +1912,65 @@ function renderSettings(w) {
     });
 }
 
+/* ------------------------------------------------------------- magazine */
+
+function renderMagazine(w, opts) {
+    const PAGES = [
+        { src: 'assets/Magazine/cover.webp', label: 'Cover' },
+        { src: 'assets/Magazine/feature.webp', label: 'Pages 14–15 · my feature' },
+        { src: 'assets/Magazine/credits.webp', label: 'Back cover · credits (I designed a banner)' }
+    ];
+    let i = opts.page != null ? opts.page : 0;
+    w.body.innerHTML = `<div class="mag">
+        <div class="mag-top">
+            <div><b>UX/UI Design &amp; Creative Computing magazine</b>
+                <small>Graduate showcase · Ravensbourne University London · 2025. Shared here: the cover, my feature and the credits.</small></div>
+            <button class="btn solid" data-jump>✿ Jump to my feature</button>
+        </div>
+        <div class="mag-stage">
+            <button class="p-nav prev" aria-label="Previous page">‹</button>
+            <div class="mag-page" title="Click to zoom"><img alt=""></div>
+            <button class="p-nav next" aria-label="Next page">›</button>
+        </div>
+        <div class="mag-foot"><span class="mag-label"></span><span class="mag-dots">${PAGES.map((p, k) => `<button data-k="${k}" aria-label="${esc(p.label)}"></button>`).join('')}</span><span class="muted">Click the page to zoom</span></div>
+    </div>`;
+    const pageEl = $('.mag-page', w.body), img = $('img', pageEl);
+    const show = (k) => {
+        i = (k + PAGES.length) % PAGES.length;
+        pageEl.classList.remove('zoomed');
+        img.src = PAGES[i].src;
+        img.alt = PAGES[i].label;
+        img.style.animation = 'none'; void img.offsetWidth; img.style.animation = '';
+        $('.mag-label', w.body).textContent = `${PAGES[i].label} · ${i + 1} / ${PAGES.length}`;
+        $$('.mag-dots button', w.body).forEach((b, k2) => b.classList.toggle('on', k2 === i));
+        Sound.play('click');
+    };
+    $('.prev', w.body).addEventListener('click', () => show(i - 1));
+    $('.next', w.body).addEventListener('click', () => show(i + 1));
+    $('[data-jump]', w.body).addEventListener('click', () => show(1));
+    $$('.mag-dots button', w.body).forEach((b) => b.addEventListener('click', () => show(+b.dataset.k)));
+    pageEl.addEventListener('click', (e) => {
+        const zoomed = pageEl.classList.toggle('zoomed');
+        if (zoomed) {
+            // zoom towards where you clicked
+            const r = pageEl.getBoundingClientRect();
+            const fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+            requestAnimationFrame(() => {
+                pageEl.scrollLeft = fx * (pageEl.scrollWidth - pageEl.clientWidth);
+                pageEl.scrollTop = fy * (pageEl.scrollHeight - pageEl.clientHeight);
+            });
+        }
+    });
+    w.onKey = (e) => {
+        if (e.key === 'ArrowRight') { show(i + 1); return true; }
+        if (e.key === 'ArrowLeft') { show(i - 1); return true; }
+        if (e.key === 'Escape' && pageEl.classList.contains('zoomed')) { pageEl.classList.remove('zoomed'); return true; }
+        return false;
+    };
+    w.setPage = (k) => { if (k != null) show(k); };
+    show(i);
+}
+
 /* ---------------------------------------------------------- small apps */
 
 function initContact(w) {
@@ -1952,6 +2014,7 @@ const APPS = {
     snake: { title: 'Snake*Search', icon: '🐍', w: 720, h: 500, render: renderSnake },
     taskmgr: { title: 'Task Manager', icon: '📊', w: 600, h: 480, render: renderTaskMgr },
     settings: { title: 'Settings', icon: '⚙️', w: 620, h: 560, render: renderSettings, pad: true },
+    magazine: { title: 'Showcase Mag', icon: '📰', w: 980, h: 680, render: renderMagazine, reopen: (w, o) => w.setPage && w.setPage(o.page) },
     bin: { title: 'Recycle Bin', icon: '🗑️', w: 500, h: 380, tpl: 'tpl-bin', render: initBin }
 };
 

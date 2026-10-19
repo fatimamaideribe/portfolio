@@ -7,6 +7,9 @@ My portfolio site: a Y2K-style laptop in the browser. It opens with a 3D laptop 
 ## Awards
 - **Award for Excellence in Computing**, Ravensbourne University London, Student Showcase Awards 2025 ([announcement](https://www.ravensbourne.ac.uk/people-and-stories/news/awards-success/ravensbourne-university-london-celebrates-success-student))
 
+## Press
+- Featured in the **UX/UI Design & Creative Computing graduate showcase magazine**, Ravensbourne University London, 2025 (pages 14–15). The cover, feature spread and credits are in the desktop's "Showcase Mag" app (`assets/Magazine/`).
+
 ## Projects
 
 ### MSc Design Engineering, Imperial College London

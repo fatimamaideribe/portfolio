@@ -470,6 +470,10 @@ input, textarea, [contenteditable="true"] { user-select: text; -webkit-user-sele
 .award-text b { display: block; font-weight: 500; font-size: 14.5px; color: #ffd166; }
 .award-text small { display: block; font-size: 12px; line-height: 1.45; color: var(--text-2); }
 .award-link { font-size: 12px; color: #ffd166; white-space: nowrap; }
+.award.mag-link { width: 100%; font: inherit; text-align: left; cursor: pointer; margin-top: -6px; border-color: rgba(0, 255, 204, 0.4); background: linear-gradient(100deg, rgba(0, 255, 204, 0.1), rgba(102, 255, 255, 0.03)); }
+.award.mag-link:hover { border-color: var(--accent); box-shadow: 0 8px 22px rgba(0, 255, 204, 0.14); }
+.award.mag-link b, .award.mag-link .award-link { color: var(--accent); }
+.award.mag-link .trophy { filter: none; }
 @media (max-width: 768px) { .award { flex-wrap: wrap; } .award-link { width: 100%; padding-left: 48px; } }
 .edu { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--line); }
 .edu li { list-style: none; margin-bottom: 6px; }
@@ -671,6 +675,33 @@ input, textarea, [contenteditable="true"] { user-select: text; -webkit-user-sele
 .p-nav.prev { left: 10px; } .p-nav.next { right: 10px; }
 .p-foot { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-top: 1px solid var(--line); font-size: 12px; color: var(--text-2); }
 .p-foot .grow { flex: 1; }
+
+/* ---------- Showcase magazine ---------- */
+
+.mag { display: grid; grid-template-rows: auto 1fr auto; height: 100%; background: radial-gradient(ellipse at 50% 30%, #1d2a86, #070b2a 70%); }
+.mag-top { display: flex; align-items: center; gap: 14px; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+.mag-top div { flex: 1; min-width: 0; }
+.mag-top b { display: block; font-weight: 500; font-size: 13.5px; }
+.mag-top small { display: block; font-size: 11.5px; color: var(--text-3); line-height: 1.45; }
+.mag-stage { position: relative; min-height: 0; }
+.mag-page { position: absolute; inset: 14px 62px; perspective: 1600px; cursor: zoom-in; }
+.mag-page img {
+    position: absolute; inset: 0; margin: auto;
+    max-width: 100%; max-height: 100%;
+    border-radius: 3px;
+    background: #fff;
+    box-shadow: 0 16px 40px rgba(0, 0, 20, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    transform-origin: left center;
+    animation: mag-turn 0.45s var(--ease);
+}
+@keyframes mag-turn { from { opacity: 0; transform: rotateY(-38deg) translateX(18px); } }
+.mag-page.zoomed { overflow: auto; cursor: zoom-out; border-radius: 4px; }
+.mag-page.zoomed img { position: static; display: block; max-width: none; max-height: none; margin: 0 auto; animation: none; }
+.mag-foot { display: flex; align-items: center; gap: 14px; padding: 9px 14px; border-top: 1px solid var(--line); font-size: 12px; color: var(--text-2); }
+.mag-foot .mag-label { flex: 1; }
+.mag-dots { display: flex; gap: 6px; }
+.mag-dots button { width: 9px; height: 9px; padding: 0; border-radius: 50%; border: 0; background: rgba(255, 255, 255, 0.25); cursor: pointer; }
+.mag-dots button.on { background: var(--accent); }
 
 /* ---------- Terminal ---------- */
 
@@ -1161,6 +1192,9 @@ html.intro-out .desktop, html.intro-out .taskbar { opacity: 1; transform: none; 
     .p-albums button { white-space: nowrap; width: auto !important; }
     .p-viewer { inset: 44px 0 0 0; }
     .snake { grid-template-columns: 1fr; }
+    .mag-top { flex-wrap: wrap; }
+    .mag-page { inset: 8px 40px; }
+    .mag-foot .muted { display: none; }
     .contact-grid, .form .row { grid-template-columns: 1fr; }
     .start-menu { width: calc(100vw - 12px); }
     .sm-body { grid-template-columns: 1fr; }
